@@ -17,6 +17,8 @@ namespace HandItOver.BackEnd.DAL
         {
         }
 
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -47,6 +49,18 @@ namespace HandItOver.BackEnd.DAL
                     .HasForeignKey(ur => ur.UserId)
                     .IsRequired();
             });
+
+            builder.Entity<RefreshToken>(b =>
+            {
+                b.HasOne(t => t.AppUser)
+                    .WithMany(u => u.RefreshTokens)
+                    .HasForeignKey(t => t.AppUserId)
+                    .IsRequired();
+
+                b.HasKey(t => t.Id);
+            });
+
+
         }
     }
 }

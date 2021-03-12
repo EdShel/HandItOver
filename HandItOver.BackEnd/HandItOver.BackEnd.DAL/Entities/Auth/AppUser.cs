@@ -13,6 +13,8 @@ namespace HandItOver.BackEnd.DAL.Entities.Auth
         public ICollection<AppUserToken> Tokens { get; set; } = null!;
 
         public ICollection<AppUserRole> UserRoles { get; set; } = null!;
+
+        public ICollection<RefreshToken> RefreshTokens { get; set; } = null!;
     }
 
     public class AppRole : IdentityRole
@@ -47,5 +49,25 @@ namespace HandItOver.BackEnd.DAL.Entities.Auth
     public class AppUserToken : IdentityUserToken<string>
     {
         public virtual AppUser User { get; set; } = null!;
+    }
+
+    public static class AppClaims
+    {
+        public const string EMAIL = "email";
+    }
+
+    public class RefreshToken
+    {
+        public string Id { get; set; }
+
+        public string AppUserId { get; set; } = null!;
+
+        public string Value { get; set; } = null!;
+
+        public DateTime Expires { get; set; }
+
+        public bool IsExpired => DateTime.UtcNow >= this.Expires;
+
+        public AppUser AppUser { get; set; } = null!;
     }
 }

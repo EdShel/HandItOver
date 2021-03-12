@@ -1,8 +1,7 @@
+using HandItOver.BackEnd.API.Extensions;
 using HandItOver.BackEnd.DAL;
-using HandItOver.BackEnd.DAL.Entities.Auth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,11 +24,10 @@ namespace HandItOver.BackEnd.API
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection"))
             );
-            services.AddIdentity<AppUser, AppRole>(options =>
-            {
 
-            }).AddEntityFrameworkStores<AppDbContext>();
+            services.AddAuthorizationServices(this.Configuration);
 
+            
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
