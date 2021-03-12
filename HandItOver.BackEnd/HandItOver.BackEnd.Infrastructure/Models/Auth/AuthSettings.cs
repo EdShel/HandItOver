@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace HandItOver.BackEnd.Infrastructure.Models.Auth
+﻿namespace HandItOver.BackEnd.Infrastructure.Models.Auth
 {
     public class AuthSettings
     {
@@ -13,5 +9,7 @@ namespace HandItOver.BackEnd.Infrastructure.Models.Auth
         public bool ValidateLifetime { get; set; } 
 
         public int TokenLifetimeSeconds { get; set; }
+
+        public int RefreshTokenLifetimeMinutes { get; set; }
     }
 }

@@ -51,14 +51,9 @@ namespace HandItOver.BackEnd.DAL.Entities.Auth
         public virtual AppUser User { get; set; } = null!;
     }
 
-    public static class AppClaims
-    {
-        public const string EMAIL = "email";
-    }
-
     public class RefreshToken
     {
-        public string Id { get; set; }
+        public string Id { get; set; } = null!;
 
         public string AppUserId { get; set; } = null!;
 

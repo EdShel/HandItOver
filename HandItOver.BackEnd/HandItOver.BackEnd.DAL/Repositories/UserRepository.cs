@@ -39,5 +39,26 @@ namespace HandItOver.BackEnd.DAL.Repositories
             user.RefreshTokens.Add(refreshToken);
             this.dbContext.Update(user);
         }
+
+        public Task<IdentityResult> AddToRoleAsync(AppUser user, string role)
+        {
+            return this.userManager.AddToRoleAsync(user, role);
+        }
+
+        public Task DeleteUserAsync(AppUser user)
+        {
+            return this.userManager.DeleteAsync(user);
+        }
+
+        public Task<RefreshToken?> GetRefreshToken(AppUser user, string refreshToken)
+        {
+            return this.dbContext.Set<RefreshToken?>()
+                .FirstOrDefaultAsync(token => token!.AppUserId == user.Id && token.Value == refreshToken);
+        }
+
+        public void DeleteRefreshToken(RefreshToken refreshToken)
+        {
+            this.dbContext.Set<RefreshToken>().Remove(refreshToken);
+        }
     }
 }

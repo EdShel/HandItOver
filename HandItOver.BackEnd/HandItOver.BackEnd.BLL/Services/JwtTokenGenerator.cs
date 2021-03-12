@@ -1,14 +1,36 @@
-﻿using HandItOver.BackEnd.Infrastructure.Services;
+﻿using HandItOver.BackEnd.Infrastructure.Models.Auth;
+using HandItOver.BackEnd.Infrastructure.Services;
+using Microsoft.IdentityModel.Tokens;
 using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 
 namespace HandItOver.BackEnd.BLL.Services
 {
-    public class JwtTokenGenerator : IAuthTokenGenerator
+    public class JwtTokenGenerator : IAuthTokenFactory
     {
-        public string GenerateJwtToken(ClaimsIdentity claims)
+        private readonly AuthSettings authSettings;
+
+        public JwtTokenGenerator(AuthSettings authSettings)
         {
-            throw new NotImplementedException();
+            this.authSettings = authSettings;
+        }
+
+        public string GenerateAuthToken(ClaimsIdentity claims)
+        {
+            var now = DateTime.UtcNow;
+            var jwt = new JwtSecurityToken(
+                    issuer: this.authSettings.ValidIssuer,
+                    notBefore: now,
+                    claims: claims.Claims,
+                    expires: now.Add(TimeSpan.FromSeconds(this.authSettings.TokenLifetimeSeconds)),
+                    signingCredentials: new SigningCredentials(
+                        key: new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.authSettings.SigningKey)),
+                        algorithm: SecurityAlgorithms.HmacSha256
+                    )
+            );
+            return new JwtSecurityTokenHandler().WriteToken(jwt);
         }
     }
 }

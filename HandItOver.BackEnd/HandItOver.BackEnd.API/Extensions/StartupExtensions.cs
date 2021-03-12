@@ -16,7 +16,7 @@ namespace HandItOver.BackEnd.API.Extensions
     {
         public static IServiceCollection AddAuthorizationServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<IAuthTokenGenerator, JwtTokenGenerator>();
+            services.AddSingleton<IAuthTokenFactory, JwtTokenGenerator>();
             services.AddSingleton<IRefreshTokenFactory, RefreshTokenFactory>();
 
             var authSettingsSection = configuration.GetSection(nameof(AuthSettings));
@@ -39,7 +39,7 @@ namespace HandItOver.BackEnd.API.Extensions
                     {
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(jwtSigningKey),
-                        ValidateIssuer = false,
+                        ValidateIssuer = true,
                         ValidateAudience = false,
                         ClockSkew = TimeSpan.Zero
                     };
@@ -50,7 +50,9 @@ namespace HandItOver.BackEnd.API.Extensions
             {
                 options.User.RequireUniqueEmail = true;
 
-                //options.ClaimsIdentity.EmailClaimType = AppClaims.EMAIL;
+                options.ClaimsIdentity.UserIdClaimType = AuthConstants.Claims.ID;
+                options.ClaimsIdentity.EmailClaimType = AuthConstants.Claims.EMAIL;
+                options.ClaimsIdentity.RoleClaimType = AuthConstants.Claims.ROLE;
 
                 options.Password.RequireDigit = false;
                 options.Password.RequireUppercase = false;

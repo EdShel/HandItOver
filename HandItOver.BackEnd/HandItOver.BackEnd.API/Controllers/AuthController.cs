@@ -1,4 +1,6 @@
-﻿using HandItOver.BackEnd.BLL.Services;
+﻿using HandItOver.BackEnd.API.Models.Auth;
+using HandItOver.BackEnd.BLL.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -26,6 +28,12 @@ namespace HandItOver.BackEnd.API.Controllers
         public async Task Login()
         {
 
+        }
+
+        [HttpPost("refresh")]
+        [AllowAnonymous]
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshModel model)
+        {
         }
     }
 }

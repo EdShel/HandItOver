@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Net;
-using System.Text;
 
 namespace HandItOver.BackEnd.Infrastructure.Exceptions
 {
@@ -18,6 +14,24 @@ namespace HandItOver.BackEnd.Infrastructure.Exceptions
     {
         public WrongValueException(string parameterName)
             : base($"{parameterName} is invalid.")
+        {
+
+        }
+    }
+
+    public class RecordAlreadyExistsException : InvalidOperationException
+    {
+        public RecordAlreadyExistsException(string recordName)
+            :base($"{recordName} already exists.")
+        {
+
+        }
+    }
+
+    public class ExpiredException : InvalidOperationException
+    {
+        public ExpiredException(string whatHasExpired)
+            : base($"{whatHasExpired} has expired.")
         {
 
         }
