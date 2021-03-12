@@ -1,16 +1,13 @@
+using HandItOver.BackEnd.DAL;
+using HandItOver.BackEnd.DAL.Entities.Auth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.API
 {
@@ -18,14 +15,20 @@ namespace HandItOver.BackEnd.API
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection"))
+            );
+            services.AddIdentity<AppUser, AppRole>(options =>
+            {
+
+            }).AddEntityFrameworkStores<AppDbContext>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -34,7 +37,6 @@ namespace HandItOver.BackEnd.API
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -48,6 +50,7 @@ namespace HandItOver.BackEnd.API
 
             app.UseRouting();
 
+            app.UseAuthorization();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
