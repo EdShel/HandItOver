@@ -37,17 +37,14 @@ namespace HandItOver.BackEnd.API.Extensions
             services.AddSingleton<AuthSettings>(authSettings);
             var jwtSigningKey = Encoding.UTF8.GetBytes(authSettings.SigningKey);
 
-            services.AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                }
-            ).AddJwtBearer(
+            services.AddAuthentication(o =>
+            {
+                o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(
                 authenticationScheme: JwtBearerDefaults.AuthenticationScheme,
                 configureOptions: options =>
                 {
                     options.RequireHttpsMetadata = true;
-                    options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
