@@ -52,6 +52,7 @@ namespace HandItOver.BackEnd.API.Extensions
                     {
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(jwtSigningKey),
+                        ValidIssuer = authSettings.ValidIssuer,
                         ValidateIssuer = true,
                         ValidateAudience = false,
                         ClockSkew = TimeSpan.Zero

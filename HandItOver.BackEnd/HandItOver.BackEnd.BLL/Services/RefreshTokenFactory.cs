@@ -37,14 +37,20 @@ namespace HandItOver.BackEnd.BLL.Services
             var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authSettings.SigningKey)),
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.authSettings.SigningKey)),
+                ValidIssuer = this.authSettings.ValidIssuer,
                 ValidateIssuer = true,
                 ValidateAudience = false,
 
                 ValidateLifetime = false
             };
 
-            var tokenHandler = new JwtSecurityTokenHandler();
+            var tokenHandler = new JwtSecurityTokenHandler
+            {
+                // Set it to false, becuase it will mangle the claims types
+                // kinda email to http://some.really/strange/url/email.
+                MapInboundClaims = false
+            };
             var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
             if (securityToken is not JwtSecurityToken jwtToken
                 || !jwtToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.OrdinalIgnoreCase))
