@@ -92,6 +92,7 @@ namespace HandItOver.BackEnd.BLL.Services
             var user = new AppUser
             {
                 Email = request.Email,
+                UserName = request.Email
             };
 
             var addResult = await this.usersRepository.CreateUserAsync(user, request.Password);

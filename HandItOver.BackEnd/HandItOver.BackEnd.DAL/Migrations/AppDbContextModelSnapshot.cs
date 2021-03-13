@@ -44,6 +44,22 @@ namespace HandItOver.BackEnd.DAL.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "99DA7670-5471-414F-834E-9B3A6B6C8F6F",
+                            ConcurrencyStamp = "b1ecfd29-e00c-43ae-98ba-8b10794aad16",
+                            Name = "user",
+                            NormalizedName = "USER"
+                        },
+                        new
+                        {
+                            Id = "2AEFE1C5-C5F0-4399-8FB8-420813567554",
+                            ConcurrencyStamp = "c1b5d642-4b94-46ed-bb58-a37f3b28c598",
+                            Name = "admin",
+                            NormalizedName = "ADMIN"
+                        });
                 });
 
             modelBuilder.Entity("HandItOver.BackEnd.DAL.Entities.Auth.AppRoleClaim", b =>
@@ -63,15 +79,9 @@ namespace HandItOver.BackEnd.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("RoleId1")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("RoleId");
-
-                    b.HasIndex("RoleId1");
 
                     b.ToTable("AspNetRoleClaims");
                 });
@@ -195,15 +205,9 @@ namespace HandItOver.BackEnd.DAL.Migrations
                     b.Property<string>("RoleId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("RoleId1")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
-
-                    b.HasIndex("RoleId1");
 
                     b.ToTable("AspNetUserRoles");
                 });
@@ -252,15 +256,9 @@ namespace HandItOver.BackEnd.DAL.Migrations
 
             modelBuilder.Entity("HandItOver.BackEnd.DAL.Entities.Auth.AppRoleClaim", b =>
                 {
-                    b.HasOne("HandItOver.BackEnd.DAL.Entities.Auth.AppRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("HandItOver.BackEnd.DAL.Entities.Auth.AppRole", "Role")
                         .WithMany("RoleClaims")
-                        .HasForeignKey("RoleId1")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -291,15 +289,9 @@ namespace HandItOver.BackEnd.DAL.Migrations
 
             modelBuilder.Entity("HandItOver.BackEnd.DAL.Entities.Auth.AppUserRole", b =>
                 {
-                    b.HasOne("HandItOver.BackEnd.DAL.Entities.Auth.AppRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("HandItOver.BackEnd.DAL.Entities.Auth.AppRole", "Role")
                         .WithMany("UserRoles")
-                        .HasForeignKey("RoleId1")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

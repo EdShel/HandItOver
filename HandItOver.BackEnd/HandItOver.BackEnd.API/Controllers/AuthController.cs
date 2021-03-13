@@ -60,7 +60,7 @@ namespace HandItOver.BackEnd.API.Controllers
 
             var requestDTO = new RefreshRequest
             (
-                AuthToken: tokens.First(),
+                AuthHeaderValue: tokens.First(),
                 RefreshToken: request.RefreshToken
             );
 
