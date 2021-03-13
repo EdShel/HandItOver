@@ -42,7 +42,7 @@ namespace HandItOver.BackEnd.BLL.Services
                 throw new WrongValueException("Password");
             }
 
-            var tokenClaims = GetTokenClaimsForUser(user);
+            var tokenClaims = await GetTokenClaimsForUserAsync(user);
             var refreshTokenValue = this.refreshTokenFactory.GenerateRefreshToken();
             var refreshToken = new RefreshToken
             {
@@ -54,20 +54,20 @@ namespace HandItOver.BackEnd.BLL.Services
 
             return new LoginResult(
                 Token: this.authTokenFactory.GenerateAuthToken(tokenClaims),
-                RefreshToken: user.Email,
-                Email: refreshTokenValue
+                Email: user.Email,
+                RefreshToken: refreshTokenValue
             );
         }
 
-        private static ClaimsIdentity GetTokenClaimsForUser(AppUser user)
+        private async Task<ClaimsIdentity> GetTokenClaimsForUserAsync(AppUser user)
         {
+            var roles = await this.usersRepository.GetUserRolesAsync(user);
             var userClaims = new[]
-                {
-                    new Claim(AuthConstants.Claims.ID, user.Id),
-                    new Claim(AuthConstants.Claims.EMAIL, user.Email),
-                }
-                .Concat(user.UserRoles.Select(r => new Claim(AuthConstants.Claims.ROLE, r.Role.Name)))
-                .ToArray();
+            {
+                new Claim(AuthConstants.Claims.ID, user.Id),
+                new Claim(AuthConstants.Claims.EMAIL, user.Email),
+                new Claim(AuthConstants.Claims.ROLE, roles.First())
+            };
             return new ClaimsIdentity(userClaims);
         }
 
@@ -145,7 +145,7 @@ namespace HandItOver.BackEnd.BLL.Services
             this.usersRepository.CreateRefreshToken(user, newRefreshToken);
             await this.usersRepository.SaveChangesAsync();
 
-            var userClaims = GetTokenClaimsForUser(user);
+            var userClaims = await GetTokenClaimsForUserAsync(user);
             return new RefreshResult(
                 AuthToken: this.authTokenFactory.GenerateAuthToken(userClaims),
                 RefreshToken: newRefreshTokenValue
@@ -154,7 +154,7 @@ namespace HandItOver.BackEnd.BLL.Services
 
         public async Task RevokeTokenAsync(RevokeRequest revokeRequest)
         {
-            AppUser? user = await this.usersRepository.FindByIdOrNull(revokeRequest.Id);
+            AppUser? user = await this.usersRepository.FindByIdOrNullAsync(revokeRequest.Id);
             if (user == null)
             {
                 throw new NotFoundException("User");

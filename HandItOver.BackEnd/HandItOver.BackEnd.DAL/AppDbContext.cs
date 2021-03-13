@@ -69,12 +69,13 @@ namespace HandItOver.BackEnd.DAL
 
             builder.Entity<RefreshToken>(b =>
             {
+                b.Property(t => t.Id).ValueGeneratedOnAdd();
+                b.HasKey(t => t.Id);
+
                 b.HasOne(t => t.AppUser)
                     .WithMany(u => u.RefreshTokens)
                     .HasForeignKey(t => t.AppUserId)
                     .IsRequired();
-
-                b.HasKey(t => t.Id);
             });
 
 

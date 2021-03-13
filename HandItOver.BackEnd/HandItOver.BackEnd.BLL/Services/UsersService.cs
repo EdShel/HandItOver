@@ -18,7 +18,7 @@ namespace HandItOver.BackEnd.BLL.Services
 
         public async Task<UserInfoResult> GetInfoByIdAsync(string id)
         {
-            AppUser? user = await this.userRepository.FindByIdOrNull(id);
+            AppUser? user = await this.userRepository.FindByIdOrNullAsync(id);
             return MakeUserInfo(user);
         }
 

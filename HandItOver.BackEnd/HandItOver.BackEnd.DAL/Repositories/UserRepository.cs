@@ -1,6 +1,8 @@
 ﻿using HandItOver.BackEnd.DAL.Entities.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.DAL.Repositories
@@ -24,9 +26,17 @@ namespace HandItOver.BackEnd.DAL.Repositories
             return this.userManager.FindByEmailAsync(email);
         }
 
-        public Task<AppUser?> FindByIdOrNull(string id)
+        public Task<AppUser?> FindByIdOrNullAsync(string id)
         {
             return this.userManager.FindByIdAsync(id);
+        }
+
+        public async Task<IEnumerable<string>> GetUserRolesAsync(AppUser user)
+        {
+            return await this.dbContext.Set<AppUserRole>()
+                .Where(ur => ur.UserId == user.Id)
+                .Select(ur => ur.Role.Name)
+                .ToArrayAsync();
         }
 
         public Task<bool> CheckPasswordAsync(AppUser user, string password)
@@ -36,8 +46,8 @@ namespace HandItOver.BackEnd.DAL.Repositories
 
         public void CreateRefreshToken(AppUser user, RefreshToken refreshToken)
         {
-            user.RefreshTokens.Add(refreshToken);
-            this.dbContext.Update(user);
+            refreshToken.AppUserId = user.Id;
+            this.dbContext.Set<RefreshToken>().Add(refreshToken);
         }
 
         public Task<IdentityResult> AddToRoleAsync(AppUser user, string role)
