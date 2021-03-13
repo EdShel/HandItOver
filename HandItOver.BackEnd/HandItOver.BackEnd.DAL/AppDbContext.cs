@@ -17,7 +17,7 @@ namespace HandItOver.BackEnd.DAL
         {
         }
 
-        public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

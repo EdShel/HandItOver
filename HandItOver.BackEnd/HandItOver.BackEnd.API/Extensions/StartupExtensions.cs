@@ -1,6 +1,7 @@
 ﻿using HandItOver.BackEnd.BLL.Services;
 using HandItOver.BackEnd.DAL;
 using HandItOver.BackEnd.DAL.Entities.Auth;
+using HandItOver.BackEnd.DAL.Repositories;
 using HandItOver.BackEnd.Infrastructure.Models.Auth;
 using HandItOver.BackEnd.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -16,9 +17,6 @@ namespace HandItOver.BackEnd.API.Extensions
     {
         public static IServiceCollection AddAuthorizationServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<IAuthTokenFactory, JwtTokenGenerator>();
-            services.AddSingleton<IRefreshTokenFactory, RefreshTokenFactory>();
-
             services.AddIdentity<AppUser, AppRole>(options =>
             {
                 options.User.RequireUniqueEmail = true;
@@ -35,8 +33,8 @@ namespace HandItOver.BackEnd.API.Extensions
             }).AddEntityFrameworkStores<AppDbContext>();
 
             var authSettingsSection = configuration.GetSection(nameof(AuthSettings));
-            services.Configure<AuthSettings>(authSettingsSection);
             var authSettings = authSettingsSection.Get<AuthSettings>();
+            services.AddSingleton<AuthSettings>(authSettings);
             var jwtSigningKey = Encoding.UTF8.GetBytes(authSettings.SigningKey);
 
             services.AddAuthentication(options =>
@@ -60,6 +58,18 @@ namespace HandItOver.BackEnd.API.Extensions
                     };
                 }
             );
+
+            services.AddSingleton<IAuthTokenFactory, JwtTokenGenerator>();
+            services.AddSingleton<IRefreshTokenFactory, RefreshTokenFactory>();
+            services.AddScoped<UserRepository>();
+            services.AddScoped<UsersService>();
+            services.AddScoped<AuthService>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddAppServices(this IServiceCollection services)
+        {
 
             return services;
         }

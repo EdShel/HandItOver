@@ -24,9 +24,9 @@ namespace HandItOver.BackEnd.API
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection"))
             );
-
+            services.AddScoped<DbContext>(provider => provider.GetService<AppDbContext>()!);
             services.AddAuthorizationServices(this.Configuration);
-
+            services.AddAppServices();
             
             services.AddControllers();
             services.AddSwaggerGen(c =>
