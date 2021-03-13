@@ -1,12 +1,15 @@
-﻿namespace HandItOver.BackEnd.BLL.Models.Auth
+﻿using System.Security.Principal;
+
+namespace HandItOver.BackEnd.BLL.Models.Auth
 {
     public record RegisterRequest(
         string Email,
         string Password,
-        string Role
+        string Role,
+        IPrincipal Registerer
     );
 
-    public record RefreshResponse(
+    public record RefreshResult(
         string AuthToken,
         string RefreshToken
     );

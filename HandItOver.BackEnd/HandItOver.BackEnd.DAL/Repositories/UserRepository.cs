@@ -60,5 +60,11 @@ namespace HandItOver.BackEnd.DAL.Repositories
         {
             this.dbContext.Set<RefreshToken>().Remove(refreshToken);
         }
+
+        public Task<bool> IsAnyoneOfRoleRegisteredAsync(string roleName)
+        {
+            return this.dbContext.Set<AppUserRole>()
+                .AnyAsync(ur => ur.Role.Name == roleName);
+        }
     }
 }

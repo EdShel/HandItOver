@@ -19,6 +19,21 @@ namespace HandItOver.BackEnd.API.Extensions
             services.AddSingleton<IAuthTokenFactory, JwtTokenGenerator>();
             services.AddSingleton<IRefreshTokenFactory, RefreshTokenFactory>();
 
+            services.AddIdentity<AppUser, AppRole>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+
+                options.ClaimsIdentity.UserIdClaimType = AuthConstants.Claims.ID;
+                options.ClaimsIdentity.EmailClaimType = AuthConstants.Claims.EMAIL;
+                options.ClaimsIdentity.RoleClaimType = AuthConstants.Claims.ROLE;
+
+                options.Password.RequireDigit = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+
+            }).AddEntityFrameworkStores<AppDbContext>();
+
             var authSettingsSection = configuration.GetSection(nameof(AuthSettings));
             services.Configure<AuthSettings>(authSettingsSection);
             var authSettings = authSettingsSection.Get<AuthSettings>();
@@ -45,22 +60,6 @@ namespace HandItOver.BackEnd.API.Extensions
                     };
                 }
             );
-
-            services.AddIdentity<AppUser, AppRole>(options =>
-            {
-                options.User.RequireUniqueEmail = true;
-
-                options.ClaimsIdentity.UserIdClaimType = AuthConstants.Claims.ID;
-                options.ClaimsIdentity.EmailClaimType = AuthConstants.Claims.EMAIL;
-                options.ClaimsIdentity.RoleClaimType = AuthConstants.Claims.ROLE;
-
-                options.Password.RequireDigit = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireNonAlphanumeric = false;
-
-            }).AddEntityFrameworkStores<AppDbContext>();
-
 
             return services;
         }

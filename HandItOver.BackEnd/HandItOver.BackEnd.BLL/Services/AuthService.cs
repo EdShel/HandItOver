@@ -73,6 +73,17 @@ namespace HandItOver.BackEnd.BLL.Services
 
         public async Task RegisterAsync(RegisterRequest request)
         {
+            if (request.Role == AuthConstants.Roles.ADMIN)
+            {
+                bool isAdminMyself = request.Registerer.IsInRole(AuthConstants.Roles.ADMIN);
+                Task<bool> adminsExist = this.usersRepository.IsAnyoneOfRoleRegisteredAsync(AuthConstants.Roles.ADMIN);
+                bool canRegisterAdmin = isAdminMyself || !await adminsExist;
+                if (!canRegisterAdmin)
+                {
+                    throw new NoRightsException("register admin");
+                }
+            }
+
             AppUser? anotherUser = await this.usersRepository.FindByEmailOrNullAsync(request.Email);
             if (anotherUser != null)
             {
@@ -96,9 +107,9 @@ namespace HandItOver.BackEnd.BLL.Services
             }
         }
 
-        public async Task<RefreshResponse> RefreshTokenAsync(RefreshRequest refreshRequest)
+        public async Task<RefreshResult> RefreshTokenAsync(RefreshRequest refreshRequest)
         {
-            var userPrincipal = new JwtTokenValidator(authSettings).ExtractPrincipalFromExpiredToken(refreshRequest.AuthToken);
+            var userPrincipal = new JwtTokenValidator(this.authSettings).ExtractPrincipalFromExpiredToken(refreshRequest.AuthToken);
             if (userPrincipal == null)
             {
                 throw new WrongValueException("Authorization token");
@@ -127,14 +138,14 @@ namespace HandItOver.BackEnd.BLL.Services
             var newRefreshToken = new RefreshToken
             {
                 Value = newRefreshTokenValue,
-                Expires = DateTime.UtcNow.AddMinutes(authSettings.RefreshTokenLifetimeMinutes)
+                Expires = DateTime.UtcNow.AddMinutes(this.authSettings.RefreshTokenLifetimeMinutes)
             };
             this.usersRepository.CreateRefreshToken(user, newRefreshToken);
             await this.usersRepository.SaveChangesAsync();
 
             var userClaims = GetTokenClaimsForUser(user);
-            return new RefreshResponse(
-                AuthToken: authTokenFactory.GenerateAuthToken(userClaims),
+            return new RefreshResult(
+                AuthToken: this.authTokenFactory.GenerateAuthToken(userClaims),
                 RefreshToken: newRefreshTokenValue
             );
         }

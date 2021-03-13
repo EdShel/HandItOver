@@ -10,5 +10,12 @@
 
             public const string ID = "id";
         }
+
+        public static class Roles
+        {
+            public const string DEFAULT = "user";
+
+            public const string ADMIN = "admin";
+        }
     }
 }

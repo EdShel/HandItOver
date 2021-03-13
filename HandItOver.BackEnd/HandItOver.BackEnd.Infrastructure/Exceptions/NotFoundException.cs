@@ -36,4 +36,13 @@ namespace HandItOver.BackEnd.Infrastructure.Exceptions
 
         }
     }
+
+    public class NoRightsException : InvalidOperationException
+    {
+        public NoRightsException(string action)
+            : base($"You're not allowed to {action}.")
+        {
+
+        }
+    }
 }
