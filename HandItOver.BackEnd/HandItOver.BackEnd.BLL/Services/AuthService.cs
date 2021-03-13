@@ -109,7 +109,8 @@ namespace HandItOver.BackEnd.BLL.Services
 
         public async Task<RefreshResult> RefreshTokenAsync(RefreshRequest refreshRequest)
         {
-            var userPrincipal = new JwtTokenValidator(this.authSettings).ExtractPrincipalFromExpiredToken(refreshRequest.AuthToken);
+            string authToken = refreshRequest.AuthHeaderValue.Substring("Bearer ".Length);
+            var userPrincipal = new JwtTokenValidator(this.authSettings).ExtractPrincipalFromExpiredToken(authToken);
             if (userPrincipal == null)
             {
                 throw new WrongValueException("Authorization token");

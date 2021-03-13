@@ -15,7 +15,7 @@ namespace HandItOver.BackEnd.BLL.Models.Auth
     );
 
     public record RefreshRequest(
-        string AuthToken,
+        string AuthHeaderValue,
         string RefreshToken
     );
 
