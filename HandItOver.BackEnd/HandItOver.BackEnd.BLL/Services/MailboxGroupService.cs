@@ -1,66 +1,52 @@
-﻿using HandItOver.BackEnd.BLL.Models.MailboxAccessControl;
-using HandItOver.BackEnd.BLL.Models.MailboxGroup;
+﻿using HandItOver.BackEnd.BLL.Models.MailboxGroup;
+using HandItOver.BackEnd.BLL.Models.MailboxMessages;
 using HandItOver.BackEnd.DAL.Entities;
 using HandItOver.BackEnd.DAL.Entities.Auth;
 using HandItOver.BackEnd.DAL.Repositories;
 using HandItOver.BackEnd.Infrastructure.Exceptions;
-using System.Linq;
+using System;
 using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.BLL.Entities
 {
-    public class MailboxAccessControlService
+    public class DeliveryService
     {
-        private readonly MailboxGroupRepository mailboxGroupRepository;
+        //private readonly MailboxRepository mailboxRepository;
 
-        private readonly UserRepository userRepository;
+        private readonly DeliveryRepository deliveryRepository;
 
-        public async Task<WhitelistInfo> GetMailboxWhitelist(string groupId)
+        public async Task HandleDeliveryArrival(DeliveryArrivedRequest delivery)
         {
-            MailboxGroup mailboxGroup = await this.mailboxGroupRepository.GetWhitelistByIdAsync(groupId)
-                ?? throw new NotFoundException("Mailbox group");
-
-            return new WhitelistInfo(
-                MailboxGroupId: mailboxGroup.GroupId,
-                Entries: mailboxGroup.Whitelisted.Select(
-                    u => new WhitelistEntry(
-                        Email: u.Email,
-                        Id: u.Id
-                    )
-                )
-            );
+            Delivery deliveryRecord = new Delivery
+            {
+                AddresseeId = "TODO: FIND OUT WHO IS THE RECEPIENT",
+                MailboxId = delivery.MailboxId,
+                Weight = delivery.Weight,
+                Arrived = DateTime.UtcNow,
+                Taken = null,
+            };
+            this.deliveryRepository.AddDelivery(deliveryRecord);
+            await this.deliveryRepository.SaveChangesAsync();
         }
 
-        public async Task AddUserToWhitelistAsync(string groupId, string userEmail)
+        public async Task RequestOpening(string mailboxId)
         {
-            AppUser user = await this.userRepository.FindByEmailOrNullAsync(userEmail)
-                ?? throw new NotFoundException("User");
-            MailboxGroup mailboxGroup = await this.mailboxGroupRepository.GetWhitelistByIdAsync(groupId)
-                ?? throw new NotFoundException("Mailbox group");
-
-            if (mailboxGroup.Whitelisted.Contains(user))
-            {
-                throw new RecordAlreadyExistsException("User in whitelist");
-            }
-
-            mailboxGroup.Whitelisted.Add(user);
-            await this.mailboxGroupRepository.SaveChangesAsync();
+            Delivery currentDelivery = await this.deliveryRepository.GetCurrentDeliveryAsync(mailboxId)
+                ?? throw new NotFoundException("Delivery");
+            currentDelivery.Taken = DateTime.UtcNow;
+            this.deliveryRepository.UpdateDelivery(currentDelivery);
+            this.deliveryRepository.UpdateDelivery(currentDelivery);
         }
 
-        public async Task RemoveUserFromWhitelistAsync(string groupId, string userEmail)
+        public async Task<bool> IsRequestedOpening(string mailboxId)
         {
-            AppUser user = await this.userRepository.FindByEmailOrNullAsync(userEmail)
-                ?? throw new NotFoundException("User");
-            MailboxGroup mailboxGroup = await this.mailboxGroupRepository.GetWhitelistByIdAsync(groupId)
-                ?? throw new NotFoundException("Mailbox group");
+            return (await this.deliveryRepository.GetCurrentDeliveryAsync(mailboxId)) == null;
+            // || is public && is reserved for now
+        }
 
-            if (!mailboxGroup.Whitelisted.Contains(user))
-            {
-                throw new WrongValueException("Mailbox group whitelist");
-            }
-
-            mailboxGroup.Whitelisted.Remove(user);
-            await this.mailboxGroupRepository.SaveChangesAsync();
+        public async Task HandleDeliveryDissapeared()
+        {
+            // TODO: Call FBI
         }
     }
 

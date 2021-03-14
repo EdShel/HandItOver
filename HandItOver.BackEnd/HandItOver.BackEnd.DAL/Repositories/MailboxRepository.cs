@@ -1,0 +1,55 @@
+﻿using HandItOver.BackEnd.DAL.Entities;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
+
+namespace HandItOver.BackEnd.DAL.Repositories
+{
+    public class DeliveryRepository : BaseRepository<Delivery>
+    {
+        public DeliveryRepository(DbContext dbContext) : base(dbContext)
+        {
+        }
+
+        public void AddDelivery(Delivery delivery)
+        {
+            this.dbContext.Set<Delivery>().Add(delivery);
+        }
+
+        public void UpdateDelivery(Delivery delivery)
+        {
+            this.dbContext.Set<Delivery>().Update(delivery);
+        }
+
+        public Task<Delivery?> GetCurrentDeliveryAsync(string mailboxId)
+        {
+            return this.dbContext.Set<Delivery?>()
+                .FirstOrDefaultAsync(
+                    d => d!.MailboxId == mailboxId && d.Taken == null
+                );
+        }
+    }
+
+    public class MailboxRepository : BaseRepository<MailboxRepository>
+    {
+        public MailboxRepository(DbContext dbContext) : base(dbContext)
+        {
+        }
+
+        public Task<Mailbox?> FindByPhysicalIdOrNullAsync(string physicalId)
+        {
+            return this.dbContext.Set<Mailbox?>()
+                .FirstOrDefaultAsync(mb => mb!.PhysicalId == physicalId);
+        }
+
+        public Task<Mailbox?> FindByIdOrNullAsync(string id)
+        {
+            return this.dbContext.Set<Mailbox?>()
+                .FirstOrDefaultAsync(mb => mb!.Id == id);
+        }
+
+        public void CreateMailbox(Mailbox mailbox)
+        {
+            this.dbContext.Set<Mailbox>().Add(mailbox);
+        }
+    }
+}

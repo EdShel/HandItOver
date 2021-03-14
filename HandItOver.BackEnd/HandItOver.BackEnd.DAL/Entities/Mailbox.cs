@@ -66,6 +66,6 @@ namespace HandItOver.BackEnd.DAL.Entities
 
         public DateTime Arrived { get; set; }
 
-        public DateTime Taken { get; set; }
+        public DateTime? Taken { get; set; }
     }
 }
