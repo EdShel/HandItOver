@@ -1,11 +1,12 @@
-﻿using HandItOver.BackEnd.BLL.Services;
-using HandItOver.BackEnd.BLL.Services.JwtAuth;
+﻿using HandItOver.BackEnd.BLL.ResourceAccess;
+using HandItOver.BackEnd.BLL.Services;
 using HandItOver.BackEnd.DAL;
 using HandItOver.BackEnd.DAL.Entities.Auth;
 using HandItOver.BackEnd.DAL.Repositories;
 using HandItOver.BackEnd.Infrastructure.Models.Auth;
 using HandItOver.BackEnd.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -37,6 +38,16 @@ namespace HandItOver.BackEnd.API.Extensions
             services.AddScoped<UserRepository>();
             services.AddScoped<UsersService>();
             services.AddScoped<AuthService>();
+
+            services.AddTransient<IAuthorizationHandler, MailboxGroupAuthorizationHandler>();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(
+                    AuthConstants.Policies.MAILBOX_GROUP_OWNER_ONLY,
+                    policy => policy.Requirements.Add(new ResourceOwnerRequirement())
+                );
+            });
 
             return services;
         }

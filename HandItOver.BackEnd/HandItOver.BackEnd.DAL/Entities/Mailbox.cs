@@ -30,7 +30,7 @@ namespace HandItOver.BackEnd.DAL.Entities
     {
         public string GroupId { get; set; } = null!;
 
-        public string OnwerId { get; set; } = null!;
+        public string Owner { get; set; } = null!;
 
         public string Name { get; set; } = null!;
 

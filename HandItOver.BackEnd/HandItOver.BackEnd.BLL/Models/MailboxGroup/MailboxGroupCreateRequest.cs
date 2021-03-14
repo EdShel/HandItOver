@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.BLL.Models.MailboxGroup
 {
+    public interface IMailboxGroupRequest
+    {
+        string GroupId { get; }
+    }
+
     public record MailboxGroupCreateRequest(
         string OwnerId,
         string Name,

@@ -103,7 +103,7 @@ namespace HandItOver.BackEnd.BLL.Entities
             MailboxGroup newMailboxGroup = new MailboxGroup
             {
                 Name = request.Name,
-                OnwerId = request.OwnerId,
+                Owner = request.OwnerId,
                 WhitelistOnly = request.WhitelistOnly
             };
             this.mailboxGroupRepository.CreateMailboxGroup(newMailboxGroup);

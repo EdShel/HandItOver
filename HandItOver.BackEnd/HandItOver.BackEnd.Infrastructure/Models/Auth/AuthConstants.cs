@@ -21,5 +21,10 @@
 
             public const string MAILBOX = "mailbox";
         }
+
+        public static class Policies
+        {
+            public const string MAILBOX_GROUP_OWNER_ONLY = "mailboxGroup";
+        }
     }
 }
