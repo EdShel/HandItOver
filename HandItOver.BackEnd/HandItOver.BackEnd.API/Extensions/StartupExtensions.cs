@@ -1,4 +1,5 @@
 ﻿using HandItOver.BackEnd.BLL.Services;
+using HandItOver.BackEnd.BLL.Services.JwtAuth;
 using HandItOver.BackEnd.DAL;
 using HandItOver.BackEnd.DAL.Entities.Auth;
 using HandItOver.BackEnd.DAL.Repositories;
@@ -7,9 +8,6 @@ using HandItOver.BackEnd.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Text;
 
 namespace HandItOver.BackEnd.API.Extensions
 {
@@ -32,10 +30,23 @@ namespace HandItOver.BackEnd.API.Extensions
 
             }).AddEntityFrameworkStores<AppDbContext>();
 
-            var authSettingsSection = configuration.GetSection(nameof(AuthSettings));
-            var authSettings = authSettingsSection.Get<AuthSettings>();
-            services.AddSingleton<AuthSettings>(authSettings);
-            var jwtSigningKey = Encoding.UTF8.GetBytes(authSettings.SigningKey);
+            AddAuthTokenServices(services, configuration);
+
+            AddRefreshTokenFactory(services, configuration);
+
+            services.AddScoped<UserRepository>();
+            services.AddScoped<UsersService>();
+            services.AddScoped<AuthService>();
+
+            return services;
+        }
+
+        private static void AddAuthTokenServices(IServiceCollection services, IConfiguration configuration)
+        {
+            var tokenSettingsSection = configuration.GetSection(nameof(JwtTokenSettings));
+            var tokenSettings = tokenSettingsSection.Get<JwtTokenSettings>();
+            var tokenService = new JwtTokenService(tokenSettings);
+            services.AddSingleton<ITokenService>(tokenService);
 
             services.AddAuthentication(o =>
             {
@@ -45,25 +56,17 @@ namespace HandItOver.BackEnd.API.Extensions
                 configureOptions: options =>
                 {
                     options.RequireHttpsMetadata = true;
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(jwtSigningKey),
-                        ValidIssuer = authSettings.ValidIssuer,
-                        ValidateIssuer = true,
-                        ValidateAudience = false,
-                        ClockSkew = TimeSpan.Zero
-                    };
+                    options.TokenValidationParameters = tokenService.ValidationParameters;
                 }
             );
+        }
 
-            services.AddSingleton<IAuthTokenFactory, JwtTokenGenerator>();
+        private static void AddRefreshTokenFactory(IServiceCollection services, IConfiguration configuration)
+        {
+            var refreshTokenSettingsSection = configuration.GetSection(nameof(RefreshTokenSettings));
+            var refreshTokenSettings = refreshTokenSettingsSection.Get<RefreshTokenSettings>();
+            services.AddSingleton(refreshTokenSettings);
             services.AddSingleton<IRefreshTokenFactory, RefreshTokenFactory>();
-            services.AddScoped<UserRepository>();
-            services.AddScoped<UsersService>();
-            services.AddScoped<AuthService>();
-
-            return services;
         }
 
         public static IServiceCollection AddAppServices(this IServiceCollection services)

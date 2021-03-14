@@ -8,29 +8,75 @@ using System.Text;
 
 namespace HandItOver.BackEnd.BLL.Services
 {
-    public class JwtTokenGenerator : IAuthTokenFactory
+    public partial class JwtTokenService : ITokenService
     {
-        private readonly AuthSettings authSettings;
+        private const string SECURITY_ALGORITHM = SecurityAlgorithms.HmacSha256;
 
-        public JwtTokenGenerator(AuthSettings authSettings)
+        private readonly JwtTokenSettings jwtSettings;
+
+        public JwtTokenService(JwtTokenSettings jwtSettings)
         {
-            this.authSettings = authSettings;
+            this.jwtSettings = jwtSettings;
+            this.ValidationParameters = NormalValidation();
+        }
+
+        public TokenValidationParameters ValidationParameters { get; }
+
+        private TokenValidationParameters NormalValidation()
+        {
+            return new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.jwtSettings.SigningKey)),
+                ValidIssuer = this.jwtSettings.ValidIssuer,
+                ValidateIssuer = true,
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero
+            };
+        }
+
+        private TokenValidationParameters ExpiredValidation()
+        {
+            var normal = NormalValidation();
+            normal.ValidateLifetime = false;
+            return normal;
         }
 
         public string GenerateAuthToken(ClaimsIdentity claims)
         {
             var now = DateTime.UtcNow;
             var jwt = new JwtSecurityToken(
-                    issuer: this.authSettings.ValidIssuer,
+                    issuer: this.jwtSettings.ValidIssuer,
                     notBefore: now,
                     claims: claims.Claims,
-                    expires: now.Add(TimeSpan.FromSeconds(this.authSettings.TokenLifetimeSeconds)),
+                    expires: now.Add(TimeSpan.FromSeconds(this.jwtSettings.TokenLifetimeSeconds)),
                     signingCredentials: new SigningCredentials(
-                        key: new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.authSettings.SigningKey)),
-                        algorithm: SecurityAlgorithms.HmacSha256
+                        key: new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.jwtSettings.SigningKey)),
+                        algorithm: SECURITY_ALGORITHM
                     )
             );
             return new JwtSecurityTokenHandler().WriteToken(jwt);
+        }
+
+        public ClaimsPrincipal? ExtractPrincipalFromExpiredAuthHeader(string headerValue)
+        {
+            var tokenValidationParameters = ExpiredValidation();
+
+            var tokenHandler = new JwtSecurityTokenHandler
+            {
+                // Set it to false, becuase it will mangle the claims types
+                // kinda email to http://some.really/strange/url/email.
+                MapInboundClaims = false
+            };
+            string token = headerValue.Substring("Bearer ".Length);
+            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
+            if (securityToken is not JwtSecurityToken jwtToken
+                || !jwtToken.Header.Alg.Equals(SECURITY_ALGORITHM, StringComparison.OrdinalIgnoreCase))
+            {
+                return null;
+            }
+
+            return principal;
         }
     }
 }

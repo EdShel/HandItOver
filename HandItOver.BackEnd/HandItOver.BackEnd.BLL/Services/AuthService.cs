@@ -15,60 +15,15 @@ namespace HandItOver.BackEnd.BLL.Services
     {
         private readonly UserRepository usersRepository;
 
-        private readonly IAuthTokenFactory authTokenFactory;
+        private readonly ITokenService tokenService;
 
         private readonly IRefreshTokenFactory refreshTokenFactory;
 
-        private readonly AuthSettings authSettings;
-
-        public AuthService(UserRepository usersRepository, IAuthTokenFactory authTokenFactory, IRefreshTokenFactory refreshTokenFactory, AuthSettings authSettings)
+        public AuthService(UserRepository usersRepository, ITokenService tokenService, IRefreshTokenFactory refreshTokenFactory)
         {
             this.usersRepository = usersRepository;
-            this.authTokenFactory = authTokenFactory;
+            this.tokenService = tokenService;
             this.refreshTokenFactory = refreshTokenFactory;
-            this.authSettings = authSettings;
-        }
-
-        public async Task<LoginResult> LoginAsync(LoginRequest loginRequest)
-        {
-            AppUser? user = await this.usersRepository.FindByEmailOrNullAsync(loginRequest.Email);
-            if (user == null)
-            {
-                throw new NotFoundException("User");
-            }
-
-            if (!await this.usersRepository.CheckPasswordAsync(user, loginRequest.Password))
-            {
-                throw new WrongValueException("Password");
-            }
-
-            var tokenClaims = await GetTokenClaimsForUserAsync(user);
-            var refreshTokenValue = this.refreshTokenFactory.GenerateRefreshToken();
-            var refreshToken = new RefreshToken
-            {
-                Value = refreshTokenValue,
-                Expires = DateTime.UtcNow.AddMinutes(this.authSettings.RefreshTokenLifetimeMinutes)
-            };
-            this.usersRepository.CreateRefreshToken(user, refreshToken);
-            await this.usersRepository.SaveChangesAsync();
-
-            return new LoginResult(
-                Token: this.authTokenFactory.GenerateAuthToken(tokenClaims),
-                Email: user.Email,
-                RefreshToken: refreshTokenValue
-            );
-        }
-
-        private async Task<ClaimsIdentity> GetTokenClaimsForUserAsync(AppUser user)
-        {
-            var roles = await this.usersRepository.GetUserRolesAsync(user);
-            var userClaims = new[]
-            {
-                new Claim(AuthConstants.Claims.ID, user.Id),
-                new Claim(AuthConstants.Claims.EMAIL, user.Email),
-                new Claim(AuthConstants.Claims.ROLE, roles.First())
-            };
-            return new ClaimsIdentity(userClaims);
         }
 
         public async Task RegisterAsync(RegisterRequest request)
@@ -108,10 +63,53 @@ namespace HandItOver.BackEnd.BLL.Services
             }
         }
 
+        public async Task<LoginResult> LoginAsync(LoginRequest loginRequest)
+        {
+            AppUser? user = await this.usersRepository.FindByEmailOrNullAsync(loginRequest.Email);
+            if (user == null)
+            {
+                throw new NotFoundException("User");
+            }
+
+            if (!await this.usersRepository.CheckPasswordAsync(user, loginRequest.Password))
+            {
+                throw new WrongValueException("Password");
+            }
+
+            var tokenClaims = await GetTokenClaimsForUserAsync(user);
+            var newRefreshToken = this.refreshTokenFactory.GenerateRefreshToken();
+            var refreshToken = new RefreshToken
+            {
+                Value = newRefreshToken.Value,
+                Expires = newRefreshToken.Expires
+            };
+            this.usersRepository.CreateRefreshToken(user, refreshToken);
+            await this.usersRepository.SaveChangesAsync();
+
+            return new LoginResult(
+                Token: this.tokenService.GenerateAuthToken(tokenClaims),
+                Email: user.Email,
+                RefreshToken: newRefreshToken.Value
+            );
+        }
+
+        private async Task<ClaimsIdentity> GetTokenClaimsForUserAsync(AppUser user)
+        {
+            var roles = await this.usersRepository.GetUserRolesAsync(user);
+            var userClaims = new[]
+            {
+                new Claim(AuthConstants.Claims.ID, user.Id),
+                new Claim(AuthConstants.Claims.EMAIL, user.Email),
+                new Claim(AuthConstants.Claims.ROLE, roles.First())
+            };
+            return new ClaimsIdentity(userClaims);
+        }
+
+
         public async Task<RefreshResult> RefreshTokenAsync(RefreshRequest refreshRequest)
         {
-            string authToken = refreshRequest.AuthHeaderValue.Substring("Bearer ".Length);
-            var userPrincipal = new JwtTokenValidator(this.authSettings).ExtractPrincipalFromExpiredToken(authToken);
+            string authHeaderValue = refreshRequest.AuthHeaderValue;
+            var userPrincipal = this.tokenService.ExtractPrincipalFromExpiredAuthHeader(authHeaderValue);
             if (userPrincipal == null)
             {
                 throw new WrongValueException("Authorization token");
@@ -139,16 +137,16 @@ namespace HandItOver.BackEnd.BLL.Services
             var newRefreshTokenValue = this.refreshTokenFactory.GenerateRefreshToken();
             var newRefreshToken = new RefreshToken
             {
-                Value = newRefreshTokenValue,
-                Expires = DateTime.UtcNow.AddMinutes(this.authSettings.RefreshTokenLifetimeMinutes)
+                Value = newRefreshTokenValue.Value,
+                Expires = newRefreshTokenValue.Expires
             };
             this.usersRepository.CreateRefreshToken(user, newRefreshToken);
             await this.usersRepository.SaveChangesAsync();
 
             var userClaims = await GetTokenClaimsForUserAsync(user);
             return new RefreshResult(
-                AuthToken: this.authTokenFactory.GenerateAuthToken(userClaims),
-                RefreshToken: newRefreshTokenValue
+                AuthToken: this.tokenService.GenerateAuthToken(userClaims),
+                RefreshToken: newRefreshTokenValue.Value
             );
         }
 

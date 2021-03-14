@@ -9,11 +9,11 @@ namespace HandItOver.BackEnd.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class UsersController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly UsersService usersService;
 
-        public UsersController(UsersService usersService)
+        public UserController(UsersService usersService)
         {
             this.usersService = usersService;
         }
@@ -31,6 +31,22 @@ namespace HandItOver.BackEnd.API.Controllers
         {
             UserInfoResult user = await this.usersService.GetInfoByEmailAsync(email);
             return new JsonResult(user);
+        }
+    }
+
+
+    [ApiController]
+    [Route("[controller]")]
+    public class MailboxController : ControllerBase
+    {
+        [HttpPost("auth")]
+        public async Task<IActionResult> AuthorizeMailbox()
+        {
+            return new JsonResult(new
+            {
+                Token = "",
+                RefreshToken = ""
+            });
         }
     }
 }
