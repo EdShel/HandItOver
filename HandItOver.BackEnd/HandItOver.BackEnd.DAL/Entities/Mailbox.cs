@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HandItOver.BackEnd.DAL.Entities.Auth;
+using System;
 using System.Collections.Generic;
 
 namespace HandItOver.BackEnd.DAL.Entities
@@ -36,13 +37,8 @@ namespace HandItOver.BackEnd.DAL.Entities
         public bool WhitelistOnly { get; set; }
 
         public ICollection<Mailbox> Mailboxes { get; set; } = null!;
-    }
 
-    public class MailboxWhitelist
-    {
-        public string MailBoxId { get; set; } = null!;
-
-        public string AppUserId { get; set; } = null!;
+        public ICollection<AppUser> Whitelisted { get; set; } = null!;
     }
 
     public class MailboxRent

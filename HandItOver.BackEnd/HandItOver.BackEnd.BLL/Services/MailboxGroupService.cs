@@ -1,12 +1,69 @@
-﻿using HandItOver.BackEnd.BLL.Models.MailboxGroup;
+﻿using HandItOver.BackEnd.BLL.Models.MailboxAccessControl;
+using HandItOver.BackEnd.BLL.Models.MailboxGroup;
 using HandItOver.BackEnd.DAL.Entities;
 using HandItOver.BackEnd.DAL.Entities.Auth;
 using HandItOver.BackEnd.DAL.Repositories;
 using HandItOver.BackEnd.Infrastructure.Exceptions;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.BLL.Entities
 {
+    public class MailboxAccessControlService
+    {
+        private readonly MailboxGroupRepository mailboxGroupRepository;
+
+        private readonly UserRepository userRepository;
+
+        public async Task<WhitelistInfo> GetMailboxWhitelist(string groupId)
+        {
+            MailboxGroup mailboxGroup = await this.mailboxGroupRepository.GetWhitelistByIdAsync(groupId)
+                ?? throw new NotFoundException("Mailbox group");
+
+            return new WhitelistInfo(
+                MailboxGroupId: mailboxGroup.GroupId,
+                Entries: mailboxGroup.Whitelisted.Select(
+                    u => new WhitelistEntry(
+                        Email: u.Email,
+                        Id: u.Id
+                    )
+                )
+            );
+        }
+
+        public async Task AddUserToWhitelistAsync(string groupId, string userEmail)
+        {
+            AppUser user = await this.userRepository.FindByEmailOrNullAsync(userEmail)
+                ?? throw new NotFoundException("User");
+            MailboxGroup mailboxGroup = await this.mailboxGroupRepository.GetWhitelistByIdAsync(groupId)
+                ?? throw new NotFoundException("Mailbox group");
+
+            if (mailboxGroup.Whitelisted.Contains(user))
+            {
+                throw new RecordAlreadyExistsException("User in whitelist");
+            }
+
+            mailboxGroup.Whitelisted.Add(user);
+            await this.mailboxGroupRepository.SaveChangesAsync();
+        }
+
+        public async Task RemoveUserFromWhitelistAsync(string groupId, string userEmail)
+        {
+            AppUser user = await this.userRepository.FindByEmailOrNullAsync(userEmail)
+                ?? throw new NotFoundException("User");
+            MailboxGroup mailboxGroup = await this.mailboxGroupRepository.GetWhitelistByIdAsync(groupId)
+                ?? throw new NotFoundException("Mailbox group");
+
+            if (!mailboxGroup.Whitelisted.Contains(user))
+            {
+                throw new WrongValueException("Mailbox group whitelist");
+            }
+
+            mailboxGroup.Whitelisted.Remove(user);
+            await this.mailboxGroupRepository.SaveChangesAsync();
+        }
+    }
+
     public class MailboxGroupService
     {
         private readonly UserRepository userRepository;
@@ -85,6 +142,11 @@ namespace HandItOver.BackEnd.BLL.Entities
             Mailbox mailbox = await this.mailboxRepository.FindByIdOrNullAsync(mailboxId)
                 ?? throw new NotFoundException("Mailbox");
 
+            if (group.Mailboxes.Contains(mailbox))
+            {
+                throw new RecordAlreadyExistsException("Mailbox in group");
+            }
+
             group.Mailboxes.Add(mailbox);
             await this.mailboxGroupRepository.SaveChangesAsync();
         }
@@ -95,6 +157,11 @@ namespace HandItOver.BackEnd.BLL.Entities
                 ?? throw new NotFoundException("Mailbox group");
             Mailbox mailbox = await this.mailboxRepository.FindByIdOrNullAsync(mailboxId)
                 ?? throw new NotFoundException("Mailbox");
+
+            if (!group.Mailboxes.Contains(mailbox))
+            {
+                throw new WrongValueException("Mailbox group");
+            }
 
             group.Mailboxes.Remove(mailbox);
             await this.mailboxGroupRepository.SaveChangesAsync();

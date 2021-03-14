@@ -15,6 +15,8 @@ namespace HandItOver.BackEnd.DAL.Entities.Auth
         public ICollection<AppUserRole> UserRoles { get; set; } = null!;
 
         public ICollection<RefreshToken> RefreshTokens { get; set; } = null!;
+
+        public ICollection<MailboxGroup> WhitelistedIn { get; set; } = null!;
     }
 
     public class AppRole : IdentityRole

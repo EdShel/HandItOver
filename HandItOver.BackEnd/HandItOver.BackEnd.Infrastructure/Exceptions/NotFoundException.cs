@@ -15,7 +15,6 @@ namespace HandItOver.BackEnd.Infrastructure.Exceptions
         public WrongValueException(string parameterName)
             : base($"{parameterName} is invalid.")
         {
-
         }
     }
 
@@ -24,7 +23,6 @@ namespace HandItOver.BackEnd.Infrastructure.Exceptions
         public RecordAlreadyExistsException(string recordName)
             :base($"{recordName} already exists.")
         {
-
         }
     }
 
@@ -33,7 +31,6 @@ namespace HandItOver.BackEnd.Infrastructure.Exceptions
         public ExpiredException(string whatHasExpired)
             : base($"{whatHasExpired} has expired.")
         {
-
         }
     }
 
@@ -42,7 +39,14 @@ namespace HandItOver.BackEnd.Infrastructure.Exceptions
         public NoRightsException(string action)
             : base($"You're not allowed to {action}.")
         {
+        }
+    }
 
+    public class NotOwnerException : InvalidOperationException
+    {
+        public NotOwnerException(string item)
+            : base($"{item} doesn't belong to you.")
+        {
         }
     }
 }

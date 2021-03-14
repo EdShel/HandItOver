@@ -52,6 +52,13 @@ namespace HandItOver.BackEnd.DAL.Repositories
                 .FirstOrDefaultAsync(m => m!.GroupId == id);
         }
 
+        public Task<MailboxGroup?> GetWhitelistByIdAsync(string id)
+        {
+            return this.dbContext.Set<MailboxGroup?>()
+                .Include(m => m.Whitelisted)
+                .FirstOrDefaultAsync(m => m!.GroupId == id);
+        }
+
         public void CreateMailboxGroup(MailboxGroup mailboxGroup)
         {
             this.dbContext.Set<MailboxGroup>().Add(mailboxGroup);
@@ -61,6 +68,8 @@ namespace HandItOver.BackEnd.DAL.Repositories
         {
             this.dbContext.Set<MailboxGroup>().Remove(mailboxGroup);
         }
+
+
     }
 
     public class UserRepository : BaseRepository<AppUser>
