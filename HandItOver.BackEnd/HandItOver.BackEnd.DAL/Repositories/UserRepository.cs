@@ -20,9 +20,46 @@ namespace HandItOver.BackEnd.DAL.Repositories
                 .FirstOrDefaultAsync(mb => mb!.PhysicalId == physicalId);
         }
 
+        public Task<Mailbox?> FindByIdOrNullAsync(string id)
+        {
+            return this.dbContext.Set<Mailbox?>()
+                .FirstOrDefaultAsync(mb => mb!.Id == id);
+        }
+
         public void CreateMailbox(Mailbox mailbox)
         {
             this.dbContext.Set<Mailbox>().Add(mailbox);
+        }
+    }
+
+    public class MailboxGroupRepository : BaseRepository<MailboxGroupRepository>
+    {
+        public MailboxGroupRepository(DbContext dbContext) : base(dbContext)
+        {
+        }
+
+        public Task<MailboxGroup?> FindByNameOrNullAsync(string name)
+        {
+            return this.dbContext.Set<MailboxGroup?>()
+                .Include(m => m!.Mailboxes)
+                .FirstOrDefaultAsync(m => m!.Name == name);
+        }
+
+        public Task<MailboxGroup?> FindByIdOrNullAsync(string id)
+        {
+            return this.dbContext.Set<MailboxGroup?>()
+                .Include(m => m!.Mailboxes)
+                .FirstOrDefaultAsync(m => m!.GroupId == id);
+        }
+
+        public void CreateMailboxGroup(MailboxGroup mailboxGroup)
+        {
+            this.dbContext.Set<MailboxGroup>().Add(mailboxGroup);
+        }
+
+        public void DeleteMailboxGroup(MailboxGroup mailboxGroup)
+        {
+            this.dbContext.Set<MailboxGroup>().Remove(mailboxGroup);
         }
     }
 

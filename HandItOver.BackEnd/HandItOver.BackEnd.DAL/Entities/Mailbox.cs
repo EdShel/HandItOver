@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace HandItOver.BackEnd.DAL.Entities
 {
@@ -17,18 +18,24 @@ namespace HandItOver.BackEnd.DAL.Entities
 
         public MailboxSize Size { get; set; }
 
-        public string GroupId { get; set; } = null!;
+        public string? GroupId { get; set; };
 
         public string PhysicalId { get; set; } = null!;
+
+        public MailboxGroup MailboxGroup { get; set; } = null!;
     }
 
     public class MailboxGroup
     {
-        public string ClusterId { get; set; } = null!;
+        public string GroupId { get; set; } = null!;
+
+        public string OnwerId { get; set; } = null!;
 
         public string Name { get; set; } = null!;
 
         public bool WhitelistOnly { get; set; }
+
+        public ICollection<Mailbox> Mailboxes { get; set; } = null!;
     }
 
     public class MailboxWhitelist

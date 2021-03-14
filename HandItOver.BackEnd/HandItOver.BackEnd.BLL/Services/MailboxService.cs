@@ -32,7 +32,7 @@ namespace HandItOver.BackEnd.BLL.Entities
             this.refreshTokenFactory = refreshTokenFactory;
         }
 
-        public async Task<MailboxAuthResult> AuthorizeMailbox(MailboxAuthRequest request)
+        public async Task<MailboxAuthResult> AuthorizeMailboxAsync(MailboxAuthRequest request)
         {
             AppUser owner = await this.userRepository.FindByIdOrNullAsync(request.OwnerId)
                 ?? throw new NotFoundException("Mailbox owner");
