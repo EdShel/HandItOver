@@ -19,6 +19,7 @@ namespace HandItOver.BackEnd.DAL.Entities
 
         public string GroupId { get; set; } = null!;
 
+        public string PhysicalId { get; set; } = null!;
     }
 
     public class MailboxGroup

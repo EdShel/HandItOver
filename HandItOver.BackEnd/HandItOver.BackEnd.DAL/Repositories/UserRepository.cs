@@ -1,4 +1,5 @@
-﻿using HandItOver.BackEnd.DAL.Entities.Auth;
+﻿using HandItOver.BackEnd.DAL.Entities;
+using HandItOver.BackEnd.DAL.Entities.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -7,6 +8,24 @@ using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.DAL.Repositories
 {
+    public class MailboxRepository : BaseRepository<MailboxRepository>
+    {
+        public MailboxRepository(DbContext dbContext) : base(dbContext)
+        {
+        }
+
+        public Task<Mailbox?> FindByPhysicalIdOrNullAsync(string physicalId)
+        {
+            return this.dbContext.Set<Mailbox?>()
+                .FirstOrDefaultAsync(mb => mb!.PhysicalId == physicalId);
+        }
+
+        public void CreateMailbox(Mailbox mailbox)
+        {
+            this.dbContext.Set<Mailbox>().Add(mailbox);
+        }
+    }
+
     public class UserRepository : BaseRepository<AppUser>
     {
         private readonly UserManager<AppUser?> userManager;

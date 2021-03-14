@@ -9,13 +9,17 @@
             public const string EMAIL = "email";
 
             public const string ID = "id";
+
+            public const string OWNER_ID = "onwerId";
         }
 
         public static class Roles
         {
-            public const string DEFAULT = "user";
+            public const string USER = "user";
 
             public const string ADMIN = "admin";
+
+            public const string MAILBOX = "mailbox";
         }
     }
 }
