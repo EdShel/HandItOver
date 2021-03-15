@@ -4,6 +4,37 @@ using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.DAL.Repositories
 {
+    public class RentRepository : BaseRepository<MailboxRent>
+    {
+        public RentRepository(DbContext dbContext) : base(dbContext)
+        {
+        }
+
+        public void CreateRent(MailboxRent rent)
+        {
+            this.dbContext.Set<MailboxRent>().Add(rent);
+        }
+
+        public Task<MailboxRent?> FindByIdOrNull(string rentId)
+        {
+            return this.dbContext.Set<MailboxRent?>()
+                .FirstOrDefaultAsync(rent => rent!.RentId == rentId);
+        }
+
+        public Task<MailboxRent?> FindByIdWithMailboxOrNull(string rentId)
+        {
+            return this.dbContext.Set<MailboxRent?>()
+                .Include(rent => rent!.Mailbox)
+                .FirstOrDefaultAsync(rent => rent!.RentId == rentId);
+        }
+
+
+        public void DeleteRent(MailboxRent rent)
+        {
+            this.dbContext.Set<MailboxRent>().Remove(rent);
+        }
+    }
+
     public class DeliveryRepository : BaseRepository<Delivery>
     {
         public DeliveryRepository(DbContext dbContext) : base(dbContext)

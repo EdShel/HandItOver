@@ -19,11 +19,15 @@ namespace HandItOver.BackEnd.DAL.Entities
 
         public MailboxSize Size { get; set; }
 
-        public string? GroupId { get; set; };
+        public string? GroupId { get; set; }
 
         public string PhysicalId { get; set; } = null!;
 
         public MailboxGroup MailboxGroup { get; set; } = null!;
+
+        public ICollection<Delivery> Deliveries { get; set; } = null!;
+
+        public ICollection<MailboxRent> Rents { get; set; } = null!;
     }
 
     public class MailboxGroup
@@ -49,9 +53,11 @@ namespace HandItOver.BackEnd.DAL.Entities
 
         public string RenterId { get; set; } = null!;
 
-        public DateTime Start { get; set; }
+        public DateTime From { get; set; }
 
-        public DateTime End { get; set; }
+        public DateTime Until { get; set; }
+
+        public Mailbox Mailbox { get; set; } = null!;
     }
 
     public class Delivery
@@ -67,5 +73,7 @@ namespace HandItOver.BackEnd.DAL.Entities
         public DateTime Arrived { get; set; }
 
         public DateTime? Taken { get; set; }
+
+        public Mailbox Mailbox { get; set; } = null!;
     }
 }

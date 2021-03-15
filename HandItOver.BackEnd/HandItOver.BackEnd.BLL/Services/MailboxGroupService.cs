@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.BLL.Entities
 {
+
     public class DeliveryService
     {
-        //private readonly MailboxRepository mailboxRepository;
 
         private readonly DeliveryRepository deliveryRepository;
 

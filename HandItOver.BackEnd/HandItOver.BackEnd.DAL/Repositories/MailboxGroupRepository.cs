@@ -1,5 +1,8 @@
 ﻿using HandItOver.BackEnd.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.DAL.Repositories
@@ -27,7 +30,7 @@ namespace HandItOver.BackEnd.DAL.Repositories
         public Task<MailboxGroup?> GetWhitelistByIdAsync(string id)
         {
             return this.dbContext.Set<MailboxGroup?>()
-                .Include(m => m.Whitelisted)
+                .Include(m => m!.Whitelisted)
                 .FirstOrDefaultAsync(m => m!.GroupId == id);
         }
 
@@ -41,6 +44,19 @@ namespace HandItOver.BackEnd.DAL.Repositories
             this.dbContext.Set<MailboxGroup>().Remove(mailboxGroup);
         }
 
+        public Task<Mailbox[]> MailboxesWithoutDelivery(string groupId)
+        {
+            return this.dbContext.Set<Mailbox>()
+                .Where(mb => mb.GroupId == groupId && !mb.Deliveries.Any(d => d.Taken == null))
+                .ToArrayAsync();
+        }
 
+        public Task<Mailbox[]> MailboxesWithoutRent(string groupId, DateTime rentBegin, DateTime rentEnd)
+        {
+            return this.dbContext.Set<Mailbox>()
+                .Where(mb => mb.GroupId == groupId
+                    && !mb.Rents.Any(rent => rentBegin < rent.Until && rent.From < rentEnd))
+                .ToArrayAsync();
+        }
     }
 }
