@@ -23,7 +23,7 @@ namespace HandItOver.BackEnd.DAL.Entities
 
         public string PhysicalId { get; set; } = null!;
 
-        public MailboxGroup MailboxGroup { get; set; } = null!;
+        public MailboxGroup? MailboxGroup { get; set; } = null!;
 
         public ICollection<Delivery> Deliveries { get; set; } = null!;
 

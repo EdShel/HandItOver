@@ -1,5 +1,7 @@
 ﻿using HandItOver.BackEnd.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.DAL.Repositories
@@ -28,6 +30,11 @@ namespace HandItOver.BackEnd.DAL.Repositories
                 .FirstOrDefaultAsync(rent => rent!.RentId == rentId);
         }
 
+        public Task<MailboxRent?> FindForTimeOrNull(string mailboxId, DateTime time)
+        {
+            return this.dbContext.Set<MailboxRent?>()
+                .FirstOrDefaultAsync(r => r!.From >= time && time <= r.Until);
+        }
 
         public void DeleteRent(MailboxRent rent)
         {
@@ -78,9 +85,17 @@ namespace HandItOver.BackEnd.DAL.Repositories
                 .FirstOrDefaultAsync(mb => mb!.Id == id);
         }
 
+        public Task<Mailbox?> FindByIdWithGroupOrNullAsync(string id)
+        {
+            return this.dbContext.Set<Mailbox?>()
+                .Include(m => m!.MailboxGroup)
+                .FirstOrDefaultAsync(mbox => mbox!.Id == id);
+        }
+
         public void CreateMailbox(Mailbox mailbox)
         {
             this.dbContext.Set<Mailbox>().Add(mailbox);
         }
+
     }
 }

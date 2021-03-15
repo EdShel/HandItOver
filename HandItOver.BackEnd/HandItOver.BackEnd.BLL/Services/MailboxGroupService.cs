@@ -1,55 +1,12 @@
 ﻿using HandItOver.BackEnd.BLL.Models.MailboxGroup;
-using HandItOver.BackEnd.BLL.Models.MailboxMessages;
 using HandItOver.BackEnd.DAL.Entities;
 using HandItOver.BackEnd.DAL.Entities.Auth;
 using HandItOver.BackEnd.DAL.Repositories;
 using HandItOver.BackEnd.Infrastructure.Exceptions;
-using System;
 using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.BLL.Entities
 {
-
-    public class DeliveryService
-    {
-
-        private readonly DeliveryRepository deliveryRepository;
-
-        public async Task HandleDeliveryArrival(DeliveryArrivedRequest delivery)
-        {
-            Delivery deliveryRecord = new Delivery
-            {
-                AddresseeId = "TODO: FIND OUT WHO IS THE RECEPIENT",
-                MailboxId = delivery.MailboxId,
-                Weight = delivery.Weight,
-                Arrived = DateTime.UtcNow,
-                Taken = null,
-            };
-            this.deliveryRepository.AddDelivery(deliveryRecord);
-            await this.deliveryRepository.SaveChangesAsync();
-        }
-
-        public async Task RequestOpening(string mailboxId)
-        {
-            Delivery currentDelivery = await this.deliveryRepository.GetCurrentDeliveryAsync(mailboxId)
-                ?? throw new NotFoundException("Delivery");
-            currentDelivery.Taken = DateTime.UtcNow;
-            this.deliveryRepository.UpdateDelivery(currentDelivery);
-            this.deliveryRepository.UpdateDelivery(currentDelivery);
-        }
-
-        public async Task<bool> IsRequestedOpening(string mailboxId)
-        {
-            return (await this.deliveryRepository.GetCurrentDeliveryAsync(mailboxId)) == null;
-            // || is public && is reserved for now
-        }
-
-        public async Task HandleDeliveryDissapeared()
-        {
-            // TODO: Call FBI
-        }
-    }
-
     public class MailboxGroupService
     {
         private readonly UserRepository userRepository;
