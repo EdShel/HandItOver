@@ -58,9 +58,10 @@ namespace HandItOver.BackEnd.DAL.Repositories
             this.dbContext.Set<Delivery>().Update(delivery);
         }
 
-        public Task<Delivery?> GetCurrentDeliveryAsync(string mailboxId)
+        public Task<Delivery?> GetCurrentDeliveryOrNullAsync(string mailboxId)
         {
             return this.dbContext.Set<Delivery?>()
+                .Include(d => d!.Mailbox)
                 .FirstOrDefaultAsync(
                     d => d!.MailboxId == mailboxId && d.Taken == null
                 );
@@ -95,6 +96,11 @@ namespace HandItOver.BackEnd.DAL.Repositories
         public void CreateMailbox(Mailbox mailbox)
         {
             this.dbContext.Set<Mailbox>().Add(mailbox);
+        }
+
+        public void UpdateMailbox(Mailbox mailbox)
+        {
+            this.dbContext.Set<Mailbox>().Update(mailbox);
         }
 
     }

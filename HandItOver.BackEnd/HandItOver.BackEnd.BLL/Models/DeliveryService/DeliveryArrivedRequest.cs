@@ -10,4 +10,9 @@ namespace HandItOver.BackEnd.BLL.Models.MailboxMessages
         string MailboxId,
         float Weight
     );
+
+    public record MailboxStatus(
+        string MailboxId,
+        bool IsOpen
+    );
 }

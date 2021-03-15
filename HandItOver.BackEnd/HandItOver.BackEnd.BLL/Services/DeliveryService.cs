@@ -9,12 +9,21 @@ namespace HandItOver.BackEnd.BLL.Entities
 {
     public class DeliveryService
     {
-
         private readonly MailboxRepository mailboxRepository;
 
         private readonly DeliveryRepository deliveryRepository;
 
         private readonly RentRepository rentRepository;
+
+        public DeliveryService(
+            MailboxRepository mailboxRepository,
+            DeliveryRepository deliveryRepository,
+            RentRepository rentRepository)
+        {
+            this.mailboxRepository = mailboxRepository;
+            this.deliveryRepository = deliveryRepository;
+            this.rentRepository = rentRepository;
+        }
 
         public async Task HandleDeliveryArrival(DeliveryArrivedRequest delivery)
         {
@@ -41,22 +50,45 @@ namespace HandItOver.BackEnd.BLL.Entities
                 Taken = null,
             };
             this.deliveryRepository.AddDelivery(deliveryRecord);
+
+            mailbox.IsOpen = false;
+            this.mailboxRepository.UpdateMailbox(mailbox);
+
             await this.deliveryRepository.SaveChangesAsync();
         }
 
         public async Task RequestOpening(string mailboxId)
         {
-            Delivery currentDelivery = await this.deliveryRepository.GetCurrentDeliveryAsync(mailboxId)
+            Delivery currentDelivery = await this.deliveryRepository.GetCurrentDeliveryOrNullAsync(mailboxId)
                 ?? throw new NotFoundException("Delivery");
+
+            currentDelivery.Mailbox.IsOpen = true;
+            this.mailboxRepository.UpdateMailbox(currentDelivery.Mailbox);
+
             currentDelivery.Taken = DateTime.UtcNow;
             this.deliveryRepository.UpdateDelivery(currentDelivery);
-            this.deliveryRepository.UpdateDelivery(currentDelivery);
+            await this.deliveryRepository.SaveChangesAsync();
         }
 
-        public async Task<bool> IsRequestedOpening(string mailboxId)
+        public async Task<MailboxStatus> GetMailboxStatus(string mailboxId)
         {
-            return (await this.deliveryRepository.GetCurrentDeliveryAsync(mailboxId)) == null
-                || ((await this.rentRepository.FindForTimeOrNull(mailboxId, DateTime.UtcNow)) != null);
+            Mailbox mailbox = await this.mailboxRepository.FindByIdOrNullAsync(mailboxId)
+                ?? throw new NotFoundException("Mailbox");
+            Delivery? currentDelivery = await this.deliveryRepository.GetCurrentDeliveryOrNullAsync(mailboxId);
+            if (currentDelivery == null)
+            {
+                MailboxRent? currentRent = await this.rentRepository.FindForTimeOrNull(mailboxId, DateTime.UtcNow);
+                if (currentRent != null && !mailbox.IsOpen)
+                {
+                    mailbox.IsOpen = true;
+                    this.mailboxRepository.UpdateMailbox(mailbox);
+                    await this.mailboxRepository.SaveChangesAsync();
+                }
+            }
+            return new MailboxStatus(
+                MailboxId: mailbox.Id,
+                IsOpen: mailbox.IsOpen
+            );
         }
 
         public async Task HandleDeliveryDisappeared()
