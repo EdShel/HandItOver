@@ -54,6 +54,8 @@ namespace HandItOver.BackEnd.BLL.Entities
             mailbox.IsOpen = false;
             this.mailboxRepository.UpdateMailbox(mailbox);
 
+            // TODO: notify addresse
+
             await this.deliveryRepository.SaveChangesAsync();
         }
 
@@ -94,6 +96,7 @@ namespace HandItOver.BackEnd.BLL.Entities
         public async Task HandleDeliveryDisappeared()
         {
             // TODO: Call FBI
+            await Task.CompletedTask;
         }
     }
 }

@@ -27,6 +27,17 @@ namespace HandItOver.BackEnd.DAL.Repositories
                 .FirstOrDefaultAsync(m => m!.GroupId == id);
         }
 
+        public Task<MailboxGroup?> FindByIdFullInfoAsync(string id)
+        {
+            return this.dbContext.Set<MailboxGroup?>()
+                .Include(m => m!.Mailboxes)
+                    .ThenInclude(m => m.Deliveries.Where(delivery => delivery.Taken == null))
+                .Include(m => m!.Mailboxes)
+                    .ThenInclude(m => m.Rents.Where(r => r.From <= DateTime.UtcNow && DateTime.UtcNow <= r.Until))
+                        .ThenInclude(r => r.Renter)
+                .FirstOrDefaultAsync(m => m!.GroupId == id);
+        }
+
         public Task<MailboxGroup?> GetWhitelistByIdAsync(string id)
         {
             return this.dbContext.Set<MailboxGroup?>()
@@ -57,6 +68,12 @@ namespace HandItOver.BackEnd.DAL.Repositories
                 .Where(mb => mb.GroupId == groupId
                     && !mb.Rents.Any(rent => rentBegin < rent.Until && rent.From < rentEnd))
                 .ToArrayAsync();
+        }
+
+        public void ReplaceMailboxGroup(MailboxGroup group)
+        {
+            this.dbContext.Set<MailboxGroup>().Attach(group);
+            this.dbContext.Entry(group).State = EntityState.Modified;
         }
     }
 }

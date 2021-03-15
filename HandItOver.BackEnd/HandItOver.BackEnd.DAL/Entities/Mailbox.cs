@@ -60,6 +60,8 @@ namespace HandItOver.BackEnd.DAL.Entities
         public DateTime Until { get; set; }
 
         public Mailbox Mailbox { get; set; } = null!;
+
+        public AppUser Renter { get; set; } = null!;
     }
 
     public class Delivery

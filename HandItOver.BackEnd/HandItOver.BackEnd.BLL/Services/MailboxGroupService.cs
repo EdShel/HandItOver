@@ -3,6 +3,7 @@ using HandItOver.BackEnd.DAL.Entities;
 using HandItOver.BackEnd.DAL.Entities.Auth;
 using HandItOver.BackEnd.DAL.Repositories;
 using HandItOver.BackEnd.Infrastructure.Exceptions;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.BLL.Entities
@@ -107,6 +108,44 @@ namespace HandItOver.BackEnd.BLL.Entities
             }
 
             group.Mailboxes.Remove(mailbox);
+            await this.mailboxGroupRepository.SaveChangesAsync();
+        }
+
+        public async Task<MailboxGroupStats> GetStats(string groupId)
+        {
+            MailboxGroup group = await this.mailboxGroupRepository.FindByIdFullInfoAsync(groupId)
+                ?? throw new NotFoundException("Mailbox group");
+
+            return new MailboxGroupStats(
+                group.GroupId,
+                group.Name,
+                group.Mailboxes.Select(
+                    mb => new MailboxStats(
+                        mb.Id,
+                        mb.Size,
+                        mb.Deliveries.Select(
+                            d => new DeliveryStats(
+                                Arrived: d.Arrived,
+                                Taken: d.Taken,
+                                PredictedTakingTime: d.Arrived.AddDays(7), // TODO: implement prediction algorithm
+                                Weight: d.Weight
+                            )
+                        ).FirstOrDefault(),
+                        mb.Rents.Select(
+                            r => new RentStats(
+                                RenterName: r.Renter.Email,
+                                From: r.From,
+                                Until: r.Until
+                            )
+                        )
+                    )
+                )
+            );
+        }
+
+        public async Task EditMailboxGroup(MailboxGroup mailboxGroup) // TODO: replace with DTO to prevent shit
+        {
+            this.mailboxGroupRepository.ReplaceMailboxGroup(mailboxGroup);
             await this.mailboxGroupRepository.SaveChangesAsync();
         }
     }

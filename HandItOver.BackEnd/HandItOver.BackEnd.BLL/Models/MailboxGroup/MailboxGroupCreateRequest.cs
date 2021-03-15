@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HandItOver.BackEnd.DAL.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,5 +21,31 @@ namespace HandItOver.BackEnd.BLL.Models.MailboxGroup
 
     public record MailboxGroupCreatedResult(
         string GroupId
+    );
+
+    public record MailboxGroupStats(
+        string GroupId,
+        string Name,
+        IEnumerable<MailboxStats> Mailboxes
+    );
+
+    public record MailboxStats(
+        string MailboxId,
+        MailboxSize Size,
+        DeliveryStats? Delivery,
+        IEnumerable<RentStats> Rents
+    );
+
+    public record DeliveryStats(
+        DateTime Arrived,
+        DateTime? Taken,
+        DateTime? PredictedTakingTime,
+        float Weight
+    );
+
+    public record RentStats(
+        string RenterName,
+        DateTime From,
+        DateTime Until
     );
 }
