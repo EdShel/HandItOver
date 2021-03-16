@@ -10,6 +10,12 @@ namespace HandItOver.BackEnd.DAL.Repositories
         {
         }
 
+        public Task<Delivery?> FindByIdOrNull(string id)
+        {
+            return this.dbContext.Set<Delivery?>()
+                .FirstOrDefaultAsync(d => d!.Id == id);
+        }
+
         public void AddDelivery(Delivery delivery)
         {
             this.dbContext.Set<Delivery>().Add(delivery);

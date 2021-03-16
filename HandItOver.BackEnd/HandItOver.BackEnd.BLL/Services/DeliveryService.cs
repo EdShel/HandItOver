@@ -1,5 +1,6 @@
 ﻿using HandItOver.BackEnd.BLL.Models.MailboxMessages;
 using HandItOver.BackEnd.DAL.Entities;
+using HandItOver.BackEnd.DAL.Entities.Auth;
 using HandItOver.BackEnd.DAL.Repositories;
 using HandItOver.BackEnd.Infrastructure.Exceptions;
 using System;
@@ -15,14 +16,18 @@ namespace HandItOver.BackEnd.BLL.Entities
 
         private readonly RentRepository rentRepository;
 
+        private readonly UserRepository userRepository;
+
         public DeliveryService(
             MailboxRepository mailboxRepository,
             DeliveryRepository deliveryRepository,
-            RentRepository rentRepository)
+            RentRepository rentRepository,
+            UserRepository userRepository)
         {
             this.mailboxRepository = mailboxRepository;
             this.deliveryRepository = deliveryRepository;
             this.rentRepository = rentRepository;
+            this.userRepository = userRepository;
         }
 
         public async Task HandleDeliveryArrival(DeliveryArrivedRequest delivery)
@@ -115,6 +120,17 @@ namespace HandItOver.BackEnd.BLL.Entities
         {
             // TODO: Call FBI
             await Task.CompletedTask;
+        }
+
+        public async Task GiveAwayDeliveryRight(string id, string to)
+        {
+            Delivery delivery = await this.deliveryRepository.FindByIdOrNull(id)
+                ?? throw new NotFoundException("Delivery");
+            AppUser addresse = await this.userRepository.FindByIdOrNullAsync(id)
+                ?? throw new NotFoundException("User");
+            delivery.AddresseeId = id;
+            this.deliveryRepository.UpdateDelivery(delivery);
+            await this.deliveryRepository.SaveChangesAsync();
         }
     }
 }
