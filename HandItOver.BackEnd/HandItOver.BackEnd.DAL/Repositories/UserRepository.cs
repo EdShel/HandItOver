@@ -60,7 +60,7 @@ namespace HandItOver.BackEnd.DAL.Repositories
             return this.userManager.DeleteAsync(user);
         }
 
-        public Task<RefreshToken?> GetRefreshToken(AppUser user, string refreshToken)
+        public Task<RefreshToken?> GetRefreshTokenAsync(AppUser user, string refreshToken)
         {
             return this.dbContext.Set<RefreshToken?>()
                 .FirstOrDefaultAsync(token => token!.AppUserId == user.Id && token.Value == refreshToken);
@@ -75,6 +75,14 @@ namespace HandItOver.BackEnd.DAL.Repositories
         {
             return this.dbContext.Set<AppUserRole>()
                 .AnyAsync(ur => ur.Role.Name == roleName);
+        }
+
+        public Task<AppUser[]> FindByNameOrEmailAsync(string searchParam)
+        {
+            return this.dbContext.Set<AppUser>()
+                .Where(u => u.Email.Contains(searchParam)
+                            || u.FullName.Contains(searchParam))
+                .ToArrayAsync();
         }
     }
 }

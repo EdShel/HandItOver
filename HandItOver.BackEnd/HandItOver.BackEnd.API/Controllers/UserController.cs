@@ -47,14 +47,14 @@ namespace HandItOver.BackEnd.API.Controllers
         public async Task<IActionResult> GetInfoAboutCurrentUserAsync()
         {
             string userId = this.User.FindFirst(AuthConstants.Claims.ID)?.Value ?? string.Empty;
-            UserInfoResult user = await this.usersService.GetInfoByIdAsync(userId);
+            UserAccountInfoResult user = await this.usersService.GetInfoByIdAsync(userId);
             return new JsonResult(user);
         }
 
         [HttpGet("user"), Authorize]
         public async Task<IActionResult> GetInfoAboutAnotherUserAsync(string email)
         {
-            UserInfoResult user = await this.usersService.GetInfoByEmailAsync(email);
+            UserAccountInfoResult user = await this.usersService.GetInfoByEmailAsync(email);
             return new JsonResult(user);
         }
     }

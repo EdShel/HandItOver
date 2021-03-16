@@ -6,9 +6,16 @@ using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.BLL.Models.Users
 {
-    public record UserInfoResult(
+    public record UserAccountInfoResult(
         string Id,
         string Email, 
+        string FullName, 
         string Role
+    );
+
+    public record UserPublicInfoResult(
+        string Id,
+        string Email,
+        string FullName
     );
 }

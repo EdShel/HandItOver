@@ -122,7 +122,7 @@ namespace HandItOver.BackEnd.BLL.Services
                 throw new NotFoundException("User");
             }
 
-            RefreshToken? refreshToken = await this.usersRepository.GetRefreshToken(user, refreshRequest.RefreshToken);
+            RefreshToken? refreshToken = await this.usersRepository.GetRefreshTokenAsync(user, refreshRequest.RefreshToken);
             if (refreshToken == null)
             {
                 throw new WrongValueException("Refresh token");
@@ -158,7 +158,7 @@ namespace HandItOver.BackEnd.BLL.Services
                 throw new NotFoundException("User");
             }
 
-            RefreshToken? refreshToken = await this.usersRepository.GetRefreshToken(user, revokeRequest.RefreshToken);
+            RefreshToken? refreshToken = await this.usersRepository.GetRefreshTokenAsync(user, revokeRequest.RefreshToken);
             if (refreshToken == null)
             {
                 throw new NotFoundException("Refresh token");
