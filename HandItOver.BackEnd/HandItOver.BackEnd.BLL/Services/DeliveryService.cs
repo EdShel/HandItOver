@@ -30,7 +30,7 @@ namespace HandItOver.BackEnd.BLL.Services
             this.userRepository = userRepository;
         }
 
-        public async Task HandleDeliveryArrival(DeliveryArrivedRequest delivery)
+        public async Task<DeliveryArrivedResult> HandleDeliveryArrival(DeliveryArrivedRequest delivery)
         {
             Mailbox mailbox = await this.mailboxRepository.FindByIdWithGroupOrNullAsync(delivery.MailboxId)
                 ?? throw new WrongValueException("Mailbox");
@@ -69,53 +69,11 @@ namespace HandItOver.BackEnd.BLL.Services
             // TODO: notify addresse
 
             await this.deliveryRepository.SaveChangesAsync();
+            return new DeliveryArrivedResult(deliveryRecord.Id);
         }
 
-        public async Task RequestOpening(string mailboxId)
-        {
-            Delivery currentDelivery = await this.deliveryRepository.GetCurrentDeliveryOrNullAsync(mailboxId)
-                ?? throw new NotFoundException("Delivery");
 
-            currentDelivery.Mailbox.IsOpen = true;
-            this.mailboxRepository.UpdateMailbox(currentDelivery.Mailbox);
-
-            currentDelivery.Taken = DateTime.UtcNow;
-            this.deliveryRepository.UpdateDelivery(currentDelivery);
-            await this.deliveryRepository.SaveChangesAsync();
-        }
-
-        public async Task<MailboxStatus> GetMailboxStatus(string mailboxId)
-        {
-            Mailbox mailbox = await this.mailboxRepository.FindByIdOrNullAsync(mailboxId)
-                ?? throw new NotFoundException("Mailbox");
-            Delivery? currentDelivery = await this.deliveryRepository.GetCurrentDeliveryOrNullAsync(mailboxId);
-            if (!mailbox.IsOpen)
-            {
-                if (currentDelivery == null)
-                {
-                    MailboxRent? currentRent = await this.rentRepository.FindForTimeOrNull(mailboxId, DateTime.UtcNow);
-                    if (currentRent != null)
-                    {
-                        mailbox.IsOpen = true;
-                        this.mailboxRepository.UpdateMailbox(mailbox);
-                        await this.mailboxRepository.SaveChangesAsync();
-                    }
-                }
-                else if (currentDelivery.TerminalTime != null
-                        && DateTime.UtcNow >= currentDelivery.TerminalTime)
-                {
-                    mailbox.IsOpen = true;
-                    this.mailboxRepository.UpdateMailbox(mailbox);
-                    await this.mailboxRepository.SaveChangesAsync();
-                }
-            }
-            return new MailboxStatus(
-                MailboxId: mailbox.Id,
-                IsOpen: mailbox.IsOpen
-            );
-        }
-
-        public async Task HandleDeliveryDisappeared()
+        public async Task HandleDeliveryDisappeared(string deliveryId)
         {
             // TODO: Call FBI
             await Task.CompletedTask;

@@ -1,5 +1,4 @@
-﻿using HandItOver.BackEnd.BLL.Models.MailboxAccessControl;
-using HandItOver.BackEnd.BLL.Models.Users;
+﻿using HandItOver.BackEnd.BLL.Models.Users;
 using HandItOver.BackEnd.BLL.Services;
 using HandItOver.BackEnd.Infrastructure.Models.Auth;
 using Microsoft.AspNetCore.Authorization;
@@ -8,29 +7,6 @@ using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.API.Controllers
 {
-
-    public record MailboxGroupModel(string GroupId);
-
-    [ApiController]
-    [Route("mailbox/whitelist")]
-    [Authorize(AuthConstants.Policies.MAILBOX_GROUP_OWNER_ONLY)]
-    public class MailboxAccessControlController : ControllerBase
-    {
-        private readonly MailboxAccessControlService mailboxAccessControlService;
-
-        public MailboxAccessControlController(MailboxAccessControlService mailboxAccessControlService)
-        {
-            this.mailboxAccessControlService = mailboxAccessControlService;
-        }
-
-        [HttpGet("{groupId}")]
-        public async Task<IActionResult> GetWhitelist([FromRoute] MailboxGroupModel groupModel)
-        {
-            WhitelistInfo result = await this.mailboxAccessControlService.GetMailboxWhitelist(groupModel.GroupId);
-            return new JsonResult(result);
-        }
-    }
-
     [ApiController]
     [Route("[controller]")]
     public class UserController : ControllerBase
@@ -55,22 +31,6 @@ namespace HandItOver.BackEnd.API.Controllers
         {
             UserAccountInfoResult user = await this.usersService.GetInfoByEmailAsync(email);
             return new JsonResult(user);
-        }
-    }
-
-
-    [ApiController]
-    [Route("[controller]")]
-    public class MailboxController : ControllerBase
-    {
-        [HttpPost("auth")]
-        public async Task<IActionResult> AuthorizeMailbox()
-        {
-            return new JsonResult(new
-            {
-                Token = "",
-                RefreshToken = ""
-            });
         }
     }
 }

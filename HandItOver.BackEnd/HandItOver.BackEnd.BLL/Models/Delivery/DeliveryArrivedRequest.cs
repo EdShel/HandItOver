@@ -5,6 +5,10 @@
         float Weight
     );
 
+    public record DeliveryArrivedResult(
+        string DeliveryId
+    );
+
     public record MailboxStatus(
         string MailboxId,
         bool IsOpen

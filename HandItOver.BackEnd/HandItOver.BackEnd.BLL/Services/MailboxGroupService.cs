@@ -81,7 +81,23 @@ namespace HandItOver.BackEnd.BLL.Services
             await this.mailboxGroupRepository.SaveChangesAsync();
         }
 
-        public async Task AddMailboxToGroupAsync(string mailboxId, string groupId)
+        public async Task EditMailboxGroup(MailboxGroup mailboxGroup) // TODO: replace with DTO to prevent shit
+        {
+            this.mailboxGroupRepository.ReplaceMailboxGroup(mailboxGroup);
+            await this.mailboxGroupRepository.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<MailboxGroupSearchResult>> FindMailboxes(MailboxGroupSearchRequest request)
+        {
+            MailboxGroup[] groups = await this.mailboxGroupRepository.FindByNameOrAddressOrOwnerAsync(request.SearchQuery);
+            return groups.Select(group => new MailboxGroupSearchResult(
+                Id: group.GroupId,
+                Owner: group.Owner.FullName,
+                Name: group.Name
+            ));
+        }
+
+        public async Task AddMailboxToGroupAsync(string groupId, string mailboxId)
         {
             MailboxGroup group = await this.mailboxGroupRepository.FindByIdOrNullAsync(groupId)
                 ?? throw new NotFoundException("Mailbox group");
@@ -97,7 +113,7 @@ namespace HandItOver.BackEnd.BLL.Services
             await this.mailboxGroupRepository.SaveChangesAsync();
         }
 
-        public async Task RemoveMailboxFromGroupAsync(string mailboxId, string groupId)
+        public async Task RemoveMailboxFromGroupAsync(string groupId, string mailboxId)
         {
             MailboxGroup group = await this.mailboxGroupRepository.FindByIdOrNullAsync(groupId)
                 ?? throw new NotFoundException("Mailbox group");
@@ -143,22 +159,6 @@ namespace HandItOver.BackEnd.BLL.Services
                     )
                 )
             );
-        }
-
-        public async Task EditMailboxGroup(MailboxGroup mailboxGroup) // TODO: replace with DTO to prevent shit
-        {
-            this.mailboxGroupRepository.ReplaceMailboxGroup(mailboxGroup);
-            await this.mailboxGroupRepository.SaveChangesAsync();
-        }
-
-        public async Task<IEnumerable<MailboxGroupSearchResult>> FindMailboxes(MailboxGroupSearchRequest request)
-        {
-            MailboxGroup[] groups = await this.mailboxGroupRepository.FindByNameOrAddressOrOwnerAsync(request.SearchQuery);
-            return groups.Select(group => new MailboxGroupSearchResult(
-                Id: group.GroupId,
-                Owner: group.Owner.FullName,
-                Name: group.Name
-            ));
         }
     }
 }
