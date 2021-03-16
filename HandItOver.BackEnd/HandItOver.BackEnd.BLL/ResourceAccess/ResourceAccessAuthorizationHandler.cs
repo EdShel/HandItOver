@@ -51,7 +51,7 @@ namespace HandItOver.BackEnd.BLL.ResourceAccess
         {
             MailboxGroup? mailboxGroup = await this.mailboxGroupRepository.FindByIdOrNullAsync(resource.GroupId)
                 ?? throw new NotFoundException("Mailbox group");
-            return mailboxGroup.Owner == userId;
+            return mailboxGroup.OwnerId == userId;
         }
     }
 

@@ -6,6 +6,8 @@ namespace HandItOver.BackEnd.DAL.Entities.Auth
 {
     public class AppUser : IdentityUser
     {
+        public string FullName { get; set; } = null!;
+
         public ICollection<AppUserClaim> Claims { get; set; } = null!;
 
         public ICollection<AppUserLogin> Logins { get; set; } = null!;
@@ -19,6 +21,8 @@ namespace HandItOver.BackEnd.DAL.Entities.Auth
         public ICollection<MailboxGroup> WhitelistedIn { get; set; } = null!;
 
         public ICollection<MailboxRent> RentedMailboxes { get; set; } = null!;
+
+        public ICollection<MailboxGroup> OwnedGroups { get; set; } = null!;
     }
 
     public class AppRole : IdentityRole

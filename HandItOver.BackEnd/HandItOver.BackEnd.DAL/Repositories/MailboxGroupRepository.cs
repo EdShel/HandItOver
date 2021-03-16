@@ -75,5 +75,16 @@ namespace HandItOver.BackEnd.DAL.Repositories
             this.dbContext.Set<MailboxGroup>().Attach(group);
             this.dbContext.Entry(group).State = EntityState.Modified;
         }
+
+        public Task<MailboxGroup[]> FindByNameOrAddressOrOwnerAsync(string searchParam)
+        {
+            return this.dbContext.Set<MailboxGroup>()
+                .Include(group => group.Owner)
+                .Where(group => group.Name.Contains(searchParam)
+                                || group.Mailboxes.Any(mb => mb.Address.Contains(searchParam))
+                                || group.Owner.FullName.Contains(searchParam)
+                                || group.Owner.Email.Contains(searchParam))
+                .ToArrayAsync();
+        }
     }
 }

@@ -3,6 +3,7 @@ using HandItOver.BackEnd.DAL.Entities;
 using HandItOver.BackEnd.DAL.Entities.Auth;
 using HandItOver.BackEnd.DAL.Repositories;
 using HandItOver.BackEnd.Infrastructure.Exceptions;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -47,7 +48,7 @@ namespace HandItOver.BackEnd.BLL.Entities
             MailboxGroup newMailboxGroup = new MailboxGroup
             {
                 Name = request.Name,
-                Owner = request.OwnerId,
+                OwnerId = request.OwnerId,
                 WhitelistOnly = request.WhitelistOnly,
                 MaxRentTime = request.MaxRentTime
             };
@@ -149,5 +150,15 @@ namespace HandItOver.BackEnd.BLL.Entities
             this.mailboxGroupRepository.ReplaceMailboxGroup(mailboxGroup);
             await this.mailboxGroupRepository.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<MailboxGroupSearchResult>> FindMailboxes(MailboxGroupSearchRequest request)
+        {
+            MailboxGroup[] groups = await this.mailboxGroupRepository.FindByNameOrAddressOrOwnerAsync(request.SearchQuery);
+            return groups.Select(group => new MailboxGroupSearchResult(
+                Id: group.GroupId,
+                Owner: group.Owner.FullName,
+                Name: group.Name
+            ));
+        } 
     }
 }

@@ -25,6 +25,8 @@ namespace HandItOver.BackEnd.DAL.Entities
 
         public string Info { get; set; } = null!;
 
+        public string Address { get; set; } = null!;
+
         public bool IsOpen { get; set; }
 
         public MailboxGroup? MailboxGroup { get; set; } = null!;
@@ -38,7 +40,7 @@ namespace HandItOver.BackEnd.DAL.Entities
     {
         public string GroupId { get; set; } = null!;
 
-        public string Owner { get; set; } = null!;
+        public string OwnerId { get; set; } = null!;
 
         public string Name { get; set; } = null!;
 
@@ -49,6 +51,8 @@ namespace HandItOver.BackEnd.DAL.Entities
         public ICollection<Mailbox> Mailboxes { get; set; } = null!;
 
         public ICollection<AppUser> Whitelisted { get; set; } = null!;
+
+        public AppUser Owner { get; set; } = null!;
     }
 
     public class MailboxRent

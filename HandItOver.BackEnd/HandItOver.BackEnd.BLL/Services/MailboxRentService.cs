@@ -26,7 +26,7 @@ namespace HandItOver.BackEnd.BLL.Entities
                 .GetWhitelistByIdAsync(request.GroupId)
                 ?? throw new NotFoundException("Mailbox group");
             bool allowedToRent = !mailboxGroup.WhitelistOnly
-                || request.RenterId == mailboxGroup.Owner
+                || request.RenterId == mailboxGroup.OwnerId
                 || mailboxGroup.Whitelisted.Any(u => u.Id == request.RenterId);
             if (!allowedToRent)
             {

@@ -1,73 +1,10 @@
 ﻿using HandItOver.BackEnd.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.DAL.Repositories
 {
-    public class RentRepository : BaseRepository<MailboxRent>
-    {
-        public RentRepository(DbContext dbContext) : base(dbContext)
-        {
-        }
-
-        public void CreateRent(MailboxRent rent)
-        {
-            this.dbContext.Set<MailboxRent>().Add(rent);
-        }
-
-        public Task<MailboxRent?> FindByIdOrNull(string rentId)
-        {
-            return this.dbContext.Set<MailboxRent?>()
-                .FirstOrDefaultAsync(rent => rent!.RentId == rentId);
-        }
-
-        public Task<MailboxRent?> FindByIdWithMailboxOrNull(string rentId)
-        {
-            return this.dbContext.Set<MailboxRent?>()
-                .Include(rent => rent!.Mailbox)
-                .FirstOrDefaultAsync(rent => rent!.RentId == rentId);
-        }
-
-        public Task<MailboxRent?> FindForTimeOrNull(string mailboxId, DateTime time)
-        {
-            return this.dbContext.Set<MailboxRent?>()
-                .FirstOrDefaultAsync(r => r!.From >= time && time <= r.Until);
-        }
-
-        public void DeleteRent(MailboxRent rent)
-        {
-            this.dbContext.Set<MailboxRent>().Remove(rent);
-        }
-    }
-
-    public class DeliveryRepository : BaseRepository<Delivery>
-    {
-        public DeliveryRepository(DbContext dbContext) : base(dbContext)
-        {
-        }
-
-        public void AddDelivery(Delivery delivery)
-        {
-            this.dbContext.Set<Delivery>().Add(delivery);
-        }
-
-        public void UpdateDelivery(Delivery delivery)
-        {
-            this.dbContext.Set<Delivery>().Update(delivery);
-        }
-
-        public Task<Delivery?> GetCurrentDeliveryOrNullAsync(string mailboxId)
-        {
-            return this.dbContext.Set<Delivery?>()
-                .Include(d => d!.Mailbox)
-                .FirstOrDefaultAsync(
-                    d => d!.MailboxId == mailboxId && d.Taken == null
-                );
-        }
-    }
-
     public class MailboxRepository : BaseRepository<MailboxRepository>
     {
         public MailboxRepository(DbContext dbContext) : base(dbContext)
@@ -102,6 +39,5 @@ namespace HandItOver.BackEnd.DAL.Repositories
         {
             this.dbContext.Set<Mailbox>().Update(mailbox);
         }
-
     }
 }

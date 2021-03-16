@@ -51,4 +51,14 @@ namespace HandItOver.BackEnd.BLL.Models.MailboxGroup
         DateTime From,
         DateTime Until
     );
+
+    public record MailboxGroupSearchRequest(
+        string SearchQuery  
+    );
+
+    public record MailboxGroupSearchResult(
+        string Id,
+        string Owner,
+        string Name
+    );
 }
