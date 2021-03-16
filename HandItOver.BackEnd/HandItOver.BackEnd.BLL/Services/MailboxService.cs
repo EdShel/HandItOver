@@ -8,7 +8,7 @@ using HandItOver.BackEnd.Infrastructure.Services;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace HandItOver.BackEnd.BLL.Entities
+namespace HandItOver.BackEnd.BLL.Services
 {
     public class MailboxService
     {

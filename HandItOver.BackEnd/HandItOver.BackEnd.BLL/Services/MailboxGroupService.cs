@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HandItOver.BackEnd.BLL.Entities
+namespace HandItOver.BackEnd.BLL.Services
 {
     public class MailboxGroupService
     {
@@ -159,6 +159,6 @@ namespace HandItOver.BackEnd.BLL.Entities
                 Owner: group.Owner.FullName,
                 Name: group.Name
             ));
-        } 
+        }
     }
 }

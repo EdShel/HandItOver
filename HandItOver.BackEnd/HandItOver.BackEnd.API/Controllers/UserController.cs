@@ -1,5 +1,4 @@
-﻿using HandItOver.BackEnd.BLL.Entities;
-using HandItOver.BackEnd.BLL.Models.MailboxAccessControl;
+﻿using HandItOver.BackEnd.BLL.Models.MailboxAccessControl;
 using HandItOver.BackEnd.BLL.Models.Users;
 using HandItOver.BackEnd.BLL.Services;
 using HandItOver.BackEnd.Infrastructure.Models.Auth;

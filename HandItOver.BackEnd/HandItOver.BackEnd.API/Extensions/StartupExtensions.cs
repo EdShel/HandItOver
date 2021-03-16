@@ -82,6 +82,16 @@ namespace HandItOver.BackEnd.API.Extensions
 
         public static IServiceCollection AddAppServices(this IServiceCollection services)
         {
+            services.AddScoped<MailboxRepository>();
+            services.AddScoped<MailboxGroupRepository>();
+            services.AddScoped<RentRepository>();
+            services.AddScoped<DeliveryRepository>();
+
+            services.AddScoped<MailboxService>();
+            services.AddScoped<MailboxAccessControlService>();
+            services.AddScoped<MailboxGroupService>();
+            services.AddScoped<MailboxRentService>();
+            services.AddScoped<DeliveryService>();
 
             return services;
         }

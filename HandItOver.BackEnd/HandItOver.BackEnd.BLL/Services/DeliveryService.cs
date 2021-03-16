@@ -1,4 +1,4 @@
-﻿using HandItOver.BackEnd.BLL.Models.MailboxMessages;
+﻿using HandItOver.BackEnd.BLL.Models.Delivery;
 using HandItOver.BackEnd.DAL.Entities;
 using HandItOver.BackEnd.DAL.Entities.Auth;
 using HandItOver.BackEnd.DAL.Repositories;
@@ -6,7 +6,7 @@ using HandItOver.BackEnd.Infrastructure.Exceptions;
 using System;
 using System.Threading.Tasks;
 
-namespace HandItOver.BackEnd.BLL.Entities
+namespace HandItOver.BackEnd.BLL.Services
 {
     public class DeliveryService
     {
@@ -46,8 +46,8 @@ namespace HandItOver.BackEnd.BLL.Entities
                 MailboxRent? rent = await this.rentRepository.FindForTimeOrNull(mailbox.Id, DateTime.UtcNow);
                 // TODO: ?? rentRepository.NearestToTheTimePeriod()
                 addresse = rent == null ? mailbox.OwnerId : rent.RenterId;
-                terminalTime = mailbox.MailboxGroup.MaxRentTime == null 
-                    ? null 
+                terminalTime = mailbox.MailboxGroup.MaxRentTime == null
+                    ? null
                     : DateTime.UtcNow.Add(mailbox.MailboxGroup.MaxRentTime.Value);
             }
 

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HandItOver.BackEnd.BLL.Models.MailboxMessages
+﻿namespace HandItOver.BackEnd.BLL.Models.Delivery
 {
     public record DeliveryArrivedRequest(
         string MailboxId,

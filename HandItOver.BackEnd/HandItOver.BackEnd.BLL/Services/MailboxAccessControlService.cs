@@ -6,7 +6,7 @@ using HandItOver.BackEnd.Infrastructure.Exceptions;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HandItOver.BackEnd.BLL.Entities
+namespace HandItOver.BackEnd.BLL.Services
 {
     public class MailboxAccessControlService
     {
