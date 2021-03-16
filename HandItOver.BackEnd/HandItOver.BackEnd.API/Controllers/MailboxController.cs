@@ -26,7 +26,8 @@ namespace HandItOver.BackEnd.API.Controllers
             MailboxAuthRequest request = new MailboxAuthRequest(
                 OwnerId: this.User.FindFirst(AuthConstants.Claims.ID)!.Value,
                 Size: authModel.Size,
-                PhysicalId: authModel.PhysicalId
+                PhysicalId: authModel.PhysicalId,
+                Address: authModel.Address
             );
             MailboxAuthResult result = await this.mailboxService.AuthorizeMailboxAsync(request);
             return new JsonResult(result);
@@ -34,7 +35,8 @@ namespace HandItOver.BackEnd.API.Controllers
 
         public record MailboxAuthModel(
             string PhysicalId,
-            MailboxSize Size
+            MailboxSize Size,
+            string Address
         );
 
 

@@ -18,7 +18,7 @@ namespace HandItOver.BackEnd.API.Controllers
             this.usersService = usersService;
         }
 
-        [HttpGet("me"), Authorize]
+        [HttpGet("me"), Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> GetInfoAboutCurrentUserAsync()
         {
             string userId = this.User.FindFirst(AuthConstants.Claims.ID)?.Value ?? string.Empty;

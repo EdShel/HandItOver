@@ -57,7 +57,8 @@ namespace HandItOver.BackEnd.BLL.Services
             {
                 OwnerId = owner.Id,
                 PhysicalId = request.PhysicalId,
-                Size = request.Size
+                Size = request.Size,
+                Address = request.Address
             };
             this.mailboxRepository.CreateMailbox(newMailbox);
 
@@ -72,6 +73,7 @@ namespace HandItOver.BackEnd.BLL.Services
 
             string authToken = this.tokenService.GenerateAuthToken(GetClaimsForMailbox(newMailbox));
             return new MailboxAuthResult(
+                MailboxId: newMailbox.Id,
                 AuthToken: authToken,
                 RefreshToken: refreshToken.Value
             );
