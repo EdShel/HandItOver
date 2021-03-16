@@ -111,8 +111,7 @@ namespace HandItOver.BackEnd.BLL.Entities
             }
             return new MailboxStatus(
                 MailboxId: mailbox.Id,
-                IsOpen: mailbox.IsOpen,
-                Info: mailbox.Info
+                IsOpen: mailbox.IsOpen
             );
         }
 

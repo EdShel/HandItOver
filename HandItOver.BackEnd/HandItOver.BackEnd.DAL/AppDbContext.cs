@@ -1,4 +1,5 @@
-﻿using HandItOver.BackEnd.DAL.Entities.Auth;
+﻿using HandItOver.BackEnd.DAL.Entities;
+using HandItOver.BackEnd.DAL.Entities.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -78,7 +79,59 @@ namespace HandItOver.BackEnd.DAL
                     .IsRequired();
             });
 
+            builder.Entity<Mailbox>(b =>
+            {
+                b.Property(mailbox => mailbox.Id).ValueGeneratedOnAdd();
 
+                b.HasOne(mailbox => mailbox.Owner)
+                    .WithMany(user => user.Mailboxes)
+                    .HasForeignKey(mailbox => mailbox.OwnerId);
+
+                b.HasOne(mailbox => mailbox.MailboxGroup)
+                    .WithMany(group => group!.Mailboxes)
+                    .HasForeignKey(mailbox => mailbox.GroupId)
+                    .OnDelete(DeleteBehavior.SetNull);
+            });
+
+            builder.Entity<MailboxGroup>(b =>
+            {
+                b.HasKey(group => group.GroupId);
+                b.Property(group => group.GroupId).ValueGeneratedOnAdd();
+
+                b.HasOne(group => group.Owner)
+                    .WithMany(user => user.OwnedGroups)
+                    .HasForeignKey(group => group.OwnerId)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                b.HasMany(group => group.Whitelisted)
+                    .WithMany(user => user.WhitelistedIn);
+            });
+
+            builder.Entity<MailboxRent>(b =>
+            {
+                b.HasKey(rent => rent.RentId);
+                b.Property(rent => rent.RentId).ValueGeneratedOnAdd();
+
+                b.HasOne(rent => rent.Mailbox)
+                    .WithMany(mailbox => mailbox.Rents)
+                    .HasForeignKey(rent => rent.MailboxId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                b.HasOne(rent => rent.Renter)
+                    .WithMany(user => user.RentedMailboxes)
+                    .HasForeignKey(rent => rent.RenterId)
+                    .OnDelete(DeleteBehavior.NoAction);
+            });
+
+            builder.Entity<Delivery>(b =>
+            {
+                b.Property(d => d.Id).ValueGeneratedOnAdd();
+
+                b.HasOne(d => d.Addressee)
+                    .WithMany(user => user.Deliveries)
+                    .HasForeignKey(d => d.AddresseeId)
+                    .OnDelete(DeleteBehavior.NoAction);
+            });
         }
     }
 }

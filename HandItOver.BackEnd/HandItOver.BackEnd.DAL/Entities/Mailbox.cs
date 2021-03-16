@@ -23,11 +23,11 @@ namespace HandItOver.BackEnd.DAL.Entities
 
         public string PhysicalId { get; set; } = null!;
 
-        public string Info { get; set; } = null!;
-
         public string Address { get; set; } = null!;
 
         public bool IsOpen { get; set; }
+
+        public AppUser Owner { get; set; } = null!;
 
         public MailboxGroup? MailboxGroup { get; set; } = null!;
 
@@ -89,6 +89,8 @@ namespace HandItOver.BackEnd.DAL.Entities
         public DateTime PredictedTakingTime { get; set; }
 
         public DateTime? TerminalTime { get; set; }
+
+        public AppUser Addressee { get; set; } = null!;
 
         public Mailbox Mailbox { get; set; } = null!;
     }

@@ -13,7 +13,6 @@ namespace HandItOver.BackEnd.BLL.Models.MailboxMessages
 
     public record MailboxStatus(
         string MailboxId,
-        bool IsOpen,
-        string Info
+        bool IsOpen
     );
 }

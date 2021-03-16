@@ -18,11 +18,15 @@ namespace HandItOver.BackEnd.DAL.Entities.Auth
 
         public ICollection<RefreshToken> RefreshTokens { get; set; } = null!;
 
+        public ICollection<Mailbox> Mailboxes { get; set; } = null!;
+
+        public ICollection<MailboxGroup> OwnedGroups { get; set; } = null!;
+
         public ICollection<MailboxGroup> WhitelistedIn { get; set; } = null!;
 
         public ICollection<MailboxRent> RentedMailboxes { get; set; } = null!;
 
-        public ICollection<MailboxGroup> OwnedGroups { get; set; } = null!;
+        public ICollection<Delivery> Deliveries { get; set; } = null!;
     }
 
     public class AppRole : IdentityRole
