@@ -30,15 +30,20 @@ namespace HandItOver.BackEnd.BLL.Entities
             Mailbox mailbox = await this.mailboxRepository.FindByIdWithGroupOrNullAsync(delivery.MailboxId)
                 ?? throw new WrongValueException("Mailbox");
             string addresse;
+            DateTime? terminalTime;
             if (mailbox.MailboxGroup == null)
             {
                 addresse = mailbox.OwnerId;
+                terminalTime = null;
             }
             else
             {
                 MailboxRent? rent = await this.rentRepository.FindForTimeOrNull(mailbox.Id, DateTime.UtcNow);
                 // TODO: ?? rentRepository.NearestToTheTimePeriod()
                 addresse = rent == null ? mailbox.OwnerId : rent.RenterId;
+                terminalTime = mailbox.MailboxGroup.MaxRentTime == null 
+                    ? null 
+                    : DateTime.UtcNow.Add(mailbox.MailboxGroup.MaxRentTime.Value);
             }
 
             Delivery deliveryRecord = new Delivery
@@ -47,7 +52,9 @@ namespace HandItOver.BackEnd.BLL.Entities
                 MailboxId = delivery.MailboxId,
                 Weight = delivery.Weight,
                 Arrived = DateTime.UtcNow,
-                Taken = null,
+                TerminalTime = terminalTime,
+                PredictedTakingTime = DateTime.UtcNow.AddDays(7), // TODO: add prediction here
+                Taken = null
             };
             this.deliveryRepository.AddDelivery(deliveryRecord);
 
@@ -77,10 +84,20 @@ namespace HandItOver.BackEnd.BLL.Entities
             Mailbox mailbox = await this.mailboxRepository.FindByIdOrNullAsync(mailboxId)
                 ?? throw new NotFoundException("Mailbox");
             Delivery? currentDelivery = await this.deliveryRepository.GetCurrentDeliveryOrNullAsync(mailboxId);
-            if (currentDelivery == null)
+            if (!mailbox.IsOpen)
             {
-                MailboxRent? currentRent = await this.rentRepository.FindForTimeOrNull(mailboxId, DateTime.UtcNow);
-                if (currentRent != null && !mailbox.IsOpen)
+                if (currentDelivery == null)
+                {
+                    MailboxRent? currentRent = await this.rentRepository.FindForTimeOrNull(mailboxId, DateTime.UtcNow);
+                    if (currentRent != null)
+                    {
+                        mailbox.IsOpen = true;
+                        this.mailboxRepository.UpdateMailbox(mailbox);
+                        await this.mailboxRepository.SaveChangesAsync();
+                    }
+                }
+                else if (currentDelivery.TerminalTime != null
+                        && DateTime.UtcNow >= currentDelivery.TerminalTime)
                 {
                     mailbox.IsOpen = true;
                     this.mailboxRepository.UpdateMailbox(mailbox);
@@ -89,7 +106,8 @@ namespace HandItOver.BackEnd.BLL.Entities
             }
             return new MailboxStatus(
                 MailboxId: mailbox.Id,
-                IsOpen: mailbox.IsOpen
+                IsOpen: mailbox.IsOpen,
+                Info: mailbox.Info
             );
         }
 

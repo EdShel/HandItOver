@@ -16,7 +16,10 @@ namespace HandItOver.BackEnd.BLL.Models.MailboxGroup
         string OwnerId,
         string Name,
         string FirstMailboxId,
-        bool WhitelistOnly
+        bool WhitelistOnly,
+        bool AutoAdjustRentTime,
+        float PredictedTimeTolerance,
+        TimeSpan? MaxRentTime
     );
 
     public record MailboxGroupCreatedResult(

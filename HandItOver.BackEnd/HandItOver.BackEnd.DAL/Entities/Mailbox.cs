@@ -23,6 +23,8 @@ namespace HandItOver.BackEnd.DAL.Entities
 
         public string PhysicalId { get; set; } = null!;
 
+        public string Info { get; set; } = null!;
+
         public bool IsOpen { get; set; }
 
         public MailboxGroup? MailboxGroup { get; set; } = null!;
@@ -41,6 +43,8 @@ namespace HandItOver.BackEnd.DAL.Entities
         public string Name { get; set; } = null!;
 
         public bool WhitelistOnly { get; set; }
+
+        public TimeSpan? MaxRentTime { get; set; }
 
         public ICollection<Mailbox> Mailboxes { get; set; } = null!;
 
@@ -77,6 +81,10 @@ namespace HandItOver.BackEnd.DAL.Entities
         public DateTime Arrived { get; set; }
 
         public DateTime? Taken { get; set; }
+
+        public DateTime PredictedTakingTime { get; set; }
+
+        public DateTime? TerminalTime { get; set; }
 
         public Mailbox Mailbox { get; set; } = null!;
     }

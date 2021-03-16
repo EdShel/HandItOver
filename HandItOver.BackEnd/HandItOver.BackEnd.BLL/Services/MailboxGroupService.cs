@@ -48,7 +48,8 @@ namespace HandItOver.BackEnd.BLL.Entities
             {
                 Name = request.Name,
                 Owner = request.OwnerId,
-                WhitelistOnly = request.WhitelistOnly
+                WhitelistOnly = request.WhitelistOnly,
+                MaxRentTime = request.MaxRentTime
             };
             this.mailboxGroupRepository.CreateMailboxGroup(newMailboxGroup);
             newMailboxGroup.Mailboxes.Add(mailbox);
@@ -127,7 +128,7 @@ namespace HandItOver.BackEnd.BLL.Entities
                             d => new DeliveryStats(
                                 Arrived: d.Arrived,
                                 Taken: d.Taken,
-                                PredictedTakingTime: d.Arrived.AddDays(7), // TODO: implement prediction algorithm
+                                PredictedTakingTime: d.PredictedTakingTime,
                                 Weight: d.Weight
                             )
                         ).FirstOrDefault(),
