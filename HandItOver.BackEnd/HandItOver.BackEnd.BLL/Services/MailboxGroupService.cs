@@ -50,7 +50,8 @@ namespace HandItOver.BackEnd.BLL.Services
                 Name = request.Name,
                 OwnerId = request.OwnerId,
                 WhitelistOnly = request.WhitelistOnly,
-                MaxRentTime = request.MaxRentTime
+                MaxRentTime = request.MaxRentTime,
+                Mailboxes = new List<Mailbox>()
             };
             this.mailboxGroupRepository.CreateMailboxGroup(newMailboxGroup);
             newMailboxGroup.Mailboxes.Add(mailbox);

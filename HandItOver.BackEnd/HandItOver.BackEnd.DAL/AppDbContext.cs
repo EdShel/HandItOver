@@ -3,6 +3,7 @@ using HandItOver.BackEnd.DAL.Entities.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -105,6 +106,9 @@ namespace HandItOver.BackEnd.DAL
 
                 b.HasMany(group => group.Whitelisted)
                     .WithMany(user => user.WhitelistedIn);
+
+                b.Property(group => group.MaxRentTime)
+                    .HasConversion(new TimeSpanToTicksConverter());
             });
 
             builder.Entity<MailboxRent>(b =>

@@ -29,7 +29,8 @@ namespace HandItOver.BackEnd.API
             services.AddAuthorizationServices(this.Configuration);
             services.AddAppServices();
             
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new TimeSpanToStringConverter()));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "HandItOver.BackEnd.API", Version = "v1" });

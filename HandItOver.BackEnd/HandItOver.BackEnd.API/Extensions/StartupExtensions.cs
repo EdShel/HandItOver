@@ -11,6 +11,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace HandItOver.BackEnd.API.Extensions
 {
@@ -103,6 +106,19 @@ namespace HandItOver.BackEnd.API.Extensions
             services.AddScoped<DeliveryService>();
 
             return services;
+        }
+    }
+
+    public class TimeSpanToStringConverter : JsonConverter<TimeSpan>
+    {
+        public override TimeSpan Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            return TimeSpan.Parse(reader.GetString()!);
+        }
+
+        public override void Write(Utf8JsonWriter writer, TimeSpan value, JsonSerializerOptions options)
+        {
+            writer.WriteStringValue(value.ToString());
         }
     }
 }
