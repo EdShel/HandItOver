@@ -16,7 +16,7 @@ namespace HandItOver.BackEnd.DAL.Repositories
             this.dbContext.Set<MailboxRent>().Add(rent);
         }
 
-        public Task<MailboxRent?> FindByIdOrNull(string rentId)
+        public Task<MailboxRent?> FindByIdOrNullAsync(string rentId)
         {
             return this.dbContext.Set<MailboxRent?>()
                 .FirstOrDefaultAsync(rent => rent!.RentId == rentId);

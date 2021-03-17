@@ -1,3 +1,4 @@
+using AutoMapper;
 using HandItOver.BackEnd.API.Extensions;
 using HandItOver.BackEnd.DAL;
 using Microsoft.AspNetCore.Builder;
@@ -59,6 +60,8 @@ namespace HandItOver.BackEnd.API
                     };
                 c.AddSecurityRequirement(requirements);
             });
+
+            services.AddMapper();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -67,7 +67,7 @@ namespace HandItOver.BackEnd.BLL.Services
 
         public async Task CancelRent(string rentId)
         {
-            MailboxRent rent = await this.rentRepository.FindByIdOrNull(rentId)
+            MailboxRent rent = await this.rentRepository.FindByIdOrNullAsync(rentId)
                 ?? throw new NotFoundException("Rent record");
             this.rentRepository.DeleteRent(rent);
             await this.rentRepository.SaveChangesAsync();
@@ -75,7 +75,7 @@ namespace HandItOver.BackEnd.BLL.Services
 
         public async Task<RentResult> GetRent(string rentId)
         {
-            MailboxRent rent = await this.rentRepository.FindByIdOrNull(rentId)
+            MailboxRent rent = await this.rentRepository.FindByIdOrNullAsync(rentId)
                 ?? throw new NotFoundException("Rent record");
 
             return new RentResult(

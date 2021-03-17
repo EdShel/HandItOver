@@ -1,4 +1,5 @@
-﻿using HandItOver.BackEnd.BLL.Models.MailboxGroup;
+﻿using AutoMapper;
+using HandItOver.BackEnd.BLL.Models.MailboxGroup;
 using HandItOver.BackEnd.DAL.Entities;
 using HandItOver.BackEnd.DAL.Entities.Auth;
 using HandItOver.BackEnd.DAL.Repositories;
@@ -17,14 +18,18 @@ namespace HandItOver.BackEnd.BLL.Services
 
         private readonly MailboxGroupRepository mailboxGroupRepository;
 
+        private readonly IMapper mapper;
+
         public MailboxGroupService(
             UserRepository userRepository,
             MailboxRepository mailboxRepository,
-            MailboxGroupRepository mailboxGroupRepository)
+            MailboxGroupRepository mailboxGroupRepository,
+            IMapper mapper)
         {
             this.userRepository = userRepository;
             this.mailboxRepository = mailboxRepository;
             this.mailboxGroupRepository = mailboxGroupRepository;
+            this.mapper = mapper;
         }
 
         public async Task<MailboxGroupCreatedResult> CreateMailboxGroupAsync(MailboxGroupCreateRequest request)
@@ -62,10 +67,11 @@ namespace HandItOver.BackEnd.BLL.Services
             );
         }
 
-        public async Task<MailboxGroup> GetMailboxGroupById(string groupId)
+        public async Task<MailboxGroupViewResult> GetMailboxGroupById(string groupId)
         {
-            return await this.mailboxGroupRepository.FindByIdOrNullAsync(groupId)
+            var group = await this.mailboxGroupRepository.FindByIdOrNullAsync(groupId)
                 ?? throw new NotFoundException("Mailbox group");
+            return this.mapper.Map<MailboxGroupViewResult>(group);
         }
 
         public async Task<MailboxGroup> GetMailboxGroupByName(string name)

@@ -11,9 +11,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace HandItOver.BackEnd.API.Extensions
 {
@@ -55,10 +52,16 @@ namespace HandItOver.BackEnd.API.Extensions
                     AuthConstants.Policies.MAILBOX_GROUP_OWNER_ONLY,
                     policy => policy.Requirements.Add(MailboxGroupAuthorizationHandler.GetRequirement("groupId"))
                 );
+
+                options.AddPolicy(
+                    AuthConstants.Policies.RENTER_OR_OWNER_ONLY,
+                    policy => policy.Requirements.Add(RentAuthorizationHandler.GetRequirement("rentId"))
+                );
             });
 
             services.AddScoped<IAuthorizationHandler, MailboxAuthorizationHandler>();
             services.AddScoped<IAuthorizationHandler, MailboxGroupAuthorizationHandler>();
+            services.AddScoped<IAuthorizationHandler, RentAuthorizationHandler>();
 
             return services;
         }
@@ -109,16 +112,4 @@ namespace HandItOver.BackEnd.API.Extensions
         }
     }
 
-    public class TimeSpanToStringConverter : JsonConverter<TimeSpan>
-    {
-        public override TimeSpan Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            return TimeSpan.Parse(reader.GetString()!);
-        }
-
-        public override void Write(Utf8JsonWriter writer, TimeSpan value, JsonSerializerOptions options)
-        {
-            writer.WriteStringValue(value.ToString());
-        }
-    }
 }

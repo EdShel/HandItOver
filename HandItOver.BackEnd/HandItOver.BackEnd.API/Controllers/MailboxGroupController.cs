@@ -3,6 +3,7 @@ using HandItOver.BackEnd.BLL.Models.MailboxRent;
 using HandItOver.BackEnd.BLL.Services;
 using HandItOver.BackEnd.DAL.Entities;
 using HandItOver.BackEnd.Infrastructure.Models.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Threading.Tasks;
@@ -63,7 +64,7 @@ namespace HandItOver.BackEnd.API.Controllers
         }
 
         // TODO: replace model with dto
-        // which has no id
+        // which has no id and nav properties
         [HttpPut("{id}")]
         public async Task<IActionResult> EditGroup(
             [FromRoute] string id,
@@ -109,21 +110,26 @@ namespace HandItOver.BackEnd.API.Controllers
             [FromRoute] string id,
             [FromBody] RentRequest model)
         {
-            var request = model with { GroupId = id };
+            var request = model with
+            {
+                GroupId = id,
+                RenterId = this.User.FindFirst(AuthConstants.Claims.ID)!.Value
+            };
             var result = await this.mailboxRentService.RentMailbox(request);
             return new JsonResult(result);
         }
 
-        [HttpDelete("{id}/rent")]
-        public async Task<IActionResult> CancelRent([FromRoute] string id)
+        [HttpDelete("rent/{rentId}")]
+        [Authorize(AuthConstants.Policies.RENTER_OR_OWNER_ONLY)]
+        public async Task<IActionResult> CancelRent([FromRoute] string rentId)
         {
-            await this.mailboxRentService.CancelRent(id);
+            await this.mailboxRentService.CancelRent(rentId);
             return NoContent();
         }
 
         [HttpGet("rent/{rentId}")]
-        public async Task<IActionResult> ViewRent(
-            [FromRoute] string rentId)
+        [Authorize(AuthConstants.Policies.RENTER_OR_OWNER_ONLY)]
+        public async Task<IActionResult> ViewRent([FromRoute] string rentId)
         {
             var result = await this.mailboxRentService.GetRent(rentId);
             return new JsonResult(result);

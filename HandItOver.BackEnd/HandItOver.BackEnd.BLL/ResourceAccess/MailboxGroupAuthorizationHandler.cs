@@ -21,5 +21,4 @@ namespace HandItOver.BackEnd.BLL.ResourceAccess
             return mailboxGroup.OwnerId == userId;
         }
     }
-
 }

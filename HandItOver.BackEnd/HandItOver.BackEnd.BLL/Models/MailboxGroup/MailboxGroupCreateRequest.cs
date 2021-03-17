@@ -11,6 +11,19 @@ namespace HandItOver.BackEnd.BLL.Models.MailboxGroup
     {
         public string GroupId { get; } = null!;
     }
+    public record MailboxGroupViewResult(
+        string GroupId,
+        string Name,
+        bool WhitelistOnly,
+        TimeSpan? MaxRentTime,
+        IEnumerable<MailboxViewResult> Mailboxes
+    );
+
+    public record MailboxViewResult(
+        string Id,
+        MailboxSize Size,
+        string Address
+    );
 
     public record MailboxGroupCreateRequest(
         string OwnerId,
@@ -51,7 +64,7 @@ namespace HandItOver.BackEnd.BLL.Models.MailboxGroup
     );
 
     public record MailboxGroupSearchRequest(
-        string SearchQuery  
+        string SearchQuery
     );
 
     public record MailboxGroupSearchResult(

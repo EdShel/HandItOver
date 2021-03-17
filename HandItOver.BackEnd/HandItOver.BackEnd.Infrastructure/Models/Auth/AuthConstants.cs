@@ -10,7 +10,7 @@
 
             public const string ID = "id";
 
-            public const string OWNER_ID = "onwerId";
+            public const string OWNER_ID = "ownerId";
         }
 
         public static class Roles
@@ -27,6 +27,8 @@
             public const string MAILBOX_OWNER_ONLY = "mailbox";
 
             public const string MAILBOX_GROUP_OWNER_ONLY = "mailboxGroup";
+
+            public const string RENTER_OR_OWNER_ONLY = "renterOrOwner";
         }
     }
 }
