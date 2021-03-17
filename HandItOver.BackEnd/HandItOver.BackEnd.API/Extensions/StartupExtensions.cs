@@ -1,4 +1,6 @@
-﻿using HandItOver.BackEnd.BLL.ResourceAccess;
+﻿using HandItOver.BackEnd.BLL.Models.Mailbox;
+using HandItOver.BackEnd.BLL.Models.MailboxGroup;
+using HandItOver.BackEnd.BLL.ResourceAccess;
 using HandItOver.BackEnd.BLL.Services;
 using HandItOver.BackEnd.DAL;
 using HandItOver.BackEnd.DAL.Entities.Auth;
@@ -39,15 +41,21 @@ namespace HandItOver.BackEnd.API.Extensions
             services.AddScoped<UsersService>();
             services.AddScoped<AuthService>();
 
-            services.AddTransient<IAuthorizationHandler, MailboxGroupAuthorizationHandler>();
-
             services.AddAuthorization(options =>
             {
                 options.AddPolicy(
+                    AuthConstants.Policies.MAILBOX_OWNER_ONLY,
+                    policy => policy.Requirements.Add(MailboxAuthorizationHandler.GetRequirement("mailboxId"))
+                );
+
+                options.AddPolicy(
                     AuthConstants.Policies.MAILBOX_GROUP_OWNER_ONLY,
-                    policy => policy.Requirements.Add(new ResourceOwnerRequirement())
+                    policy => policy.Requirements.Add(MailboxGroupAuthorizationHandler.GetRequirement("groupId"))
                 );
             });
+
+            services.AddScoped<IAuthorizationHandler, MailboxAuthorizationHandler>();
+            services.AddScoped<IAuthorizationHandler, MailboxGroupAuthorizationHandler>();
 
             return services;
         }
@@ -62,6 +70,7 @@ namespace HandItOver.BackEnd.API.Extensions
             services.AddAuthentication(o =>
             {
                 o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(
                 authenticationScheme: JwtBearerDefaults.AuthenticationScheme,
                 configureOptions: options =>

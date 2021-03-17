@@ -24,6 +24,8 @@
 
         public static class Policies
         {
+            public const string MAILBOX_OWNER_ONLY = "mailbox";
+
             public const string MAILBOX_GROUP_OWNER_ONLY = "mailboxGroup";
         }
     }

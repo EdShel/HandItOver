@@ -1,58 +1,43 @@
-﻿using HandItOver.BackEnd.BLL.Models.MailboxGroup;
-using HandItOver.BackEnd.DAL.Entities;
-using HandItOver.BackEnd.DAL.Repositories;
-using HandItOver.BackEnd.Infrastructure.Exceptions;
-using HandItOver.BackEnd.Infrastructure.Models.Auth;
+﻿using HandItOver.BackEnd.Infrastructure.Models.Auth;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.BLL.ResourceAccess
 {
-    public interface IOwnedResource
+    public abstract class ResourceAccessAuthorizationHandler<THandler>
+        : AuthorizationHandler<ResourceOwnerRequirement<THandler>>
     {
-        string OwnerId { get; }
-    }
+        public static ResourceOwnerRequirement<THandler> GetRequirement(string idRouteParameterName)
+        {
+            return new ResourceOwnerRequirement<THandler>(idRouteParameterName);
+        }
 
-    public class ResourceOwnerRequirement : IAuthorizationRequirement
-    {
-    }
-
-    public abstract class ResourceAccessAuthorizationHandler<TResource> : AuthorizationHandler<ResourceOwnerRequirement, TResource>
-    {
         protected override async Task HandleRequirementAsync(
             AuthorizationHandlerContext context,
-            ResourceOwnerRequirement requirement,
-            TResource resource)
+            ResourceOwnerRequirement<THandler> requirement)
         {
+            // TODO: uncomment to allow admin doing everything he wants
+            //if (context.User.IsInRole(AuthConstants.Roles.ADMIN))
+            //{
+            //    context.Succeed(requirement);
+            //}
+
             string? userId = context.User.FindFirst(AuthConstants.Claims.ID)?.Value;
-            if (userId != null && await IsOwnerAsync(userId, resource))
+            RouteValueDictionary routeValues = (context.Resource as DefaultHttpContext)!.Request.RouteValues;
+            string routeIdPropertyName = requirement.IdRouteParameterName;
+            if (!routeValues.TryGetValue(routeIdPropertyName, out object? id))
+            {
+                throw new InvalidOperationException($"Request doesn't have route value '{routeIdPropertyName}'.");
+            }
+            if (userId != null && await IsOwnerAsync(userId, (id as string)!))
             {
                 context.Succeed(requirement);
             }
         }
 
-        protected abstract Task<bool> IsOwnerAsync(string userId, TResource resource);
+        protected abstract Task<bool> IsOwnerAsync(string userId, string resourceId);
     }
-
-    public sealed class MailboxGroupAuthorizationHandler : ResourceAccessAuthorizationHandler<IMailboxGroupRequest>
-    {
-        private readonly MailboxGroupRepository mailboxGroupRepository;
-
-        public MailboxGroupAuthorizationHandler(MailboxGroupRepository mailboxGroupRepository)
-        {
-            this.mailboxGroupRepository = mailboxGroupRepository;
-        }
-
-        protected override async Task<bool> IsOwnerAsync(string userId, IMailboxGroupRequest resource)
-        {
-            MailboxGroup? mailboxGroup = await this.mailboxGroupRepository.FindByIdOrNullAsync(resource.GroupId)
-                ?? throw new NotFoundException("Mailbox group");
-            return mailboxGroup.OwnerId == userId;
-        }
-    }
-
 }

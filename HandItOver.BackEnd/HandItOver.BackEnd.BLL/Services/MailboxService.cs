@@ -7,6 +7,7 @@ using HandItOver.BackEnd.Infrastructure.Exceptions;
 using HandItOver.BackEnd.Infrastructure.Models.Auth;
 using HandItOver.BackEnd.Infrastructure.Services;
 using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -133,6 +134,12 @@ namespace HandItOver.BackEnd.BLL.Services
                 MailboxId: mailbox.Id,
                 IsOpen: mailbox.IsOpen
             );
+        }
+
+        // TODO: create DTO
+        public async Task<IEnumerable<Mailbox>> GetOwnedMailboxes(string userId)
+        {
+            return await this.mailboxRepository.FindByOwnerAsync(userId);
         }
     }
 }

@@ -49,7 +49,7 @@ namespace HandItOver.BackEnd.API.Controllers
             return NoContent();
         }
 
-        public record MailboxGroupModel(string GroupId) : IMailboxGroupRequest;
+        public record MailboxGroupModel(string GroupId);
 
         public record UserModel(string UserEmail);
     }
