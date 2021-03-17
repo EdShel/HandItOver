@@ -75,6 +75,11 @@ namespace HandItOver.BackEnd.API
 
             app.UseHttpsRedirection();
 
+            app.UseCors(builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+
             app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseRouting();
