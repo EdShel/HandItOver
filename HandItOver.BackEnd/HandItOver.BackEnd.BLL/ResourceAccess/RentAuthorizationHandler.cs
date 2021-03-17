@@ -17,7 +17,7 @@ namespace HandItOver.BackEnd.BLL.ResourceAccess
         protected override async Task<bool> IsOwnerAsync(string userId, string rentId)
         {
             MailboxRent rent = await this.rentRepository.FindByIdWithMailboxOrNull(rentId)
-                ?? throw new NotFoundException("Mailbox group");
+                ?? throw new NotFoundException("Rent record");
             return rent.RenterId == userId || rent.Mailbox.OwnerId == userId;
         }
     }

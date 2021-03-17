@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace HandItOver.BackEnd.API.Extensions
 {
+
     public static class MapperConfig
     {
         public static IServiceCollection AddMapper(this IServiceCollection services)

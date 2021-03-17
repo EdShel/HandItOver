@@ -75,6 +75,8 @@ namespace HandItOver.BackEnd.API
 
             app.UseHttpsRedirection();
 
+            app.UseMiddleware<ExceptionMiddleware>();
+
             app.UseRouting();
 
             app.UseAuthentication();
