@@ -15,9 +15,12 @@ namespace HandItOver.BackEnd.API.Controllers
     {
         private readonly DatabaseBackupService databaseBackupService;
 
-        public AdminController(DatabaseBackupService databaseBackupService)
+        private readonly CertExpirationService certExpirationService;
+
+        public AdminController(DatabaseBackupService databaseBackupService, CertExpirationService certExpirationService)
         {
             this.databaseBackupService = databaseBackupService;
+            this.certExpirationService = certExpirationService;
         }
 
         [HttpPost("backup")]
@@ -33,6 +36,16 @@ namespace HandItOver.BackEnd.API.Controllers
         {
             System.IO.Stream backupFileStream = this.databaseBackupService.GetBackupAsStream(file);
             return File(backupFileStream, "application/octet-stream");
+        }
+
+        [HttpGet("sslExpiration")]
+        public async Task<IActionResult> GetSslExpirationDate()
+        {
+            string url = $"{this.HttpContext.Request.Scheme}://{this.HttpContext.Request.Host}/healthCheck";
+            return new JsonResult(new
+            {
+                Expires = await this.certExpirationService.GetCertExpirationDateAsync(url)
+            });
         }
 
         //[HttpGet("config")]

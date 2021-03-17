@@ -119,6 +119,7 @@ namespace HandItOver.BackEnd.API.Extensions
             });
             services.AddScoped<DatabaseRepository>();
             services.AddScoped<DatabaseBackupService>();
+            services.AddSingleton<CertExpirationService>();
 
             return services;
         }
