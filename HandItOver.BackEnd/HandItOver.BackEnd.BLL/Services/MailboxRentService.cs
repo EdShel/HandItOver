@@ -60,17 +60,12 @@ namespace HandItOver.BackEnd.BLL.Services
                 RenterId = request.RenterId,
                 From = request.RentFrom,
                 Until = request.RentUntil,
+                Mailbox = toRent
             };
             this.rentRepository.CreateRent(rentRecord);
             await this.rentRepository.SaveChangesAsync();
 
-            return new RentResult(
-                RentId: rentRecord.RentId,
-                MailboxId: rentRecord.MailboxId,
-                MailboxSize: toRent.Size,
-                From: rentRecord.From,
-                Until: rentRecord.Until
-            );
+            return this.mapper.Map<RentResult>(rentRecord);
         }
 
         public async Task CancelRent(string rentId)

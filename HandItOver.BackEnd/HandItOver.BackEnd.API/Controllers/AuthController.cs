@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.API.Controllers
 {
+
     [ApiController]
     [Route("[controller]")]
     public class AuthController : ControllerBase

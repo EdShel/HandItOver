@@ -2,9 +2,12 @@
 using HandItOver.BackEnd.BLL.Models.MailboxGroup;
 using HandItOver.BackEnd.BLL.ResourceAccess;
 using HandItOver.BackEnd.BLL.Services;
+using HandItOver.BackEnd.BLL.Services.Admin;
 using HandItOver.BackEnd.DAL;
 using HandItOver.BackEnd.DAL.Entities.Auth;
 using HandItOver.BackEnd.DAL.Repositories;
+using HandItOver.BackEnd.DAL.Repositories.Admin;
+using HandItOver.BackEnd.Infrastructure.Models.Admin;
 using HandItOver.BackEnd.Infrastructure.Models.Auth;
 using HandItOver.BackEnd.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -95,7 +98,7 @@ namespace HandItOver.BackEnd.API.Extensions
             services.AddSingleton<IRefreshTokenFactory, RefreshTokenFactory>();
         }
 
-        public static IServiceCollection AddAppServices(this IServiceCollection services)
+        public static IServiceCollection AddAppServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<MailboxRepository>();
             services.AddScoped<MailboxGroupRepository>();
@@ -107,6 +110,15 @@ namespace HandItOver.BackEnd.API.Extensions
             services.AddScoped<MailboxGroupService>();
             services.AddScoped<MailboxRentService>();
             services.AddScoped<DeliveryService>();
+
+            services.AddScoped(s =>
+            {
+                var dbBackupSection = configuration.GetSection(nameof(BackupSettings));
+                var dbBackup = dbBackupSection.Get<BackupSettings>();
+                return dbBackup;
+            });
+            services.AddScoped<DatabaseRepository>();
+            services.AddScoped<DatabaseBackupService>();
 
             return services;
         }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.DAL.Repositories
 {
-    public class RentRepository : BaseRepository<MailboxRent>
+    public class RentRepository : BaseRepository
     {
         public RentRepository(DbContext dbContext) : base(dbContext)
         {
@@ -21,6 +21,7 @@ namespace HandItOver.BackEnd.DAL.Repositories
         public Task<MailboxRent?> FindByIdOrNullAsync(string rentId)
         {
             return this.dbContext.Set<MailboxRent?>()
+                .Include(rent => rent!.Mailbox)
                 .FirstOrDefaultAsync(rent => rent!.RentId == rentId);
         }
 
@@ -34,12 +35,13 @@ namespace HandItOver.BackEnd.DAL.Repositories
         public Task<MailboxRent?> FindForTimeOrNull(string mailboxId, DateTime time)
         {
             return this.dbContext.Set<MailboxRent?>()
-                .FirstOrDefaultAsync(r => r!.From >= time && time <= r.Until);
+                .FirstOrDefaultAsync(r => r!.MailboxId == mailboxId && r!.From >= time && time <= r.Until);
         }
 
         public async Task<IEnumerable<MailboxRent>> FindByRenterAsync(string renterId)
         {
             return await this.dbContext.Set<MailboxRent>()
+                .Include(rent => rent.Mailbox)
                 .Where(rent => rent.RenterId == renterId)
                 .ToListAsync();
         }

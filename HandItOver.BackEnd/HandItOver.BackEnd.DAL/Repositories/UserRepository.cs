@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.DAL.Repositories
 {
-    public class UserRepository : BaseRepository<AppUser>
+    public class UserRepository : BaseRepository
     {
         private readonly UserManager<AppUser?> userManager;
 

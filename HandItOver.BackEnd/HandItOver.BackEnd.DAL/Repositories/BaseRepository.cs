@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.DAL.Repositories
 {
-    public abstract class BaseRepository<T> where T : class
+    public abstract class BaseRepository
     {
         protected readonly DbContext dbContext;
 

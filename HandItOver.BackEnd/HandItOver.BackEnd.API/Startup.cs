@@ -28,7 +28,7 @@ namespace HandItOver.BackEnd.API
             );
             services.AddScoped<DbContext>(provider => provider.GetService<AppDbContext>()!);
             services.AddAuthorizationServices(this.Configuration);
-            services.AddAppServices();
+            services.AddAppServices(this.Configuration);
             
             services.AddControllers()
                 .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new TimeSpanToStringConverter()));

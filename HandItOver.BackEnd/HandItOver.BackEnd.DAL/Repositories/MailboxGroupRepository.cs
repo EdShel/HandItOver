@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.DAL.Repositories
 {
-    public class MailboxGroupRepository : BaseRepository<MailboxGroupRepository>
+    public class MailboxGroupRepository : BaseRepository
     {
         public MailboxGroupRepository(DbContext dbContext) : base(dbContext)
         {

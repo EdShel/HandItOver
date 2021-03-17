@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.DAL.Repositories
 {
-    public class MailboxRepository : BaseRepository<MailboxRepository>
+    public class MailboxRepository : BaseRepository
     {
         public MailboxRepository(DbContext dbContext) : base(dbContext)
         {

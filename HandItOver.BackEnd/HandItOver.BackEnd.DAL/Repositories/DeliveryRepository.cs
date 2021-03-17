@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.DAL.Repositories
 {
-    public class DeliveryRepository : BaseRepository<Delivery>
+    public class DeliveryRepository : BaseRepository
     {
         public DeliveryRepository(DbContext dbContext) : base(dbContext)
         {
