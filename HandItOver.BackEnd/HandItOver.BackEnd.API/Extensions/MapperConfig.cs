@@ -24,6 +24,7 @@ namespace HandItOver.BackEnd.API.Extensions
             {
                 CreateMap<DAL.Entities.Mailbox, BLL.Models.MailboxGroup.MailboxViewResult>();
                 CreateMap<DAL.Entities.MailboxGroup, BLL.Models.MailboxGroup.MailboxGroupViewResult>();
+                CreateMap<DAL.Entities.MailboxRent, BLL.Models.MailboxRent.RentResult>();
             }
         }
     }

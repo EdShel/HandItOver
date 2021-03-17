@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 namespace HandItOver.BackEnd.API.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
     public class MailboxGroupController : ControllerBase
     {
@@ -132,6 +133,14 @@ namespace HandItOver.BackEnd.API.Controllers
         public async Task<IActionResult> ViewRent([FromRoute] string rentId)
         {
             var result = await this.mailboxRentService.GetRent(rentId);
+            return new JsonResult(result);
+        }
+
+        [HttpGet("rent")]
+        public async Task<IActionResult> ViewRent()
+        {
+            string userId = this.User.FindFirst(AuthConstants.Claims.ID)!.Value;
+            var result = await this.mailboxRentService.GetRentsOfUserAsync(userId);
             return new JsonResult(result);
         }
     }

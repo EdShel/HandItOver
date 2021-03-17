@@ -1,8 +1,10 @@
-﻿using HandItOver.BackEnd.BLL.Models.MailboxRent;
+﻿using AutoMapper;
+using HandItOver.BackEnd.BLL.Models.MailboxRent;
 using HandItOver.BackEnd.DAL.Entities;
 using HandItOver.BackEnd.DAL.Repositories;
 using HandItOver.BackEnd.Infrastructure.Exceptions;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,10 +16,16 @@ namespace HandItOver.BackEnd.BLL.Services
 
         private readonly RentRepository rentRepository;
 
-        public MailboxRentService(MailboxGroupRepository mailboxGroupRepository, RentRepository rentRepository)
+        private readonly IMapper mapper;
+
+        public MailboxRentService(
+            MailboxGroupRepository mailboxGroupRepository,
+            RentRepository rentRepository,
+            IMapper mapper)
         {
             this.mailboxGroupRepository = mailboxGroupRepository;
             this.rentRepository = rentRepository;
+            this.mapper = mapper;
         }
 
         public async Task<RentResult> RentMailbox(RentRequest request)
@@ -78,13 +86,13 @@ namespace HandItOver.BackEnd.BLL.Services
             MailboxRent rent = await this.rentRepository.FindByIdOrNullAsync(rentId)
                 ?? throw new NotFoundException("Rent record");
 
-            return new RentResult(
-                RentId: rent.RentId,
-                MailboxId: rent.MailboxId,
-                MailboxSize: rent.Mailbox.Size,
-                From: rent.From,
-                Until: rent.Until
-            );
+            return this.mapper.Map<RentResult>(rent);
+        }
+
+        public async Task<IEnumerable<RentResult>> GetRentsOfUserAsync(string userId)
+        {
+            IEnumerable<MailboxRent> rents = await this.rentRepository.FindByRenterAsync(userId);
+            return this.mapper.Map<IEnumerable<RentResult>>(rents);
         }
     }
 }

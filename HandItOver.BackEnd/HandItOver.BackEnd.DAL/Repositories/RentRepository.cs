@@ -1,6 +1,8 @@
 ﻿using HandItOver.BackEnd.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.DAL.Repositories
@@ -33,6 +35,13 @@ namespace HandItOver.BackEnd.DAL.Repositories
         {
             return this.dbContext.Set<MailboxRent?>()
                 .FirstOrDefaultAsync(r => r!.From >= time && time <= r.Until);
+        }
+
+        public async Task<IEnumerable<MailboxRent>> FindByRenterAsync(string renterId)
+        {
+            return await this.dbContext.Set<MailboxRent>()
+                .Where(rent => rent.RenterId == renterId)
+                .ToListAsync();
         }
 
         public void DeleteRent(MailboxRent rent)
