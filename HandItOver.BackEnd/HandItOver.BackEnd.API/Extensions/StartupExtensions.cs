@@ -121,6 +121,17 @@ namespace HandItOver.BackEnd.API.Extensions
             services.AddScoped<DatabaseBackupService>();
             services.AddSingleton<CertExpirationService>();
 
+            services.AddSingleton(s =>
+            {
+                var emailSettingsSection = configuration.GetSection("Email");
+                var emailSettings = emailSettingsSection.Get<EmailOptions>();
+                return emailSettings;
+            });
+            services.AddSingleton<EmailService>();
+
+            services.AddSingleton(s => configuration.GetSection(nameof(SslMonitoringOptions)).Get<SslMonitoringOptions>());
+            services.AddHostedService<CertExpirationNotifyService>();
+
             return services;
         }
     }

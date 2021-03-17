@@ -13,7 +13,7 @@ namespace HandItOver.BackEnd.BLL.Services.Admin
             DateTime? expiration = default;
             request.ServerCertificateValidationCallback += (sender, cert, chain, errors) =>
             {
-                expiration = cert != null 
+                expiration = cert != null
                 ? DateTime.Parse(cert.GetExpirationDateString())
                 : null;
                 return true;
