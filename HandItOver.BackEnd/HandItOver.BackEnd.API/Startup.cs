@@ -1,4 +1,3 @@
-using AutoMapper;
 using HandItOver.BackEnd.API.Extensions;
 using HandItOver.BackEnd.DAL;
 using Microsoft.AspNetCore.Builder;
@@ -29,7 +28,7 @@ namespace HandItOver.BackEnd.API
             services.AddScoped<DbContext>(provider => provider.GetService<AppDbContext>()!);
             services.AddAuthorizationServices(this.Configuration);
             services.AddAppServices(this.Configuration);
-            
+
             services.AddControllers()
                 .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new TimeSpanToStringConverter()));
             services.AddSwaggerGen(c =>

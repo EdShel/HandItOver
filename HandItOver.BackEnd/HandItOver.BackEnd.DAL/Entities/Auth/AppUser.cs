@@ -27,6 +27,8 @@ namespace HandItOver.BackEnd.DAL.Entities.Auth
         public ICollection<MailboxRent> RentedMailboxes { get; set; } = null!;
 
         public ICollection<Delivery> Deliveries { get; set; } = null!;
+
+        public FirebaseToken FirebaseToken { get; set; } = null!;
     }
 
     public class AppRole : IdentityRole

@@ -1,10 +1,9 @@
 ﻿using HandItOver.BackEnd.Infrastructure.Models.Auth;
 using MailKit.Net.Smtp;
 using MimeKit;
-using System;
 using System.Threading.Tasks;
 
-namespace HandItOver.BackEnd.BLL.Services
+namespace HandItOver.BackEnd.BLL.Services.Notification
 {
     public class EmailService
     {

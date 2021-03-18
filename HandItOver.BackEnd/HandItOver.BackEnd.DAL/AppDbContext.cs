@@ -1,15 +1,9 @@
 ﻿using HandItOver.BackEnd.DAL.Entities;
 using HandItOver.BackEnd.DAL.Entities.Auth;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.DAL
 {
@@ -145,6 +139,14 @@ namespace HandItOver.BackEnd.DAL
                     .WithMany(group => group.WhitelistJoinTokens)
                     .HasForeignKey(t => t.GroupId)
                     .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            builder.Entity<FirebaseToken>(b =>
+            {
+                b.HasKey(t => t.UserId);
+                b.HasOne(t => t.User)
+                    .WithOne(u => u.FirebaseToken)
+                    .HasForeignKey<FirebaseToken>(t => t.UserId);
             });
         }
     }

@@ -107,4 +107,13 @@ namespace HandItOver.BackEnd.DAL.Entities
 
         public MailboxGroup Group { get; set; } = null!;
     }
+
+    public class FirebaseToken
+    {
+        public string UserId { get; set; } = null!;
+
+        public string Token { get; set; } = null!;
+
+        public AppUser User { get; set; } = null!;
+    }
 }
