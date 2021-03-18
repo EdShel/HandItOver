@@ -28,6 +28,7 @@ namespace HandItOver.BackEnd.API.Controllers
             var registerDTO = new RegisterRequest
             (
                 Email: request.Email,
+                FullName: request.FullName,
                 Password: request.Password,
                 Role: request.Role,
                 Registerer: this.User

@@ -47,6 +47,7 @@ namespace HandItOver.BackEnd.BLL.Services
             var user = new AppUser
             {
                 Email = request.Email,
+                FullName = request.FullName,
                 UserName = request.Email
             };
 

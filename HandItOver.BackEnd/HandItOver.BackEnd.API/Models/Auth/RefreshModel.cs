@@ -14,6 +14,7 @@ namespace HandItOver.BackEnd.API.Models.Auth
 
     public record RegisterModel(
         string Email,    
+        string FullName,
         string Password,
         string Role
     );

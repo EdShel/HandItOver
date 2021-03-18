@@ -30,6 +30,16 @@ namespace HandItOver.BackEnd.BLL.Services
 
         public async Task<RentResult> RentMailbox(RentRequest request)
         {
+            if (request.RentFrom >= request.RentUntil)
+            {
+                throw new WrongValueException("Rent period");
+            }
+            const int maxRentHours = 8;
+            if ((request.RentUntil - request.RentFrom).TotalHours >= maxRentHours)
+            {
+                throw new NoRightsException($"rent more than for {maxRentHours} hours.");
+            }
+
             MailboxGroup mailboxGroup = await this.mailboxGroupRepository
                 .GetWhitelistByIdAsync(request.GroupId)
                 ?? throw new NotFoundException("Mailbox group");
@@ -38,12 +48,13 @@ namespace HandItOver.BackEnd.BLL.Services
                 || mailboxGroup.Whitelisted.Any(u => u.Id == request.RenterId);
             if (!allowedToRent)
             {
-                throw new NoRightsException("rent the mailbox group.");
+                throw new NoRightsException("rent the mailbox group");
             }
 
+            // TODO: change it to use max delivery time ('cause it will be opened and can be used)
             var notOccupiedRightNow = await this.mailboxGroupRepository.MailboxesWithoutDelivery(mailboxGroup.GroupId);
             var notRentedForPeriod = await this.mailboxGroupRepository.MailboxesWithoutRent(mailboxGroup.GroupId, request.RentFrom, request.RentUntil);
-            var willBeFreeToRent = notOccupiedRightNow.Union(notRentedForPeriod).ToArray();
+            var willBeFreeToRent = notOccupiedRightNow.Intersect(notRentedForPeriod).ToArray();
             if (willBeFreeToRent.Length == 0)
             {
                 throw new InvalidOperationException("No available mailboxes for the period.");

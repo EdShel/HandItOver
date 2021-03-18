@@ -62,11 +62,12 @@ namespace HandItOver.BackEnd.DAL.Repositories
                 .ToArrayAsync();
         }
 
+        // All mailboxes that have no rents periods intersection [rentBegin, rentEnd)
         public Task<Mailbox[]> MailboxesWithoutRent(string groupId, DateTime rentBegin, DateTime rentEnd)
         {
             return this.dbContext.Set<Mailbox>()
                 .Where(mb => mb.GroupId == groupId
-                    && !mb.Rents.Any(rent => rentBegin < rent.Until && rent.From < rentEnd))
+                    && !mb.Rents.Any(rent => rentBegin <= rent.Until && rent.From < rentEnd))
                 .ToArrayAsync();
         }
 

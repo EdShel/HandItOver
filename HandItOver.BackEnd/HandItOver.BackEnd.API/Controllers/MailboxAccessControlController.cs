@@ -20,19 +20,19 @@ namespace HandItOver.BackEnd.API.Controllers
         }
 
         [HttpGet("{groupId}/whitelist")]
-        public async Task<IActionResult> GetWhitelist([FromRoute] string groupModel)
+        public async Task<IActionResult> GetWhitelist([FromRoute] string groupId)
         {
-            WhitelistInfo result = await this.mailboxAccessControlService.GetMailboxWhitelist(groupModel);
+            WhitelistInfo result = await this.mailboxAccessControlService.GetMailboxWhitelist(groupId);
             return new JsonResult(result);
         }
 
         [HttpPost("{groupId}/whitelist")]
         public async Task<IActionResult> AddUserToWhitelist(
-            [FromRoute] string groupModel,
+            [FromRoute] string groupId,
             [FromBody] UserModel user)
         {
             await this.mailboxAccessControlService.AddUserToWhitelistAsync(
-                groupId: groupModel,
+                groupId: groupId,
                 userEmail: user.UserEmail
             );
             return Ok();
@@ -40,11 +40,11 @@ namespace HandItOver.BackEnd.API.Controllers
 
         [HttpDelete("{groupId}/whitelist/{user}")]
         public async Task<IActionResult> RemoveUserFromWhitelist(
-            [FromRoute] string groupModel,
+            [FromRoute] string groupId,
             [FromRoute] UserModel user)
         {
             await this.mailboxAccessControlService.RemoveUserFromWhitelistAsync(
-                groupId: groupModel,
+                groupId: groupId,
                 userEmail: user.UserEmail
             );
             return NoContent();

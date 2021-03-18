@@ -4,6 +4,7 @@ namespace HandItOver.BackEnd.BLL.Models.Auth
 {
     public record RegisterRequest(
         string Email,
+        string FullName,
         string Password,
         string Role,
         IPrincipal Registerer
