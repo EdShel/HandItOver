@@ -84,5 +84,12 @@ namespace HandItOver.BackEnd.BLL.Services
         {
             return await this.mailboxRepository.FindByOwnerAsync(userId);
         }
+
+        // TODO: dto
+        public async Task<Mailbox> GetMailbox(string mailboxId)
+        {
+            return await this.mailboxRepository.FindByIdOrNullAsync(mailboxId)
+                   ?? throw new NotFoundException("Mailbox");
+        }
     }
 }

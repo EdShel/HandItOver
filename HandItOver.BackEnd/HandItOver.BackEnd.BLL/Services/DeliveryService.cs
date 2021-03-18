@@ -99,6 +99,7 @@ namespace HandItOver.BackEnd.BLL.Services
             Mailbox mailbox = await this.mailboxRepository.FindByIdOrNullAsync(mailboxId)
                 ?? throw new NotFoundException("Mailbox");
             Delivery? currentDelivery = await this.deliveryRepository.GetCurrentDeliveryOrNullAsync(mailboxId);
+            string? renter = null;
             if (!mailbox.IsOpen)
             {
                 if (currentDelivery != null 
@@ -110,9 +111,18 @@ namespace HandItOver.BackEnd.BLL.Services
                     await this.mailboxRepository.SaveChangesAsync();
                 }
             }
+            else
+            {
+                var currentRent = await this.rentRepository.FindForTimeWithRenterOrNull(mailboxId, DateTime.UtcNow);
+                if (currentRent != null)
+                {
+                    renter = currentRent.Renter.FullName;
+                }
+            }
             return new MailboxStatus(
                 MailboxId: mailbox.Id,
-                IsOpen: mailbox.IsOpen
+                IsOpen: mailbox.IsOpen,
+                Renter: renter
             );
         }
 

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.API.Controllers
@@ -42,11 +43,27 @@ namespace HandItOver.BackEnd.API.Controllers
             string Address
         );
 
-        [HttpGet]
+        [HttpGet("my")]
         public async Task<IActionResult> GetMailboxes()
         {
-            string userId = this.User.FindFirst(AuthConstants.Claims.ID)!.Value;
+            string userId = this.User.FindFirstValue(AuthConstants.Claims.ID);
             IEnumerable<Mailbox> result = await this.mailboxService.GetOwnedMailboxes(userId);
+            return new JsonResult(result);
+        }
+
+        [HttpGet("{mailboxId}")]
+        public async Task<IActionResult> GetMailboxInfo([FromRoute] string mailboxId)
+        {
+            var result = await this.mailboxService.GetMailbox(mailboxId);
+            return new JsonResult(result);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = AuthConstants.Roles.MAILBOX)]
+        public async Task<IActionResult> GetInfo()
+        {
+            var mailboxId = this.User.FindFirstValue(AuthConstants.Claims.MAILBOX_ID);
+            var result = await this.mailboxService.GetMailbox(mailboxId);
             return new JsonResult(result);
         }
     }

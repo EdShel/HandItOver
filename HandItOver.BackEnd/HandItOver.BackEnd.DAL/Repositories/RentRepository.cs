@@ -38,6 +38,13 @@ namespace HandItOver.BackEnd.DAL.Repositories
                 .FirstOrDefaultAsync(r => r!.MailboxId == mailboxId && r!.From >= time && time <= r.Until);
         }
 
+        public Task<MailboxRent?> FindForTimeWithRenterOrNull(string mailboxId, DateTime time)
+        {
+            return this.dbContext.Set<MailboxRent?>()
+                .Include(r => r!.Renter)
+                .FirstOrDefaultAsync(r => r!.MailboxId == mailboxId && r!.From >= time && time <= r.Until);
+        }
+
         public async Task<IEnumerable<MailboxRent>> FindByRenterAsync(string renterId)
         {
             return await this.dbContext.Set<MailboxRent>()

@@ -11,6 +11,7 @@
 
     public record MailboxStatus(
         string MailboxId,
-        bool IsOpen
+        bool IsOpen,
+        string? Renter
     );
 }
