@@ -108,6 +108,7 @@ namespace HandItOver.BackEnd.API.Extensions
         {
             services.AddScoped<MailboxRepository>();
             services.AddScoped<MailboxGroupRepository>();
+            services.AddScoped<WhitelistJoinTokenRepository>();
             services.AddScoped<RentRepository>();
             services.AddScoped<DeliveryRepository>();
 

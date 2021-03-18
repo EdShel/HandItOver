@@ -52,6 +52,8 @@ namespace HandItOver.BackEnd.DAL.Entities
 
         public ICollection<AppUser> Whitelisted { get; set; } = null!;
 
+        public ICollection<WhitelistJoinToken> WhitelistJoinTokens { get; set; } = null!;
+
         public AppUser Owner { get; set; } = null!;
     }
 
@@ -93,5 +95,16 @@ namespace HandItOver.BackEnd.DAL.Entities
         public AppUser Addressee { get; set; } = null!;
 
         public Mailbox Mailbox { get; set; } = null!;
+    }
+
+    public class WhitelistJoinToken
+    {
+        public string Id { get; set; } = null!;
+
+        public string GroupId { get; set; } = null!;
+
+        public string Token { get; set; } = null!;
+
+        public MailboxGroup Group { get; set; } = null!;
     }
 }

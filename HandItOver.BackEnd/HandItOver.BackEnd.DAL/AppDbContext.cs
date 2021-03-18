@@ -136,6 +136,16 @@ namespace HandItOver.BackEnd.DAL
                     .HasForeignKey(d => d.AddresseeId)
                     .OnDelete(DeleteBehavior.NoAction);
             });
+
+            builder.Entity<WhitelistJoinToken>(b =>
+            {
+                b.Property(t => t.Id).ValueGeneratedOnAdd();
+
+                b.HasOne(t => t.Group)
+                    .WithMany(group => group.WhitelistJoinTokens)
+                    .HasForeignKey(t => t.GroupId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
         }
     }
 }

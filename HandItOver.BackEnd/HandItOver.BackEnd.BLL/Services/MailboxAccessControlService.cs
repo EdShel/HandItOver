@@ -3,7 +3,10 @@ using HandItOver.BackEnd.DAL.Entities;
 using HandItOver.BackEnd.DAL.Entities.Auth;
 using HandItOver.BackEnd.DAL.Repositories;
 using HandItOver.BackEnd.Infrastructure.Exceptions;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.BLL.Services
@@ -12,14 +15,18 @@ namespace HandItOver.BackEnd.BLL.Services
     {
         private readonly MailboxGroupRepository mailboxGroupRepository;
 
+        private readonly WhitelistJoinTokenRepository whitelistJoinTokenRepository;
+
         private readonly UserRepository userRepository;
 
         public MailboxAccessControlService(
             MailboxGroupRepository mailboxGroupRepository,
-            UserRepository userRepository)
+            UserRepository userRepository,
+            WhitelistJoinTokenRepository whitelistJoinTokenRepository)
         {
             this.mailboxGroupRepository = mailboxGroupRepository;
             this.userRepository = userRepository;
+            this.whitelistJoinTokenRepository = whitelistJoinTokenRepository;
         }
 
         public async Task<WhitelistInfo> GetMailboxWhitelist(string groupId)
@@ -68,6 +75,46 @@ namespace HandItOver.BackEnd.BLL.Services
 
             mailboxGroup.Whitelisted.Remove(user);
             await this.mailboxGroupRepository.SaveChangesAsync();
+        }
+
+        // TODO: dto
+        public async Task<WhitelistJoinToken> CreateWhitelistJoinTokenAsync(string groupId)
+        {
+            const int tokenSize = 36;
+            byte[] tokenData = new byte[tokenSize];
+            RandomNumberGenerator.Create().GetBytes(tokenData);
+            string tokenValue = Convert.ToBase64String(tokenData);
+
+            var token = new WhitelistJoinToken
+            {
+                GroupId = groupId,
+                Token = tokenValue
+            };
+            this.whitelistJoinTokenRepository.AddToken(token);
+            await this.whitelistJoinTokenRepository.SaveChangesAsync();
+
+            return token;
+        }
+
+        public async Task<IEnumerable<WhitelistJoinToken>> GetAllTokensAsync(string groupId)
+        {
+            var tokens = await this.whitelistJoinTokenRepository.GetTokensOfGroup(groupId);
+            return tokens;
+        }
+
+        public async Task DeleteToken(string tokenId)
+        {
+            WhitelistJoinToken token = await this.whitelistJoinTokenRepository.FindByIdOrNull(tokenId)
+                ?? throw new NotFoundException("Whitelist join token");
+            this.whitelistJoinTokenRepository.DeleteToken(token);
+            await this.whitelistJoinTokenRepository.SaveChangesAsync();
+        }
+
+        public async Task JoinWhitelistByToken(string groupId, string tokenValue, string userEmail)
+        {
+            WhitelistJoinToken token = await this.whitelistJoinTokenRepository.FindByGroupAndValueOrNull(groupId, tokenValue)
+                ?? throw new NotFoundException("Whitelist join token");
+            await AddUserToWhitelistAsync(groupId, userEmail);
         }
     }
 }
