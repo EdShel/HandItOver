@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "968894059117",
+    "project_id": "handitover-b003d",
+    "storage_bucket": "handitover-b003d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:968894059117:android:deaf5cf4ccb1bd9a286564",
+        "android_client_info": {
+          "package_name": "ua.nure.sheliemietiev.handitover"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "968894059117-por32vs2f4mgmm13ue5ba42g13hiiqs5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbAbLrUoWgRjC3C97H9Ooa_JyOR_rLAUQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "968894059117-por32vs2f4mgmm13ue5ba42g13hiiqs5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

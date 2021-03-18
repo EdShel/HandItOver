@@ -1,4 +1,8 @@
-﻿using HandItOver.BackEnd.BLL.ResourceAccess;
+﻿using FirebaseAdmin;
+using FirebaseAdmin.Messaging;
+using Google.Apis.Auth.OAuth2;
+using HandItOver.BackEnd.API.Models.Firebase;
+using HandItOver.BackEnd.BLL.ResourceAccess;
 using HandItOver.BackEnd.BLL.Services;
 using HandItOver.BackEnd.BLL.Services.Admin;
 using HandItOver.BackEnd.DAL;
@@ -13,6 +17,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Security.Principal;
 
 namespace HandItOver.BackEnd.API.Extensions
@@ -143,6 +149,17 @@ namespace HandItOver.BackEnd.API.Extensions
             services.AddHostedService<CertExpirationNotifyService>();
             services.AddScoped<ConfigurationService>();
 
+            var firebaseOptions = configuration.GetSection("Firebase").Get<FirebaseSettings>();
+            var firebaseOptionsJson = JsonConvert.SerializeObject(firebaseOptions);
+            var firebaseApp = FirebaseApp.Create(new AppOptions
+            {
+                Credential = GoogleCredential.FromJson(firebaseOptionsJson)
+            });
+            var message = new Message
+            {
+
+            };
+            FirebaseMessaging.DefaultInstance.
             return services;
         }
     }
