@@ -18,6 +18,13 @@ namespace HandItOver.BackEnd.DAL.Repositories
                 .FirstOrDefaultAsync(d => d!.Id == id);
         }
 
+        public Task<Delivery?> FindByIdWithMailboxOrNullAsync(string id)
+        {
+            return this.dbContext.Set<Delivery?>()
+                .Include(d => d.Mailbox)
+                .FirstOrDefaultAsync(d => d!.Id == id);
+        }
+
         public async Task<IEnumerable<Delivery>> GetActiveDeliveriesOfUserAsync(string userId)
         {
             return await this.dbContext.Set<Delivery>()

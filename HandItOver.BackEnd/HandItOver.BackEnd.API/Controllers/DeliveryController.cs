@@ -65,7 +65,7 @@ namespace HandItOver.BackEnd.API.Controllers
             [FromRoute] string deliveryId,
             [FromBody] DeliveryGiveAwayModel model)
         {
-            await this.deliveryService.GiveAwayDeliveryRight(deliveryId, model.To);
+            await this.deliveryService.GiveAwayDeliveryRight(deliveryId, model.NewAddresseeId);
             return Ok();
         }
 
@@ -77,6 +77,6 @@ namespace HandItOver.BackEnd.API.Controllers
             return new JsonResult(result);
         }
 
-        public record DeliveryGiveAwayModel(string To);
+        public record DeliveryGiveAwayModel(string NewAddresseeId);
     }
 }

@@ -83,7 +83,7 @@ namespace HandItOver.BackEnd.BLL.Services
 
         public async Task RequestOpeningDelivery(string deliveryId)
         {
-            Delivery currentDelivery = await this.deliveryRepository.FindByIdOrNull(deliveryId)
+            Delivery currentDelivery = await this.deliveryRepository.FindByIdWithMailboxOrNullAsync(deliveryId)
                 ?? throw new NotFoundException("Delivery");
 
             currentDelivery.Mailbox.IsOpen = true;
@@ -116,13 +116,13 @@ namespace HandItOver.BackEnd.BLL.Services
             );
         }
 
-        public async Task GiveAwayDeliveryRight(string deliveryId, string to)
+        public async Task GiveAwayDeliveryRight(string deliveryId, string newAddresseeId)
         {
             Delivery delivery = await this.deliveryRepository.FindByIdOrNull(deliveryId)
                 ?? throw new NotFoundException("Delivery");
-            AppUser addresse = await this.userRepository.FindByIdOrNullAsync(deliveryId)
+            AppUser addresse = await this.userRepository.FindByIdOrNullAsync(newAddresseeId)
                 ?? throw new NotFoundException("User");
-            delivery.AddresseeId = deliveryId;
+            delivery.AddresseeId = addresse.Id;
             this.deliveryRepository.UpdateDelivery(delivery);
             await this.deliveryRepository.SaveChangesAsync();
         }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.BLL.ResourceAccess
 {
-    public sealed class DeliveryAuthorizationHandler : ResourceAccessAuthorizationHandler<MailboxOwnerAuthorizationHandler>
+    public sealed class DeliveryAuthorizationHandler : ResourceAccessAuthorizationHandler<DeliveryAuthorizationHandler>
     {
         private readonly DeliveryRepository deliveryRepository;
 
