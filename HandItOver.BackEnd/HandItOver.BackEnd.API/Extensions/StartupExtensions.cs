@@ -92,6 +92,7 @@ namespace HandItOver.BackEnd.API.Extensions
                 {
                     options.RequireHttpsMetadata = true;
                     options.TokenValidationParameters = tokenService.ValidationParameters;
+                    options.MapInboundClaims = false;
                 }
             );
         }

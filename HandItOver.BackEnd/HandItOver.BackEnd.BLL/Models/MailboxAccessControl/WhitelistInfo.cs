@@ -14,4 +14,11 @@ namespace HandItOver.BackEnd.BLL.Models.MailboxAccessControl
         string Email,
         string Id
     );
+
+    public class JoinTokenModel
+    {
+        public string Id { get; set; } = null!;
+
+        public string Token { get; set; } = null!;
+    }
 }

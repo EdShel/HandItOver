@@ -1,4 +1,5 @@
-﻿using HandItOver.BackEnd.BLL.Models.MailboxAccessControl;
+﻿using AutoMapper;
+using HandItOver.BackEnd.BLL.Models.MailboxAccessControl;
 using HandItOver.BackEnd.DAL.Entities;
 using HandItOver.BackEnd.DAL.Entities.Auth;
 using HandItOver.BackEnd.DAL.Repositories;
@@ -19,14 +20,18 @@ namespace HandItOver.BackEnd.BLL.Services
 
         private readonly UserRepository userRepository;
 
+        private readonly IMapper mapper;
+
         public MailboxAccessControlService(
             MailboxGroupRepository mailboxGroupRepository,
             UserRepository userRepository,
-            WhitelistJoinTokenRepository whitelistJoinTokenRepository)
+            WhitelistJoinTokenRepository whitelistJoinTokenRepository,
+            IMapper mapper)
         {
             this.mailboxGroupRepository = mailboxGroupRepository;
             this.userRepository = userRepository;
             this.whitelistJoinTokenRepository = whitelistJoinTokenRepository;
+            this.mapper = mapper;
         }
 
         public async Task<WhitelistInfo> GetMailboxWhitelist(string groupId)
@@ -52,6 +57,10 @@ namespace HandItOver.BackEnd.BLL.Services
             MailboxGroup mailboxGroup = await this.mailboxGroupRepository.GetWhitelistByIdAsync(groupId)
                 ?? throw new NotFoundException("Mailbox group");
 
+            if (mailboxGroup.OwnerId == user.Id)
+            {
+                throw new OperationException("Owner of the group can't be whitelisted.");
+            }
             if (mailboxGroup.Whitelisted.Contains(user))
             {
                 throw new RecordAlreadyExistsException("User in whitelist");
@@ -78,7 +87,7 @@ namespace HandItOver.BackEnd.BLL.Services
         }
 
         // TODO: dto
-        public async Task<WhitelistJoinToken> CreateWhitelistJoinTokenAsync(string groupId)
+        public async Task<JoinTokenModel> CreateWhitelistJoinTokenAsync(string groupId)
         {
             const int tokenSize = 36;
             byte[] tokenData = new byte[tokenSize];
@@ -93,13 +102,13 @@ namespace HandItOver.BackEnd.BLL.Services
             this.whitelistJoinTokenRepository.AddToken(token);
             await this.whitelistJoinTokenRepository.SaveChangesAsync();
 
-            return token;
+            return this.mapper.Map<JoinTokenModel>(token);
         }
 
-        public async Task<IEnumerable<WhitelistJoinToken>> GetAllTokensAsync(string groupId)
+        public async Task<IEnumerable<JoinTokenModel>> GetAllTokensAsync(string groupId)
         {
             var tokens = await this.whitelistJoinTokenRepository.GetTokensOfGroup(groupId);
-            return tokens;
+            return this.mapper.Map<IEnumerable<JoinTokenModel>>(tokens);
         }
 
         public async Task DeleteToken(string tokenId)
