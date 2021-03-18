@@ -3,6 +3,7 @@ using HandItOver.BackEnd.BLL.Services;
 using HandItOver.BackEnd.Infrastructure.Models.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.API.Controllers
@@ -18,7 +19,7 @@ namespace HandItOver.BackEnd.API.Controllers
             this.usersService = usersService;
         }
 
-        [HttpGet("me"), Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpGet("me"), Authorize]
         public async Task<IActionResult> GetInfoAboutCurrentUserAsync()
         {
             string userId = this.User.FindFirst(AuthConstants.Claims.ID)?.Value ?? string.Empty;
@@ -26,11 +27,18 @@ namespace HandItOver.BackEnd.API.Controllers
             return new JsonResult(user);
         }
 
-        [HttpGet("user"), Authorize]
-        public async Task<IActionResult> GetInfoAboutAnotherUserAsync(string email)
+        [HttpGet("byEmail"), Authorize]
+        public async Task<IActionResult> GetInfoAboutAnotherUserAsync([FromQuery] string email)
         {
             UserAccountInfoResult user = await this.usersService.GetInfoByEmailAsync(email);
             return new JsonResult(user);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> SearchAsync([FromQuery, Required] string search)
+        {
+            var result = await this.usersService.FindByNameOrEmail(search);
+            return new JsonResult(result);
         }
     }
 }

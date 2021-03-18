@@ -137,7 +137,7 @@ namespace HandItOver.BackEnd.API.Controllers
         }
 
         [HttpGet("rent")]
-        public async Task<IActionResult> ViewRent()
+        public async Task<IActionResult> ViewRents()
         {
             string userId = this.User.FindFirst(AuthConstants.Claims.ID)!.Value;
             var result = await this.mailboxRentService.GetRentsOfUserAsync(userId);
