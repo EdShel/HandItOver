@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
+using System.Linq;
 
 namespace HandItOver.BackEnd.API.Extensions
 {
@@ -27,6 +28,7 @@ namespace HandItOver.BackEnd.API.Extensions
                 CreateMap<DAL.Entities.MailboxRent, BLL.Models.MailboxRent.RentResult>()
                     .ForMember(r => r.MailboxSize, opt => opt.MapFrom(r => r.Mailbox.Size));
                 CreateMap<DAL.Entities.WhitelistJoinToken, BLL.Models.MailboxAccessControl.JoinTokenModel>();
+                CreateMap<DAL.Entities.Auth.AppUser, BLL.Models.Users.UserPublicInfoResult>();
             }
         }
     }

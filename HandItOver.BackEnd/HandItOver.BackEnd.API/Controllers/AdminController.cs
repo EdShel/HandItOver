@@ -1,4 +1,6 @@
 ﻿using HandItOver.BackEnd.API.Models.Admin;
+using HandItOver.BackEnd.BLL.Models.Users;
+using HandItOver.BackEnd.BLL.Services;
 using HandItOver.BackEnd.BLL.Services.Admin;
 using HandItOver.BackEnd.Infrastructure.Models.Auth;
 using Microsoft.AspNetCore.Authorization;
@@ -17,10 +19,16 @@ namespace HandItOver.BackEnd.API.Controllers
 
         private readonly CertExpirationService certExpirationService;
 
-        public AdminController(DatabaseBackupService databaseBackupService, CertExpirationService certExpirationService)
+        private readonly UsersService usersService;
+
+        public AdminController(
+            DatabaseBackupService databaseBackupService,
+            CertExpirationService certExpirationService,
+            UsersService usersService)
         {
             this.databaseBackupService = databaseBackupService;
             this.certExpirationService = certExpirationService;
+            this.usersService = usersService;
         }
 
         [HttpPost("backup")]
@@ -65,11 +73,21 @@ namespace HandItOver.BackEnd.API.Controllers
         //    return Ok();
         //}
 
-        //[HttpGet("users")]
-        //public async Task<IActionResult> GetUsersAsync(int pageIndex, int pageSize, string name)
-        //{
-        //    AppUsersPaginatedDTO result = await userService.GetUsersByNamePaginatedAsync(pageIndex, pageSize, name);
-        //    return Ok(result);
-        //}
+
+        [HttpGet("users")]
+        public async Task<IActionResult> SearchPaginatedAsync(
+            [FromQuery, Required] int pageIndex,
+            [FromQuery, Required] int pageSize,
+            [FromQuery] string? search
+        )
+        {
+            var request = new UsersPaginatedRequest(
+                SearchQuery: search,
+                PageIndex: pageIndex,
+                PageSize: pageSize
+            );
+            var result = await this.usersService.GetUsersPaginated(request);
+            return new JsonResult(result);
+        }
     }
 }

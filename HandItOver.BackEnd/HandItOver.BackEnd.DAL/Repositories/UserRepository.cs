@@ -1,6 +1,7 @@
 ﻿using HandItOver.BackEnd.DAL.Entities.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -83,6 +84,28 @@ namespace HandItOver.BackEnd.DAL.Repositories
                 .Where(u => u.Email.Contains(searchParam)
                             || u.FullName.Contains(searchParam))
                 .ToArrayAsync();
+        }
+
+        public record UserSearchResult(
+            int TotalPages,
+            IEnumerable<AppUser> Users
+        );
+
+        public async Task<UserSearchResult> SearchUsersPaginatedAsync(string? query, int pageIndex, int pageSize)
+        {
+            IQueryable<AppUser> users = this.dbContext.Set<AppUser>();
+            if (query != null)
+            {
+                users = users.Where(user => user.FullName.Contains(query) || user.Email.Contains(query));
+            }
+            int count = await users.CountAsync();
+            return new UserSearchResult(
+                TotalPages: (int)Math.Ceiling((double)count / pageSize),
+                Users: await users
+                    .Skip(pageIndex * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync()
+            );
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using HandItOver.BackEnd.BLL.Models.Mailbox;
-using HandItOver.BackEnd.BLL.Models.MailboxGroup;
-using HandItOver.BackEnd.BLL.ResourceAccess;
+﻿using HandItOver.BackEnd.BLL.ResourceAccess;
 using HandItOver.BackEnd.BLL.Services;
 using HandItOver.BackEnd.BLL.Services.Admin;
 using HandItOver.BackEnd.DAL;
@@ -10,10 +8,12 @@ using HandItOver.BackEnd.DAL.Repositories.Admin;
 using HandItOver.BackEnd.Infrastructure.Models.Admin;
 using HandItOver.BackEnd.Infrastructure.Models.Auth;
 using HandItOver.BackEnd.Infrastructure.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Security.Principal;
 
 namespace HandItOver.BackEnd.API.Extensions
 {
@@ -71,6 +71,8 @@ namespace HandItOver.BackEnd.API.Extensions
             services.AddScoped<IAuthorizationHandler, MailboxGroupAuthorizationHandler>();
             services.AddScoped<IAuthorizationHandler, RentAuthorizationHandler>();
             services.AddScoped<IAuthorizationHandler, DeliveryAuthorizationHandler>();
+
+            services.AddSingleton<IClaimsTransformation, ClaimsTransformation>();
 
             return services;
         }
@@ -143,5 +145,4 @@ namespace HandItOver.BackEnd.API.Extensions
             return services;
         }
     }
-
 }
