@@ -49,7 +49,8 @@ namespace HandItOver.BackEnd.BLL.Services
                 OwnerId = owner.Id,
                 PhysicalId = request.PhysicalId,
                 Size = request.Size,
-                Address = request.Address
+                Address = request.Address,
+                IsOpen = true
             };
             this.mailboxRepository.CreateMailbox(newMailbox);
 

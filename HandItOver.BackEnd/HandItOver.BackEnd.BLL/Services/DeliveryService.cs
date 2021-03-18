@@ -100,18 +100,9 @@ namespace HandItOver.BackEnd.BLL.Services
             Delivery? currentDelivery = await this.deliveryRepository.GetCurrentDeliveryOrNullAsync(mailboxId);
             if (!mailbox.IsOpen)
             {
-                if (currentDelivery == null)
-                {
-                    MailboxRent? currentRent = await this.rentRepository.FindForTimeOrNull(mailboxId, DateTime.UtcNow);
-                    if (currentRent != null)
-                    {
-                        mailbox.IsOpen = true;
-                        this.mailboxRepository.UpdateMailbox(mailbox);
-                        await this.mailboxRepository.SaveChangesAsync();
-                    }
-                }
-                else if (currentDelivery.TerminalTime != null
-                        && DateTime.UtcNow >= currentDelivery.TerminalTime)
+                if (currentDelivery != null 
+                    && currentDelivery.TerminalTime != null
+                    && DateTime.UtcNow >= currentDelivery.TerminalTime)
                 {
                     mailbox.IsOpen = true;
                     this.mailboxRepository.UpdateMailbox(mailbox);
