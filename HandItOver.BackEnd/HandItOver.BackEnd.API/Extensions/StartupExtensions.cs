@@ -141,6 +141,7 @@ namespace HandItOver.BackEnd.API.Extensions
 
             services.AddSingleton(s => configuration.GetSection(nameof(SslMonitoringOptions)).Get<SslMonitoringOptions>());
             services.AddHostedService<CertExpirationNotifyService>();
+            services.AddScoped<ConfigurationService>();
 
             return services;
         }
