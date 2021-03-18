@@ -73,19 +73,64 @@ namespace HandItOver.BackEnd.BLL.Services
         }
 
 
-        public async Task HandleDeliveryDisappeared(string deliveryId)
+        public async Task HandleDeliveryDisappeared(string mailboxId)
         {
             // TODO: Call FBI
             await Task.CompletedTask;
         }
 
-        public async Task GiveAwayDeliveryRight(string id, string to)
+
+        public async Task RequestOpeningDelivery(string deliveryId)
         {
-            Delivery delivery = await this.deliveryRepository.FindByIdOrNull(id)
+            Delivery currentDelivery = await this.deliveryRepository.FindByIdOrNull(deliveryId)
                 ?? throw new NotFoundException("Delivery");
-            AppUser addresse = await this.userRepository.FindByIdOrNullAsync(id)
+
+            currentDelivery.Mailbox.IsOpen = true;
+            this.mailboxRepository.UpdateMailbox(currentDelivery.Mailbox);
+
+            currentDelivery.Taken = DateTime.UtcNow;
+            this.deliveryRepository.UpdateDelivery(currentDelivery);
+            await this.deliveryRepository.SaveChangesAsync();
+        }
+
+        public async Task<MailboxStatus> GetMailboxStatus(string mailboxId)
+        {
+            Mailbox mailbox = await this.mailboxRepository.FindByIdOrNullAsync(mailboxId)
+                ?? throw new NotFoundException("Mailbox");
+            Delivery? currentDelivery = await this.deliveryRepository.GetCurrentDeliveryOrNullAsync(mailboxId);
+            if (!mailbox.IsOpen)
+            {
+                if (currentDelivery == null)
+                {
+                    MailboxRent? currentRent = await this.rentRepository.FindForTimeOrNull(mailboxId, DateTime.UtcNow);
+                    if (currentRent != null)
+                    {
+                        mailbox.IsOpen = true;
+                        this.mailboxRepository.UpdateMailbox(mailbox);
+                        await this.mailboxRepository.SaveChangesAsync();
+                    }
+                }
+                else if (currentDelivery.TerminalTime != null
+                        && DateTime.UtcNow >= currentDelivery.TerminalTime)
+                {
+                    mailbox.IsOpen = true;
+                    this.mailboxRepository.UpdateMailbox(mailbox);
+                    await this.mailboxRepository.SaveChangesAsync();
+                }
+            }
+            return new MailboxStatus(
+                MailboxId: mailbox.Id,
+                IsOpen: mailbox.IsOpen
+            );
+        }
+
+        public async Task GiveAwayDeliveryRight(string deliveryId, string to)
+        {
+            Delivery delivery = await this.deliveryRepository.FindByIdOrNull(deliveryId)
+                ?? throw new NotFoundException("Delivery");
+            AppUser addresse = await this.userRepository.FindByIdOrNullAsync(deliveryId)
                 ?? throw new NotFoundException("User");
-            delivery.AddresseeId = id;
+            delivery.AddresseeId = deliveryId;
             this.deliveryRepository.UpdateDelivery(delivery);
             await this.deliveryRepository.SaveChangesAsync();
         }

@@ -32,8 +32,6 @@ namespace HandItOver.BackEnd.BLL.Services
                 Text = bodyHtml
             };
 
-            try
-            {
             using (var client = new SmtpClient())
             {
                 await client.ConnectAsync(this.options.Server, this.options.Port, this.options.UseSsl);
@@ -42,11 +40,6 @@ namespace HandItOver.BackEnd.BLL.Services
                 await client.SendAsync(emailMessage);
 
                 await client.DisconnectAsync(true);
-            }
-            }
-            catch(Exception ex)
-            {
-                System.Console.WriteLine(ex);
             }
         }
 

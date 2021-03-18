@@ -48,7 +48,7 @@ namespace HandItOver.BackEnd.API.Extensions
             {
                 options.AddPolicy(
                     AuthConstants.Policies.MAILBOX_OWNER_ONLY,
-                    policy => policy.Requirements.Add(MailboxAuthorizationHandler.GetRequirement("mailboxId"))
+                    policy => policy.Requirements.Add(MailboxOwnerAuthorizationHandler.GetRequirement("mailboxId"))
                 );
 
                 options.AddPolicy(
@@ -60,11 +60,17 @@ namespace HandItOver.BackEnd.API.Extensions
                     AuthConstants.Policies.RENTER_OR_OWNER_ONLY,
                     policy => policy.Requirements.Add(RentAuthorizationHandler.GetRequirement("rentId"))
                 );
+
+                options.AddPolicy(
+                    AuthConstants.Policies.DELIVERY_ADDRESSEE_ONLY,
+                    policy => policy.Requirements.Add(DeliveryAuthorizationHandler.GetRequirement("deliveryId"))
+                );
             });
 
-            services.AddScoped<IAuthorizationHandler, MailboxAuthorizationHandler>();
+            services.AddScoped<IAuthorizationHandler, MailboxOwnerAuthorizationHandler>();
             services.AddScoped<IAuthorizationHandler, MailboxGroupAuthorizationHandler>();
             services.AddScoped<IAuthorizationHandler, RentAuthorizationHandler>();
+            services.AddScoped<IAuthorizationHandler, DeliveryAuthorizationHandler>();
 
             return services;
         }

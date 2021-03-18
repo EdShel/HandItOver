@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.BLL.ResourceAccess
 {
-    public sealed class MailboxAuthorizationHandler : ResourceAccessAuthorizationHandler<MailboxAuthorizationHandler>
+    public sealed class MailboxOwnerAuthorizationHandler : ResourceAccessAuthorizationHandler<MailboxOwnerAuthorizationHandler>
     {
         private readonly MailboxRepository mailboxRepository;
 
-        public MailboxAuthorizationHandler(MailboxRepository mailboxRepository)
+        public MailboxOwnerAuthorizationHandler(MailboxRepository mailboxRepository)
         {
             this.mailboxRepository = mailboxRepository;
         }

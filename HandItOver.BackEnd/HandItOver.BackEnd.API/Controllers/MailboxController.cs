@@ -13,7 +13,7 @@ namespace HandItOver.BackEnd.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    //[Authorize]
+    [Authorize]
     public class MailboxController : ControllerBase
     {
         private readonly MailboxService mailboxService;
@@ -41,30 +41,6 @@ namespace HandItOver.BackEnd.API.Controllers
             MailboxSize Size,
             string Address
         );
-
-
-        [HttpPost("{mailboxId}/open")]
-        public async Task<IActionResult> OpenMailbox([FromRoute] MailboxRequest model)
-        {
-            await this.mailboxService.RequestOpening(model.MailboxId);
-            return Ok();
-        }
-
-        [HttpGet("{mailboxId}")]
-        [Authorize(Policy = AuthConstants.Policies.MAILBOX_OWNER_ONLY)]
-        public async Task<IActionResult> GetStatus([FromRoute] MailboxRequest model)
-        {
-            var result = await this.mailboxService.GetMailboxStatus(model.MailboxId);
-            return new JsonResult(result);
-        }
-
-
-        public class MailboxRequest
-        {
-            [Required]
-            [FromRoute]
-            public string MailboxId { get; set; } = null!;
-        }
 
         [HttpGet]
         public async Task<IActionResult> GetMailboxes()
