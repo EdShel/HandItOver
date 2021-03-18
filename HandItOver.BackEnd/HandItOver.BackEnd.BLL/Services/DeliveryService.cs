@@ -1,4 +1,5 @@
 ﻿using HandItOver.BackEnd.BLL.Models.Delivery;
+using HandItOver.BackEnd.BLL.Services.Notification;
 using HandItOver.BackEnd.DAL.Entities;
 using HandItOver.BackEnd.DAL.Entities.Auth;
 using HandItOver.BackEnd.DAL.Repositories;
@@ -19,16 +20,24 @@ namespace HandItOver.BackEnd.BLL.Services
 
         private readonly UserRepository userRepository;
 
+        private readonly NotificationsMessagesService notificationsMessagesService;
+
+        private readonly FirebaseRepository firebaseRepository;
+
         public DeliveryService(
             MailboxRepository mailboxRepository,
             DeliveryRepository deliveryRepository,
             RentRepository rentRepository,
-            UserRepository userRepository)
+            UserRepository userRepository,
+            NotificationsMessagesService notificationsMessagesService,
+            FirebaseRepository firebaseRepository)
         {
             this.mailboxRepository = mailboxRepository;
             this.deliveryRepository = deliveryRepository;
             this.rentRepository = rentRepository;
             this.userRepository = userRepository;
+            this.notificationsMessagesService = notificationsMessagesService;
+            this.firebaseRepository = firebaseRepository;
         }
 
         public async Task<DeliveryArrivedResult> HandleDeliveryArrival(DeliveryArrivedRequest delivery)
@@ -67,7 +76,8 @@ namespace HandItOver.BackEnd.BLL.Services
             mailbox.IsOpen = false;
             this.mailboxRepository.UpdateMailbox(mailbox);
 
-            // TODO: notify addresse
+            (string title, string message) = this.notificationsMessagesService.DeliveryArrived;
+            await this.firebaseRepository.SendMessageAsync(addresse, title, message);
 
             await this.deliveryRepository.SaveChangesAsync();
             return new DeliveryArrivedResult(deliveryRecord.Id);
@@ -76,8 +86,10 @@ namespace HandItOver.BackEnd.BLL.Services
 
         public async Task HandleDeliveryDisappeared(string mailboxId)
         {
-            // TODO: Call FBI
-            await Task.CompletedTask;
+            var delivery = await this.deliveryRepository.GetCurrentDeliveryOrNullAsync(mailboxId)
+                ?? throw new NotFoundException("Delivery");
+            (string title, string message) = this.notificationsMessagesService.DeliveryTheft;
+            await this.firebaseRepository.SendMessageAsync(delivery.AddresseeId, title, message);
         }
 
 
@@ -109,6 +121,9 @@ namespace HandItOver.BackEnd.BLL.Services
                     mailbox.IsOpen = true;
                     this.mailboxRepository.UpdateMailbox(mailbox);
                     await this.mailboxRepository.SaveChangesAsync();
+
+                    (string title, string message) = this.notificationsMessagesService.DeliveryExpiration;
+                    await this.firebaseRepository.SendMessageAsync(currentDelivery.AddresseeId, title, message);
                 }
             }
             else

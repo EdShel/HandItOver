@@ -123,6 +123,7 @@ namespace HandItOver.BackEnd.API.Extensions
             services.AddScoped<MailboxRentService>();
             services.AddScoped<DeliveryService>();
             services.AddScoped<FirebaseTokenSerivce>();
+            services.AddScoped<NotificationsMessagesService>();
 
             services.AddScoped(s =>
             {
