@@ -115,8 +115,8 @@ namespace HandItOver.BackEnd.BLL.Services
                 throw new WrongValueException("Authorization token");
             }
 
-            string email = userPrincipal.FindFirstValue(AuthConstants.Claims.EMAIL);
-            AppUser? user = await this.usersRepository.FindByEmailOrNullAsync(email);
+            string id = userPrincipal.FindFirstValue(AuthConstants.Claims.ID);
+            AppUser? user = await this.usersRepository.FindByIdOrNullAsync(id);
             if (user == null)
             {
                 throw new NotFoundException("User");
@@ -143,9 +143,8 @@ namespace HandItOver.BackEnd.BLL.Services
             this.usersRepository.CreateRefreshToken(user, newRefreshToken);
             await this.usersRepository.SaveChangesAsync();
 
-            var userClaims = await GetTokenClaimsForUserAsync(user);
             return new RefreshResult(
-                AuthToken: this.tokenService.GenerateAuthToken(userClaims),
+                AuthToken: this.tokenService.GenerateAuthToken(userPrincipal.Identities.First()),
                 RefreshToken: newRefreshTokenValue.Value
             );
         }

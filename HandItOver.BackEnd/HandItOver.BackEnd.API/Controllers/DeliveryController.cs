@@ -3,6 +3,7 @@ using HandItOver.BackEnd.BLL.Services;
 using HandItOver.BackEnd.Infrastructure.Models.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.API.Controllers
@@ -24,7 +25,7 @@ namespace HandItOver.BackEnd.API.Controllers
         [Authorize(Roles = AuthConstants.Roles.MAILBOX)]
         public async Task<IActionResult> DeliveryArrived([FromBody] DeliveryArrivedModel model)
         {
-            string mailboxId = this.User.FindFirst(AuthConstants.Claims.MAILBOX_ID)!.Value;
+            string mailboxId = this.User.FindFirstValue(AuthConstants.Claims.MAILBOX_ID);
             var request = new DeliveryArrivedRequest(mailboxId, model.Weight);
             await this.deliveryService.HandleDeliveryArrival(request);
             return Ok();
@@ -40,10 +41,11 @@ namespace HandItOver.BackEnd.API.Controllers
             return Ok();
         }
 
-        [HttpGet]
+        [HttpGet("mailboxStatus")]
         [Authorize(Roles = AuthConstants.Roles.MAILBOX)]
-        public async Task<IActionResult> GetStatus([FromRoute] string mailboxId)
+        public async Task<IActionResult> GetStatus()
         {
+            string mailboxId = this.User.FindFirstValue(AuthConstants.Claims.MAILBOX_ID);
             var result = await this.deliveryService.GetMailboxStatus(mailboxId);
             return new JsonResult(result);
         }
@@ -52,7 +54,7 @@ namespace HandItOver.BackEnd.API.Controllers
         [Authorize(Roles = AuthConstants.Roles.MAILBOX)]
         public async Task<IActionResult> DeliveryStolen()
         {
-            string mailboxId = this.User.FindFirst(AuthConstants.Claims.MAILBOX_ID)!.Value;
+            string mailboxId = this.User.FindFirstValue(AuthConstants.Claims.MAILBOX_ID);
             await this.deliveryService.HandleDeliveryDisappeared(mailboxId);
             return Ok();
         }
@@ -65,6 +67,14 @@ namespace HandItOver.BackEnd.API.Controllers
         {
             await this.deliveryService.GiveAwayDeliveryRight(deliveryId, model.To);
             return Ok();
+        }
+
+        [HttpGet("active")]
+        public async Task<IActionResult> GetActiveDeliveriesAsync()
+        {
+            string userId = this.User.FindFirstValue(AuthConstants.Claims.ID);
+            var result = await this.deliveryService.GetActiveDeliveries(userId);
+            return new JsonResult(result);
         }
 
         public record DeliveryGiveAwayModel(string To);

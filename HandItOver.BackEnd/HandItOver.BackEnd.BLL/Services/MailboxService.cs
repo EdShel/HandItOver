@@ -38,22 +38,19 @@ namespace HandItOver.BackEnd.BLL.Services
             AppUser owner = await this.userRepository.FindByIdOrNullAsync(request.OwnerId)
                 ?? throw new NotFoundException("Mailbox owner");
 
-            Mailbox? alreadyRegistered = await this.mailboxRepository.FindByPhysicalIdOrNullAsync(request.PhysicalId);
-            if (alreadyRegistered != null)
+            Mailbox? mailbox = await this.mailboxRepository.FindByPhysicalIdOrNullAsync(request.PhysicalId);
+            if (mailbox == null)
             {
-                throw new RecordAlreadyExistsException("Registered mailbox");
+                mailbox = new Mailbox
+                {
+                    OwnerId = owner.Id,
+                    PhysicalId = request.PhysicalId,
+                    Size = request.Size,
+                    Address = request.Address,
+                    IsOpen = true
+                };
+                this.mailboxRepository.CreateMailbox(mailbox);
             }
-
-            Mailbox newMailbox = new Mailbox
-            {
-                OwnerId = owner.Id,
-                PhysicalId = request.PhysicalId,
-                Size = request.Size,
-                Address = request.Address,
-                IsOpen = true
-            };
-            this.mailboxRepository.CreateMailbox(newMailbox);
-
             IRefreshToken refreshToken = this.refreshTokenFactory.GenerateRefreshToken();
             RefreshToken refreshTokenRecord = new RefreshToken
             {
@@ -63,9 +60,9 @@ namespace HandItOver.BackEnd.BLL.Services
             this.userRepository.CreateRefreshToken(owner, refreshTokenRecord);
             await this.userRepository.SaveChangesAsync();
 
-            string authToken = this.tokenService.GenerateAuthToken(GetClaimsForMailbox(newMailbox));
+            string authToken = this.tokenService.GenerateAuthToken(GetClaimsForMailbox(mailbox));
             return new MailboxAuthResult(
-                MailboxId: newMailbox.Id,
+                MailboxId: mailbox.Id,
                 AuthToken: authToken,
                 RefreshToken: refreshToken.Value
             );

@@ -4,6 +4,7 @@ using HandItOver.BackEnd.DAL.Entities.Auth;
 using HandItOver.BackEnd.DAL.Repositories;
 using HandItOver.BackEnd.Infrastructure.Exceptions;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.BLL.Services
@@ -124,6 +125,13 @@ namespace HandItOver.BackEnd.BLL.Services
             delivery.AddresseeId = deliveryId;
             this.deliveryRepository.UpdateDelivery(delivery);
             await this.deliveryRepository.SaveChangesAsync();
+        }
+
+        // TODO: replace with DTO
+        public async Task<IEnumerable<Delivery>> GetActiveDeliveries(string userId)
+        {
+            var deliveries = await this.deliveryRepository.GetActiveDeliveriesOfUserAsync(userId);
+            return deliveries;
         }
     }
 }
