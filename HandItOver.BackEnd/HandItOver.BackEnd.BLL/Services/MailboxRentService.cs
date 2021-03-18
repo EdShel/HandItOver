@@ -57,12 +57,12 @@ namespace HandItOver.BackEnd.BLL.Services
             var willBeFreeToRent = notOccupiedRightNow.Intersect(notRentedForPeriod).ToArray();
             if (willBeFreeToRent.Length == 0)
             {
-                throw new InvalidOperationException("No available mailboxes for the period.");
+                throw new OperationException("No available mailboxes for the period.");
             }
             var possibleToRent = willBeFreeToRent.Where(m => request.PackageSize <= m.Size).ToArray();
             if (possibleToRent.Length == 0)
             {
-                throw new InvalidOperationException("No mailboxes of suitable size.");
+                throw new OperationException("No mailboxes of suitable size.");
             }
             Mailbox toRent = possibleToRent.OrderBy(m => m.Size).First();
             MailboxRent rentRecord = new MailboxRent

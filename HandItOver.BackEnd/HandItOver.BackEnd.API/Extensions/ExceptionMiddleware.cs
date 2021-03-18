@@ -34,6 +34,7 @@ namespace HandItOver.BackEnd.API.Extensions
                     ExpiredException => (int)HttpStatusCode.BadRequest,
                     NoRightsException => (int)HttpStatusCode.Forbidden,
                     NotOwnerException => (int)HttpStatusCode.Forbidden,
+                    OperationException => (int)HttpStatusCode.BadRequest,
                     _ => 500,
                 };
                 context.Response.StatusCode = statusCode;

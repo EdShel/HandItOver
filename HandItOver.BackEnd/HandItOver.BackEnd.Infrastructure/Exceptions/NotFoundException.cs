@@ -49,4 +49,12 @@ namespace HandItOver.BackEnd.Infrastructure.Exceptions
         {
         }
     }
+
+    public class OperationException : InvalidOperationException
+    {
+        public OperationException(string message)
+            : base(message)
+        {
+        }
+    }
 }
