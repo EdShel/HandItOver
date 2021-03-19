@@ -7,6 +7,7 @@ using HandItOver.BackEnd.Infrastructure.Exceptions;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.BLL.Services
@@ -49,6 +50,11 @@ namespace HandItOver.BackEnd.BLL.Services
         {
             Mailbox mailbox = await this.mailboxRepository.FindByIdWithGroupOrNullAsync(delivery.MailboxId)
                 ?? throw new WrongValueException("Mailbox");
+            if (!mailbox.IsOpen)
+            {
+                throw new OperationException("Mailbox already contains a delivery.");
+            }
+
             string addresse;
             DateTime? terminalTime;
             if (mailbox.MailboxGroup == null)
@@ -66,6 +72,29 @@ namespace HandItOver.BackEnd.BLL.Services
                     : DateTime.UtcNow.Add(mailbox.MailboxGroup.MaxRentTime.Value);
             }
 
+            DateTime predictedTime;
+            var deliveriesToUseInPrediction = await this.deliveryRepository.GetAllTaken();
+            if (!deliveriesToUseInPrediction.Any())
+            {
+                const int basicPredictionDays = 2;
+                predictedTime = DateTime.UtcNow.AddDays(basicPredictionDays);
+            }
+            else
+            {
+                var now = DateTime.UtcNow;
+                predictedTime = now.Add(new DeliveryTimePredictor(
+                    deliveriesToUseInPrediction.Select(
+                        d => new DeliveryPredictionData((int)d.Arrived.DayOfWeek, d.Arrived.Hour, (d.Arrived.Month - 1) / 4, d.Weight, d.Taken!.Value - d.Arrived)
+                    )
+                ).Predict(new DeliveryPredictionData(
+                    (int)now.DayOfWeek,
+                    now.Hour,
+                    (now.Month - 1) / 4,
+                    delivery.Weight,
+                    TimeSpan.Zero
+                ))
+                );
+            }
             Delivery deliveryRecord = new Delivery
             {
                 AddresseeId = addresse,
@@ -73,7 +102,7 @@ namespace HandItOver.BackEnd.BLL.Services
                 Weight = delivery.Weight,
                 Arrived = DateTime.UtcNow,
                 TerminalTime = terminalTime,
-                PredictedTakingTime = DateTime.UtcNow.AddDays(7), // TODO: add prediction here
+                PredictedTakingTime = predictedTime, // TODO: add prediction here
                 Taken = null
             };
             this.deliveryRepository.AddDelivery(deliveryRecord);

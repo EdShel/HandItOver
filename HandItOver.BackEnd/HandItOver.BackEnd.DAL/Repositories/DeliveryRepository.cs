@@ -12,6 +12,13 @@ namespace HandItOver.BackEnd.DAL.Repositories
         {
         }
 
+        public async Task<IEnumerable<Delivery>> GetAllTaken()
+        {
+            return await this.dbContext.Set<Delivery>()
+                .Where(d => d.Taken != null)
+                .ToListAsync();
+        }
+
         public Task<Delivery?> FindByIdOrNull(string id)
         {
             return this.dbContext.Set<Delivery?>()
@@ -21,7 +28,7 @@ namespace HandItOver.BackEnd.DAL.Repositories
         public Task<Delivery?> FindByIdWithMailboxOrNullAsync(string id)
         {
             return this.dbContext.Set<Delivery?>()
-                .Include(d => d.Mailbox)
+                .Include(d => d!.Mailbox)
                 .FirstOrDefaultAsync(d => d!.Id == id);
         }
 
