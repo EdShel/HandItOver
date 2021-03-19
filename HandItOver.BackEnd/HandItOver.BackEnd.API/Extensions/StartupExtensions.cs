@@ -114,7 +114,7 @@ namespace HandItOver.BackEnd.API.Extensions
             services.AddScoped<WhitelistJoinTokenRepository>();
             services.AddScoped<RentRepository>();
             services.AddScoped<DeliveryRepository>();
-            services.AddSingleton<FirebaseTokenRepository>();
+            services.AddScoped<FirebaseTokenRepository>();
             services.AddSingleton<FirebaseRepository>();
 
             services.AddScoped<MailboxService>();
@@ -124,6 +124,7 @@ namespace HandItOver.BackEnd.API.Extensions
             services.AddScoped<DeliveryService>();
             services.AddScoped<FirebaseTokenSerivce>();
             services.AddScoped<NotificationsMessagesService>();
+            services.AddScoped<FirebaseNotificationService>();
 
             services.AddScoped(s =>
             {

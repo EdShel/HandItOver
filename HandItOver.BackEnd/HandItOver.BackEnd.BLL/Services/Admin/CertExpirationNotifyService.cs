@@ -1,4 +1,5 @@
-﻿using HandItOver.BackEnd.BLL.Services.Notification;
+﻿using HandItOver.BackEnd.BLL.Models.Notification;
+using HandItOver.BackEnd.BLL.Services.Notification;
 using HandItOver.BackEnd.Infrastructure.Models.Admin;
 using System;
 using System.Threading;
@@ -34,9 +35,12 @@ namespace HandItOver.BackEnd.BLL.Services.Admin
                 if (expired)
                 {
                     await this.emailService.SendAsync(
-                        this.options.EmailForNotifications,
-                        "Hand It Over SSL expiration",
-                        $"The certificate will expire at {expires.Value}");
+                        new NotificationMessage(
+                            this.options.EmailForNotifications,
+                            "Hand It Over SSL expiration",
+                            $"The certificate will expire at {expires.Value}"
+                        )
+                    );
 
                     await Task.Delay(this.options.NotificationDelayMinutes * 60 * 1000, cancellationToken);
                 }

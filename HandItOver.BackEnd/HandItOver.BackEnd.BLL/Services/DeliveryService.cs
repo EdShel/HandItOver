@@ -4,6 +4,7 @@ using HandItOver.BackEnd.DAL.Entities;
 using HandItOver.BackEnd.DAL.Entities.Auth;
 using HandItOver.BackEnd.DAL.Repositories;
 using HandItOver.BackEnd.Infrastructure.Exceptions;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -22,7 +23,9 @@ namespace HandItOver.BackEnd.BLL.Services
 
         private readonly NotificationsMessagesService notificationsMessagesService;
 
-        private readonly FirebaseRepository firebaseRepository;
+        private readonly FirebaseNotificationService firebaseNotificationService;
+
+        private readonly ILogger<DeliveryService> logger;
 
         public DeliveryService(
             MailboxRepository mailboxRepository,
@@ -30,14 +33,16 @@ namespace HandItOver.BackEnd.BLL.Services
             RentRepository rentRepository,
             UserRepository userRepository,
             NotificationsMessagesService notificationsMessagesService,
-            FirebaseRepository firebaseRepository)
+            FirebaseNotificationService firebaseNotificationService,
+            ILogger<DeliveryService> logger)
         {
             this.mailboxRepository = mailboxRepository;
             this.deliveryRepository = deliveryRepository;
             this.rentRepository = rentRepository;
             this.userRepository = userRepository;
             this.notificationsMessagesService = notificationsMessagesService;
-            this.firebaseRepository = firebaseRepository;
+            this.firebaseNotificationService = firebaseNotificationService;
+            this.logger = logger;
         }
 
         public async Task<DeliveryArrivedResult> HandleDeliveryArrival(DeliveryArrivedRequest delivery)
@@ -76,10 +81,18 @@ namespace HandItOver.BackEnd.BLL.Services
             mailbox.IsOpen = false;
             this.mailboxRepository.UpdateMailbox(mailbox);
 
-            (string title, string message) = this.notificationsMessagesService.DeliveryArrived;
-            await this.firebaseRepository.SendMessageAsync(addresse, title, message);
-
             await this.deliveryRepository.SaveChangesAsync();
+
+            try
+            {
+                var message = this.notificationsMessagesService.DeliveryArrived(addresse);
+                await this.firebaseNotificationService.SendAsync(message);
+            }
+            catch (NotFoundException ex)
+            {
+                this.logger.LogInformation(ex, "Can't send push notification.");
+            }
+
             return new DeliveryArrivedResult(deliveryRecord.Id);
         }
 
@@ -88,8 +101,15 @@ namespace HandItOver.BackEnd.BLL.Services
         {
             var delivery = await this.deliveryRepository.GetCurrentDeliveryOrNullAsync(mailboxId)
                 ?? throw new NotFoundException("Delivery");
-            (string title, string message) = this.notificationsMessagesService.DeliveryTheft;
-            await this.firebaseRepository.SendMessageAsync(delivery.AddresseeId, title, message);
+            try
+            {
+                var message = this.notificationsMessagesService.DeliveryTheft(delivery.AddresseeId);
+                await this.firebaseNotificationService.SendAsync(message);
+            }
+            catch (NotFoundException ex)
+            {
+                this.logger.LogInformation(ex, "Can't send push notification.");
+            }
         }
 
 
@@ -114,7 +134,7 @@ namespace HandItOver.BackEnd.BLL.Services
             string? renter = null;
             if (!mailbox.IsOpen)
             {
-                if (currentDelivery != null 
+                if (currentDelivery != null
                     && currentDelivery.TerminalTime != null
                     && DateTime.UtcNow >= currentDelivery.TerminalTime)
                 {
@@ -122,8 +142,15 @@ namespace HandItOver.BackEnd.BLL.Services
                     this.mailboxRepository.UpdateMailbox(mailbox);
                     await this.mailboxRepository.SaveChangesAsync();
 
-                    (string title, string message) = this.notificationsMessagesService.DeliveryExpiration;
-                    await this.firebaseRepository.SendMessageAsync(currentDelivery.AddresseeId, title, message);
+                    try
+                    {
+                        var message = this.notificationsMessagesService.DeliveryExpiration(currentDelivery.AddresseeId);
+                        await this.firebaseNotificationService.SendAsync(message);
+                    }
+                    catch (NotFoundException ex)
+                    {
+                        this.logger.LogInformation(ex, "Can't send push notification.");
+                    }
                 }
             }
             else

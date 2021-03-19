@@ -29,8 +29,8 @@ namespace HandItOver.BackEnd.DAL.Repositories
             {
                 Notification = new Notification
                 {
-                    Title = "Hello",
-                    Body = "I am a test message!!!!"
+                    Title = title,
+                    Body = body
                 },
                 Token = clientToken
             };

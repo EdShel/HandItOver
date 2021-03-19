@@ -12,15 +12,23 @@ namespace HandItOver.BackEnd.BLL.Services.Notification
             this.configuration = configuration.GetSection("Notifications");
         }
 
-        public NotificationMessage DeliveryArrived => GetNotificationMessage("deliveryArrived");
+        public NotificationMessage DeliveryArrived(string userId) => GetNotificationMessage(userId, "deliveryArrived");
 
-        public NotificationMessage DeliveryExpiration => GetNotificationMessage("deliveryExpiration");
+        public NotificationMessage DeliveryExpiration(string userId) => GetNotificationMessage(userId, "deliveryExpiration");
 
-        public NotificationMessage DeliveryTheft => GetNotificationMessage("deliveryTheft");
+        public NotificationMessage DeliveryTheft(string userId) => GetNotificationMessage(userId, "deliveryTheft");
 
-        private NotificationMessage GetNotificationMessage(string notificationName)
+        private NotificationMessage GetNotificationMessage(string userId, string notificationName)
         {
-            return this.configuration.GetValue<NotificationMessage>(notificationName);
+            var message = this.configuration.GetSection(notificationName).Get<Message>();
+            return new NotificationMessage(userId, message.Title, message.Body);
         }
+
+        private class Message
+        {
+            public string Title { get; set; } = null!;
+            public string Body { get; set; } = null!;
+        }
+
     }
 }
