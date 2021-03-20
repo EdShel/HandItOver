@@ -1,4 +1,5 @@
-﻿using HandItOver.BackEnd.BLL.Services;
+﻿using HandItOver.BackEnd.API.Models.Firebase;
+using HandItOver.BackEnd.BLL.Services;
 using HandItOver.BackEnd.Infrastructure.Models.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +29,5 @@ namespace HandItOver.BackEnd.API.Controllers
             return Ok();
         }
 
-        public record FirebaseTokenModel(string FirebaseClientToken);
     }
 }

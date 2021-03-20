@@ -1,4 +1,5 @@
-﻿using HandItOver.BackEnd.BLL.Models.MailboxAccessControl;
+﻿using HandItOver.BackEnd.API.Models.MailboxAccessControl;
+using HandItOver.BackEnd.BLL.Models.MailboxAccessControl;
 using HandItOver.BackEnd.BLL.Services;
 using HandItOver.BackEnd.Infrastructure.Models.Auth;
 using Microsoft.AspNetCore.Authorization;
@@ -40,8 +41,6 @@ namespace HandItOver.BackEnd.API.Controllers
             );
             return Ok();
         }
-
-        public record UserModel(string UserEmail);
 
         [HttpDelete("{groupId}/whitelist/{email}")]
         [Authorize(AuthConstants.Policies.MAILBOX_GROUP_OWNER_ONLY)]

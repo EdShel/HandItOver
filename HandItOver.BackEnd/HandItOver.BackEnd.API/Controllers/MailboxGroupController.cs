@@ -1,4 +1,5 @@
-﻿using HandItOver.BackEnd.BLL.Models.MailboxGroup;
+﻿using HandItOver.BackEnd.API.Models.MailboxGroup;
+using HandItOver.BackEnd.BLL.Models.MailboxGroup;
 using HandItOver.BackEnd.BLL.Models.MailboxRent;
 using HandItOver.BackEnd.BLL.Services;
 using HandItOver.BackEnd.DAL.Entities;
@@ -28,7 +29,6 @@ namespace HandItOver.BackEnd.API.Controllers
             this.mailboxRentService = mailboxRentService;
         }
 
-        // TODO: replace model
         [HttpPost]
         public async Task<IActionResult> CreateGroup([FromBody] MailboxGroupCreateModel model)
         {
@@ -45,13 +45,6 @@ namespace HandItOver.BackEnd.API.Controllers
                 StatusCode = (int)HttpStatusCode.Created
             };
         }
-
-        public record MailboxGroupCreateModel(
-            string Name,
-            string FirstMailboxId,
-            bool WhitelistOnly,
-            TimeSpan? MaxRentTime
-        );
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] string id)
@@ -92,12 +85,6 @@ namespace HandItOver.BackEnd.API.Controllers
             return Ok();
         }
 
-        public record MailboxGroupEditModel(
-            string Name,
-            bool WhitelistOnly,
-            TimeSpan? MaxRentTime
-        );
-
         [HttpPost("{groupId}/mailboxes")]
         [Authorize(AuthConstants.Policies.MAILBOX_GROUP_OWNER_ONLY)]
         public async Task<IActionResult> AddMailbox(
@@ -109,8 +96,6 @@ namespace HandItOver.BackEnd.API.Controllers
                 mailboxId: model.MailboxId);
             return Ok();
         }
-
-        public record MailboxAddModel(string MailboxId);
 
         [HttpDelete("{groupId}/mailboxes/{mailboxId}")]
         [Authorize(AuthConstants.Policies.MAILBOX_GROUP_OWNER_ONLY)]
@@ -144,12 +129,6 @@ namespace HandItOver.BackEnd.API.Controllers
             var result = await this.mailboxRentService.RentMailbox(request);
             return new JsonResult(result);
         }
-
-        public record RentModel(
-            MailboxSize PackageSize,
-            DateTime RentFrom,
-            DateTime RentUntil
-        );
 
         [HttpDelete("rent/{rentId}")]
         [Authorize(AuthConstants.Policies.RENTER_OR_OWNER_ONLY)]

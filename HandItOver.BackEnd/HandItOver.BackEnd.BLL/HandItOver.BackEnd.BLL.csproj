@@ -17,4 +17,8 @@
     <ProjectReference Include="..\HandItOver.BackEnd.Infrastructure\HandItOver.BackEnd.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interfaces\" />
+  </ItemGroup>
+
 </Project>

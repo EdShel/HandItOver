@@ -1,10 +1,9 @@
-﻿using HandItOver.BackEnd.BLL.Models.Mailbox;
+﻿using HandItOver.BackEnd.API.Models.Mailbox;
+using HandItOver.BackEnd.BLL.Models.Mailbox;
 using HandItOver.BackEnd.BLL.Services;
-using HandItOver.BackEnd.DAL.Entities;
 using HandItOver.BackEnd.Infrastructure.Models.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -34,12 +33,6 @@ namespace HandItOver.BackEnd.API.Controllers
             MailboxAuthResult result = await this.mailboxService.AuthorizeMailboxAsync(request);
             return new JsonResult(result);
         }
-
-        public record MailboxAuthModel(
-            string PhysicalId,
-            MailboxSize Size,
-            string Address
-        );
 
         [HttpGet("my")]
         public async Task<IActionResult> GetMailboxes()

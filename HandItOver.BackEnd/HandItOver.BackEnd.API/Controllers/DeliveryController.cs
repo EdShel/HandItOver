@@ -1,9 +1,9 @@
-﻿using HandItOver.BackEnd.BLL.Models.Delivery;
+﻿using HandItOver.BackEnd.API.Models.Delivery;
+using HandItOver.BackEnd.BLL.Models.Delivery;
 using HandItOver.BackEnd.BLL.Services;
 using HandItOver.BackEnd.Infrastructure.Models.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -21,7 +21,6 @@ namespace HandItOver.BackEnd.API.Controllers
             this.deliveryService = deliveryService;
         }
 
-        // TODO: move this and all other records inside controllers to the Models folder
         [HttpPost("arrived")]
         [Authorize(Roles = AuthConstants.Roles.MAILBOX)]
         public async Task<IActionResult> DeliveryArrived([FromBody] DeliveryArrivedModel model)
@@ -32,7 +31,6 @@ namespace HandItOver.BackEnd.API.Controllers
             return Ok();
         }
 
-        public record DeliveryArrivedModel(float Weight);
 
         [HttpPost("{deliveryId}/open")]
         [Authorize(AuthConstants.Policies.DELIVERY_ADDRESSEE_ONLY)]
@@ -77,9 +75,5 @@ namespace HandItOver.BackEnd.API.Controllers
             var result = await this.deliveryService.GetActiveDeliveries(userId);
             return new JsonResult(result);
         }
-
-        public record DeliveryGiveAwayModel(string NewAddresseeId);
-
-
     }
 }

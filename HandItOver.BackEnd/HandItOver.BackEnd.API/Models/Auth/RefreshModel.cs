@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace HandItOver.BackEnd.API.Models.Auth
 {
@@ -13,7 +9,7 @@ namespace HandItOver.BackEnd.API.Models.Auth
     }
 
     public record RegisterModel(
-        string Email,    
+        string Email,
         string FullName,
         string Password,
         string Role
