@@ -19,11 +19,10 @@ namespace HandItOver.BackEnd.BLL.ResourceAccess
             AuthorizationHandlerContext context,
             ResourceOwnerRequirement<THandler> requirement)
         {
-            // TODO: uncomment to allow admin doing everything he wants
-            //if (context.User.IsInRole(AuthConstants.Roles.ADMIN))
-            //{
-            //    context.Succeed(requirement);
-            //}
+            if (context.User.IsInRole(AuthConstants.Roles.ADMIN))
+            {
+                context.Succeed(requirement);
+            }
 
             string? userId = context.User.FindFirst(AuthConstants.Claims.ID)?.Value;
             RouteValueDictionary routeValues = (context.Resource as DefaultHttpContext)!.Request.RouteValues;

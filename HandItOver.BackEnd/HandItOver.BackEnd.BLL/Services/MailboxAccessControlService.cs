@@ -86,7 +86,6 @@ namespace HandItOver.BackEnd.BLL.Services
             await this.mailboxGroupRepository.SaveChangesAsync();
         }
 
-        // TODO: dto
         public async Task<JoinTokenModel> CreateWhitelistJoinTokenAsync(string groupId)
         {
             const int tokenSize = 36;

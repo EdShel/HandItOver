@@ -51,7 +51,6 @@ namespace HandItOver.BackEnd.BLL.Services
                 throw new NoRightsException("rent the mailbox group");
             }
 
-            // TODO: change it to use max delivery time ('cause it will be opened and can be used)
             var notOccupiedRightNow = await this.mailboxGroupRepository.MailboxesWithoutDelivery(mailboxGroup.GroupId);
             var notRentedForPeriod = await this.mailboxGroupRepository.MailboxesWithoutRent(mailboxGroup.GroupId, request.RentFrom, request.RentUntil);
             var willBeFreeToRent = notOccupiedRightNow.Intersect(notRentedForPeriod).ToArray();

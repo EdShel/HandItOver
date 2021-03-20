@@ -74,7 +74,6 @@ namespace HandItOver.BackEnd.BLL.Services
             else
             {
                 MailboxRent? rent = await this.rentRepository.FindForTimeOrNull(mailbox.Id, DateTime.UtcNow);
-                // TODO: ?? rentRepository.NearestToTheTimePeriod()
                 addresse = rent == null ? mailbox.OwnerId : rent.RenterId;
                 terminalTime = mailbox.MailboxGroup.MaxRentTime == null
                     ? null
@@ -111,7 +110,7 @@ namespace HandItOver.BackEnd.BLL.Services
                 Weight = delivery.Weight,
                 Arrived = DateTime.UtcNow,
                 TerminalTime = terminalTime,
-                PredictedTakingTime = predictedTime, // TODO: add prediction here
+                PredictedTakingTime = predictedTime,
                 Taken = null
             };
             this.deliveryRepository.AddDelivery(deliveryRecord);
