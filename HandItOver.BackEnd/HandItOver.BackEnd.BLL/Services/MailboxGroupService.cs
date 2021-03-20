@@ -88,8 +88,9 @@ namespace HandItOver.BackEnd.BLL.Services
             await this.mailboxGroupRepository.SaveChangesAsync();
         }
 
-        public async Task EditMailboxGroup(MailboxGroup mailboxGroup) // TODO: replace with DTO to prevent shit
+        public async Task EditMailboxGroup(MailboxGroupEditRequest request)
         {
+            var mailboxGroup = this.mapper.Map<MailboxGroup>(request);
             this.mailboxGroupRepository.ReplaceMailboxGroup(mailboxGroup);
             await this.mailboxGroupRepository.SaveChangesAsync();
         }

@@ -1,4 +1,5 @@
-﻿using HandItOver.BackEnd.BLL.Models.Mailbox;
+﻿using AutoMapper;
+using HandItOver.BackEnd.BLL.Models.Mailbox;
 using HandItOver.BackEnd.DAL.Entities;
 using HandItOver.BackEnd.DAL.Entities.Auth;
 using HandItOver.BackEnd.DAL.Repositories;
@@ -21,16 +22,20 @@ namespace HandItOver.BackEnd.BLL.Services
 
         private readonly IRefreshTokenFactory refreshTokenFactory;
 
+        private readonly IMapper mapper;
+
         public MailboxService(
             UserRepository userRepository,
             MailboxRepository mailboxRepository,
             ITokenService tokenService,
-            IRefreshTokenFactory refreshTokenFactory)
+            IRefreshTokenFactory refreshTokenFactory,
+            IMapper mapper)
         {
             this.userRepository = userRepository;
             this.mailboxRepository = mailboxRepository;
             this.tokenService = tokenService;
             this.refreshTokenFactory = refreshTokenFactory;
+            this.mapper = mapper;
         }
 
         public async Task<MailboxAuthResult> AuthorizeMailboxAsync(MailboxAuthRequest request)
@@ -79,17 +84,17 @@ namespace HandItOver.BackEnd.BLL.Services
             return new ClaimsIdentity(claims);
         }
 
-        // TODO: create DTO
-        public async Task<IEnumerable<Mailbox>> GetOwnedMailboxes(string userId)
+        public async Task<IEnumerable<MailboxViewResult>> GetOwnedMailboxes(string userId)
         {
-            return await this.mailboxRepository.FindByOwnerAsync(userId);
+            var mailboxes = await this.mailboxRepository.FindByOwnerAsync(userId);
+            return this.mapper.Map<IEnumerable<MailboxViewResult>>(mailboxes);
         }
 
-        // TODO: dto
-        public async Task<Mailbox> GetMailbox(string mailboxId)
+        public async Task<MailboxViewResult> GetMailbox(string mailboxId)
         {
-            return await this.mailboxRepository.FindByIdOrNullAsync(mailboxId)
+            var mailbox = await this.mailboxRepository.FindByIdOrNullAsync(mailboxId)
                    ?? throw new NotFoundException("Mailbox");
+            return this.mapper.Map<MailboxViewResult>(mailbox);
         }
     }
 }

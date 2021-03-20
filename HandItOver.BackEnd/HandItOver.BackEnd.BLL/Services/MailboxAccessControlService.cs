@@ -111,7 +111,7 @@ namespace HandItOver.BackEnd.BLL.Services
             return this.mapper.Map<IEnumerable<JoinTokenModel>>(tokens);
         }
 
-        public async Task DeleteToken(string tokenId)
+        public async Task DeleteToken(string groupId, string tokenId)
         {
             WhitelistJoinToken token = await this.whitelistJoinTokenRepository.FindByIdOrNull(tokenId)
                 ?? throw new NotFoundException("Whitelist join token");

@@ -1,4 +1,5 @@
-﻿using HandItOver.BackEnd.BLL.Models.Delivery;
+﻿using AutoMapper;
+using HandItOver.BackEnd.BLL.Models.Delivery;
 using HandItOver.BackEnd.BLL.Services.Notification;
 using HandItOver.BackEnd.DAL.Entities;
 using HandItOver.BackEnd.DAL.Entities.Auth;
@@ -28,6 +29,8 @@ namespace HandItOver.BackEnd.BLL.Services
 
         private readonly ILogger<DeliveryService> logger;
 
+        private readonly IMapper mapper;
+
         public DeliveryService(
             MailboxRepository mailboxRepository,
             DeliveryRepository deliveryRepository,
@@ -35,7 +38,8 @@ namespace HandItOver.BackEnd.BLL.Services
             UserRepository userRepository,
             NotificationsMessagesService notificationsMessagesService,
             FirebaseNotificationService firebaseNotificationService,
-            ILogger<DeliveryService> logger)
+            ILogger<DeliveryService> logger,
+            IMapper mapper)
         {
             this.mailboxRepository = mailboxRepository;
             this.deliveryRepository = deliveryRepository;
@@ -44,10 +48,15 @@ namespace HandItOver.BackEnd.BLL.Services
             this.notificationsMessagesService = notificationsMessagesService;
             this.firebaseNotificationService = firebaseNotificationService;
             this.logger = logger;
+            this.mapper = mapper;
         }
 
         public async Task<DeliveryArrivedResult> HandleDeliveryArrival(DeliveryArrivedRequest delivery)
         {
+            if (delivery.Weight <= 0)
+            {
+                throw new WrongValueException("Delivery weight");
+            }
             Mailbox mailbox = await this.mailboxRepository.FindByIdWithGroupOrNullAsync(delivery.MailboxId)
                 ?? throw new WrongValueException("Mailbox");
             if (!mailbox.IsOpen)
@@ -139,6 +148,9 @@ namespace HandItOver.BackEnd.BLL.Services
             {
                 this.logger.LogInformation(ex, "Can't send push notification.");
             }
+            delivery.Taken = DateTime.UtcNow;
+            deliveryRepository.UpdateDelivery(delivery);
+            await deliveryRepository.SaveChangesAsync();
         }
 
 
@@ -208,11 +220,10 @@ namespace HandItOver.BackEnd.BLL.Services
             await this.deliveryRepository.SaveChangesAsync();
         }
 
-        // TODO: replace with DTO
-        public async Task<IEnumerable<Delivery>> GetActiveDeliveries(string userId)
+        public async Task<IEnumerable<ActiveDeliveryResult>> GetActiveDeliveries(string userId)
         {
-            var deliveries = await this.deliveryRepository.GetActiveDeliveriesOfUserAsync(userId);
-            return deliveries;
+            IEnumerable<Delivery> deliveries = await this.deliveryRepository.GetActiveDeliveriesOfUserAsync(userId);
+            return this.mapper.Map<IEnumerable<ActiveDeliveryResult>>(deliveries);
         }
     }
 }

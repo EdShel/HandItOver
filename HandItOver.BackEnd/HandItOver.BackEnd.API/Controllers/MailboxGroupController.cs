@@ -5,6 +5,7 @@ using HandItOver.BackEnd.DAL.Entities;
 using HandItOver.BackEnd.Infrastructure.Models.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -29,18 +30,28 @@ namespace HandItOver.BackEnd.API.Controllers
 
         // TODO: replace model
         [HttpPost]
-        public async Task<IActionResult> CreateGroup([FromBody] MailboxGroupCreateRequest model)
+        public async Task<IActionResult> CreateGroup([FromBody] MailboxGroupCreateModel model)
         {
-            var request = model with
-            {
-                OwnerId = this.User.FindFirst(AuthConstants.Claims.ID)!.Value
-            };
+            var request = new MailboxGroupCreateRequest(
+                this.User.FindFirst(AuthConstants.Claims.ID)!.Value,
+                model.Name,
+                model.FirstMailboxId,
+                model.WhitelistOnly,
+                model.MaxRentTime
+            );
             var result = await this.mailboxGroupService.CreateMailboxGroupAsync(request);
             return new JsonResult(result)
             {
                 StatusCode = (int)HttpStatusCode.Created
             };
         }
+
+        public record MailboxGroupCreateModel(
+            string Name,
+            string FirstMailboxId,
+            bool WhitelistOnly,
+            TimeSpan? MaxRentTime
+        );
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] string id)
@@ -57,32 +68,44 @@ namespace HandItOver.BackEnd.API.Controllers
             return new JsonResult(result);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteGroup([FromRoute] string id)
+        [HttpDelete("{groupId}")]
+        [Authorize(AuthConstants.Policies.MAILBOX_GROUP_OWNER_ONLY)]
+        public async Task<IActionResult> DeleteGroup([FromRoute] string groupId)
         {
-            await this.mailboxGroupService.DeleteMailboxGroupAsync(id);
+            await this.mailboxGroupService.DeleteMailboxGroupAsync(groupId);
             return NoContent();
         }
 
-        // TODO: replace model with dto
-        // which has no id and nav properties
-        [HttpPut("{id}")]
+        [HttpPut("{groupId}")]
+        [Authorize(AuthConstants.Policies.MAILBOX_GROUP_OWNER_ONLY)]
         public async Task<IActionResult> EditGroup(
-            [FromRoute] string id,
-            [FromBody] MailboxGroup model)
+            [FromRoute] string groupId,
+            [FromBody] MailboxGroupEditModel model)
         {
-            model.GroupId = id;
-            await this.mailboxGroupService.EditMailboxGroup(model);
-            return NoContent();
+            var request = new MailboxGroupEditRequest(
+                groupId,
+                model.Name,
+                model.WhitelistOnly,
+                model.MaxRentTime
+            );
+            await this.mailboxGroupService.EditMailboxGroup(request);
+            return Ok();
         }
 
-        [HttpPost("{id}/mailboxes")]
+        public record MailboxGroupEditModel(
+            string Name,
+            bool WhitelistOnly,
+            TimeSpan? MaxRentTime
+        );
+
+        [HttpPost("{groupId}/mailboxes")]
+        [Authorize(AuthConstants.Policies.MAILBOX_GROUP_OWNER_ONLY)]
         public async Task<IActionResult> AddMailbox(
-            [FromRoute] string id,
+            [FromRoute] string groupId,
             [FromBody] MailboxAddModel model)
         {
             await this.mailboxGroupService.AddMailboxToGroupAsync(
-                groupId: id,
+                groupId: groupId,
                 mailboxId: model.MailboxId);
             return Ok();
         }
@@ -90,6 +113,7 @@ namespace HandItOver.BackEnd.API.Controllers
         public record MailboxAddModel(string MailboxId);
 
         [HttpDelete("{groupId}/mailboxes/{mailboxId}")]
+        [Authorize(AuthConstants.Policies.MAILBOX_GROUP_OWNER_ONLY)]
         public async Task<IActionResult> RemoveMailboxFromGroup(
             [FromRoute] string groupId,
             [FromRoute] string mailboxId)
@@ -105,20 +129,27 @@ namespace HandItOver.BackEnd.API.Controllers
             return new JsonResult(result);
         }
 
-        // TODO: replace with model
         [HttpPost("{id}/rent")]
         public async Task<IActionResult> RentMailbox(
             [FromRoute] string id,
-            [FromBody] RentRequest model)
+            [FromBody] RentModel model)
         {
-            var request = model with
-            {
-                GroupId = id,
-                RenterId = this.User.FindFirst(AuthConstants.Claims.ID)!.Value
-            };
+            var request = new RentRequest(
+                GroupId: id,
+                RenterId: this.User.FindFirst(AuthConstants.Claims.ID)!.Value,
+                PackageSize: model.PackageSize,
+                RentFrom: model.RentFrom,
+                RentUntil: model.RentUntil
+            );
             var result = await this.mailboxRentService.RentMailbox(request);
             return new JsonResult(result);
         }
+
+        public record RentModel(
+            MailboxSize PackageSize,
+            DateTime RentFrom,
+            DateTime RentUntil
+        );
 
         [HttpDelete("rent/{rentId}")]
         [Authorize(AuthConstants.Policies.RENTER_OR_OWNER_ONLY)]

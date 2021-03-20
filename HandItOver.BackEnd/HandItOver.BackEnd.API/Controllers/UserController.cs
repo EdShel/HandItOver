@@ -34,7 +34,7 @@ namespace HandItOver.BackEnd.API.Controllers
             return new JsonResult(user);
         }
 
-        [HttpGet]
+        [HttpGet, Authorize]
         public async Task<IActionResult> SearchAsync([FromQuery, Required] string search)
         {
             var result = await this.usersService.FindByNameOrEmail(search);

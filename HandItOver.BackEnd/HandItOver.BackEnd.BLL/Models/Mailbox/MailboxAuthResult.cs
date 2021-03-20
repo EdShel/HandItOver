@@ -14,4 +14,14 @@ namespace HandItOver.BackEnd.BLL.Models.Mailbox
         string AuthToken,
         string RefreshToken
     );
+
+    public record MailboxViewResult(
+        string Id,
+        string OwnerId,
+        MailboxSize Size,
+        string? GroupId,
+        string PhysicalId,
+        string Address,
+        bool IsOpen
+    );
 }

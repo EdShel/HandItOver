@@ -45,7 +45,7 @@ namespace HandItOver.BackEnd.API.Controllers
         public async Task<IActionResult> GetMailboxes()
         {
             string userId = this.User.FindFirstValue(AuthConstants.Claims.ID);
-            IEnumerable<Mailbox> result = await this.mailboxService.GetOwnedMailboxes(userId);
+            var result = await this.mailboxService.GetOwnedMailboxes(userId);
             return new JsonResult(result);
         }
 

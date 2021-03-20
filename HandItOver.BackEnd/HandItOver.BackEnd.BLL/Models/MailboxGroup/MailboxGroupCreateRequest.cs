@@ -72,4 +72,11 @@ namespace HandItOver.BackEnd.BLL.Models.MailboxGroup
         string Owner,
         string Name
     );
+
+    public record MailboxGroupEditRequest(
+        string GroupId,
+        string Name,
+        bool WhitelistOnly,
+        TimeSpan? MaxRentTime
+    );
 }

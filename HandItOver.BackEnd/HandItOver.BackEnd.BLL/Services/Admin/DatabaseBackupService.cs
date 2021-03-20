@@ -26,7 +26,7 @@ namespace HandItOver.BackEnd.BLL.Services.Admin
             string? backupDirectory = Path.GetDirectoryName(pathToBackup);
             if (backupDirectory == null)
             {
-                throw new NotFoundException("Backup directory");
+                throw new WrongValueException("Backup directory");
             }
             Directory.CreateDirectory(backupDirectory);
 

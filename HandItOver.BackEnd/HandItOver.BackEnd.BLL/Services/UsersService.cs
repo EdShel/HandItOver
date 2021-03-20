@@ -30,7 +30,8 @@ namespace HandItOver.BackEnd.BLL.Services
 
         public async Task<UserAccountInfoResult> GetInfoByEmailAsync(string email)
         {
-            AppUser? user = await this.userRepository.FindByEmailOrNullAsync(email);
+            AppUser user = await this.userRepository.FindByEmailOrNullAsync(email)
+                ?? throw new NotFoundException("User with this email");
             return await MakeUserInfo(user);
         }
 

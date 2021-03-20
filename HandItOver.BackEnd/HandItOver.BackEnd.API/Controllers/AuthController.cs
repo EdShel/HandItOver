@@ -1,6 +1,7 @@
 ﻿using HandItOver.BackEnd.API.Models.Auth;
 using HandItOver.BackEnd.BLL.Models.Auth;
 using HandItOver.BackEnd.BLL.Services;
+using HandItOver.BackEnd.Infrastructure.Exceptions;
 using HandItOver.BackEnd.Infrastructure.Models.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -57,7 +58,7 @@ namespace HandItOver.BackEnd.API.Controllers
             bool hasAuthHeader = this.Request.Headers.TryGetValue("Authorization", out StringValues tokens);
             if (!hasAuthHeader || tokens.Count > 1)
             {
-                return BadRequest("Provide single authentication header.");
+                throw new WrongValueException("Authorization header");
             }
 
             var requestDTO = new RefreshRequest

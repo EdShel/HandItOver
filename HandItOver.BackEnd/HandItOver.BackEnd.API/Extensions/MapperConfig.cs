@@ -29,6 +29,9 @@ namespace HandItOver.BackEnd.API.Extensions
                     .ForMember(r => r.MailboxSize, opt => opt.MapFrom(r => r.Mailbox.Size));
                 CreateMap<DAL.Entities.WhitelistJoinToken, BLL.Models.MailboxAccessControl.JoinTokenModel>();
                 CreateMap<DAL.Entities.Auth.AppUser, BLL.Models.Users.UserPublicInfoResult>();
+                CreateMap<DAL.Entities.Delivery, BLL.Models.Delivery.ActiveDeliveryResult>();
+                CreateMap<DAL.Entities.Mailbox, BLL.Models.Mailbox.MailboxViewResult>();
+                CreateMap<BLL.Models.MailboxGroup.MailboxGroupEditRequest, DAL.Entities.MailboxGroup>();
             }
         }
     }

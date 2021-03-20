@@ -54,13 +54,13 @@ namespace HandItOver.BackEnd.BLL.Services
             var addResult = await this.usersRepository.CreateUserAsync(user, request.Password);
             if (!addResult.Succeeded)
             {
-                throw new InvalidOperationException("Can't create user.");
+                throw new OperationException("Can't create user.");
             }
             var roleResult = await this.usersRepository.AddToRoleAsync(user, request.Role);
             if (!roleResult.Succeeded)
             {
                 await this.usersRepository.DeleteUserAsync(user);
-                throw new InvalidOperationException("Can't assign the role.");
+                throw new OperationException("Can't assign the role.");
             }
         }
 
@@ -69,7 +69,7 @@ namespace HandItOver.BackEnd.BLL.Services
             AppUser? user = await this.usersRepository.FindByEmailOrNullAsync(loginRequest.Email);
             if (user == null)
             {
-                throw new NotFoundException("User");
+                throw new WrongValueException("User");
             }
 
             if (!await this.usersRepository.CheckPasswordAsync(user, loginRequest.Password))

@@ -80,7 +80,7 @@ namespace HandItOver.BackEnd.API.Controllers
             [FromRoute] string groupId,
             [FromRoute] string tokenId)
         {
-            await this.mailboxAccessControlService.DeleteToken(tokenId);
+            await this.mailboxAccessControlService.DeleteToken(groupId, tokenId);
             return NoContent();
         }
 
@@ -93,7 +93,8 @@ namespace HandItOver.BackEnd.API.Controllers
             await this.mailboxAccessControlService.JoinWhitelistByToken(
                 groupId,
                 joinToken,
-                this.User.FindFirstValue(AuthConstants.Claims.EMAIL));
+                this.User.FindFirstValue(AuthConstants.Claims.EMAIL)
+            );
             return Ok();
         }
 

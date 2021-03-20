@@ -1,4 +1,6 @@
-﻿namespace HandItOver.BackEnd.BLL.Models.Delivery
+﻿using System;
+
+namespace HandItOver.BackEnd.BLL.Models.Delivery
 {
     public record DeliveryArrivedRequest(
         string MailboxId,
@@ -13,5 +15,14 @@
         string MailboxId,
         bool IsOpen,
         string? Renter
+    );
+
+    public record ActiveDeliveryResult(
+        string Id,
+        float Weight,
+        string MailboxId,
+        DateTime Arrived,
+        DateTime PredictedTakingTime,
+        DateTime? TerminalTime
     );
 }

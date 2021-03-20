@@ -48,7 +48,7 @@ namespace HandItOver.BackEnd.API.Controllers
         [HttpGet("backup")]
         public IActionResult SendBackup([FromQuery, Required] string file)
         {
-            System.IO.Stream backupFileStream = this.databaseBackupService.GetBackupAsStream(file);
+            Stream backupFileStream = this.databaseBackupService.GetBackupAsStream(file);
             return File(backupFileStream, "application/octet-stream");
         }
 
