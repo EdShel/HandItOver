@@ -14,7 +14,7 @@ namespace HandItOver.BackEnd.BLL.Services
             this.firebaseTokenRepository = firebaseTokenRepository;
         }
 
-        public async Task RegisterFirebaseToken(string userId, string tokenValue)
+        public async Task RegisterFirebaseTokenAsync(string userId, string tokenValue)
         {
             var existingToken = await this.firebaseTokenRepository.FindTokenForUserOrNull(userId);
             if (existingToken != null)

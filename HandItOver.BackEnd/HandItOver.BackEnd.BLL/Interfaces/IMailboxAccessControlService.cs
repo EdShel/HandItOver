@@ -8,10 +8,10 @@ namespace HandItOver.BackEnd.BLL.Interfaces
     {
         Task AddUserToWhitelistAsync(string groupId, string userEmail);
         Task<JoinTokenModel> CreateWhitelistJoinTokenAsync(string groupId);
-        Task DeleteToken(string groupId, string tokenId);
+        Task DeleteTokenAsync(string groupId, string tokenId);
         Task<IEnumerable<JoinTokenModel>> GetAllTokensAsync(string groupId);
-        Task<WhitelistInfo> GetMailboxWhitelist(string groupId);
-        Task JoinWhitelistByToken(string groupId, string tokenValue, string userEmail);
+        Task<WhitelistInfo> GetMailboxWhitelistAsync(string groupId);
+        Task JoinWhitelistByTokenAsync(string groupId, string tokenValue, string userEmail);
         Task RemoveUserFromWhitelistAsync(string groupId, string userEmail);
     }
 }

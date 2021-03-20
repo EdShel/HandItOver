@@ -10,11 +10,11 @@ namespace HandItOver.BackEnd.BLL.Interfaces
         Task AddMailboxToGroupAsync(string groupId, string mailboxId);
         Task<MailboxGroupCreatedResult> CreateMailboxGroupAsync(MailboxGroupCreateRequest request);
         Task DeleteMailboxGroupAsync(string mailboxGroupId);
-        Task EditMailboxGroup(MailboxGroupEditRequest request);
-        Task<IEnumerable<MailboxGroupSearchResult>> FindMailboxes(MailboxGroupSearchRequest request);
+        Task EditMailboxGroupAsync(MailboxGroupEditRequest request);
+        Task<IEnumerable<MailboxGroupSearchResult>> FindMailboxesAsync(MailboxGroupSearchRequest request);
         Task<MailboxGroupViewResult> GetMailboxGroupById(string groupId);
-        Task<MailboxGroup> GetMailboxGroupByName(string name);
-        Task<MailboxGroupStats> GetStats(string groupId);
+        Task<MailboxGroup> GetMailboxGroupByNameAsync(string name);
+        Task<MailboxGroupStats> GetStatsAsync(string groupId);
         Task RemoveMailboxFromGroupAsync(string groupId, string mailboxId);
     }
 }

@@ -22,7 +22,7 @@ namespace HandItOver.BackEnd.API.Controllers
         }
 
         [HttpPost("authorize")]
-        public async Task<IActionResult> Authorize([FromBody] MailboxAuthModel authModel)
+        public async Task<IActionResult> AuthorizeAsync([FromBody] MailboxAuthModel authModel)
         {
             MailboxAuthRequest request = new MailboxAuthRequest(
                 OwnerId: this.User.FindFirst(AuthConstants.Claims.ID)!.Value,
@@ -35,26 +35,26 @@ namespace HandItOver.BackEnd.API.Controllers
         }
 
         [HttpGet("my")]
-        public async Task<IActionResult> GetMailboxes()
+        public async Task<IActionResult> GetMailboxesAsync()
         {
             string userId = this.User.FindFirstValue(AuthConstants.Claims.ID);
-            var result = await this.mailboxService.GetOwnedMailboxes(userId);
+            var result = await this.mailboxService.GetOwnedMailboxesAsync(userId);
             return new JsonResult(result);
         }
 
         [HttpGet("{mailboxId}")]
-        public async Task<IActionResult> GetMailboxInfo([FromRoute] string mailboxId)
+        public async Task<IActionResult> GetMailboxInfoAsync([FromRoute] string mailboxId)
         {
-            var result = await this.mailboxService.GetMailbox(mailboxId);
+            var result = await this.mailboxService.GetMailboxAsync(mailboxId);
             return new JsonResult(result);
         }
 
         [HttpGet]
         [Authorize(Roles = AuthConstants.Roles.MAILBOX)]
-        public async Task<IActionResult> GetInfo()
+        public async Task<IActionResult> GetInfoAsync()
         {
             var mailboxId = this.User.FindFirstValue(AuthConstants.Claims.MAILBOX_ID);
-            var result = await this.mailboxService.GetMailbox(mailboxId);
+            var result = await this.mailboxService.GetMailboxAsync(mailboxId);
             return new JsonResult(result);
         }
     }

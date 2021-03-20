@@ -6,9 +6,9 @@ namespace HandItOver.BackEnd.BLL.Interfaces
 {
     public interface IUsersService
     {
-        Task<IEnumerable<UserPublicInfoResult>> FindByNameOrEmail(string seachQuery);
+        Task<IEnumerable<UserPublicInfoResult>> FindByNameOrEmailAsync(string seachQuery);
         Task<UserAccountInfoResult> GetInfoByEmailAsync(string email);
         Task<UserAccountInfoResult> GetInfoByIdAsync(string id);
-        Task<UsersPaginatedResult> GetUsersPaginated(UsersPaginatedRequest request);
+        Task<UsersPaginatedResult> GetUsersPaginatedAsync(UsersPaginatedRequest request);
     }
 }

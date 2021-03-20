@@ -35,7 +35,7 @@ namespace HandItOver.BackEnd.BLL.Services
             this.mapper = mapper;
         }
 
-        public async Task<WhitelistInfo> GetMailboxWhitelist(string groupId)
+        public async Task<WhitelistInfo> GetMailboxWhitelistAsync(string groupId)
         {
             MailboxGroup mailboxGroup = await this.mailboxGroupRepository.GetWhitelistByIdAsync(groupId)
                 ?? throw new NotFoundException("Mailbox group");
@@ -99,7 +99,7 @@ namespace HandItOver.BackEnd.BLL.Services
                 GroupId = groupId,
                 Token = tokenValue
             };
-            this.whitelistJoinTokenRepository.AddToken(token);
+            this.whitelistJoinTokenRepository.AddTokenAsync(token);
             await this.whitelistJoinTokenRepository.SaveChangesAsync();
 
             return this.mapper.Map<JoinTokenModel>(token);
@@ -107,21 +107,21 @@ namespace HandItOver.BackEnd.BLL.Services
 
         public async Task<IEnumerable<JoinTokenModel>> GetAllTokensAsync(string groupId)
         {
-            var tokens = await this.whitelistJoinTokenRepository.GetTokensOfGroup(groupId);
+            var tokens = await this.whitelistJoinTokenRepository.GetTokensOfGroupAsync(groupId);
             return this.mapper.Map<IEnumerable<JoinTokenModel>>(tokens);
         }
 
-        public async Task DeleteToken(string groupId, string tokenId)
+        public async Task DeleteTokenAsync(string groupId, string tokenId)
         {
-            WhitelistJoinToken token = await this.whitelistJoinTokenRepository.FindByIdOrNull(tokenId)
+            WhitelistJoinToken token = await this.whitelistJoinTokenRepository.FindByIdOrNullAsync(tokenId)
                 ?? throw new NotFoundException("Whitelist join token");
-            this.whitelistJoinTokenRepository.DeleteToken(token);
+            this.whitelistJoinTokenRepository.DeleteTokenAsync(token);
             await this.whitelistJoinTokenRepository.SaveChangesAsync();
         }
 
-        public async Task JoinWhitelistByToken(string groupId, string tokenValue, string userEmail)
+        public async Task JoinWhitelistByTokenAsync(string groupId, string tokenValue, string userEmail)
         {
-            WhitelistJoinToken token = await this.whitelistJoinTokenRepository.FindByGroupAndValueOrNull(groupId, tokenValue)
+            WhitelistJoinToken token = await this.whitelistJoinTokenRepository.FindByGroupAndValueOrNullAsync(groupId, tokenValue)
                 ?? throw new NotFoundException("Whitelist join token");
             await AddUserToWhitelistAsync(groupId, userEmail);
         }

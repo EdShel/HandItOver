@@ -12,31 +12,31 @@ namespace HandItOver.BackEnd.DAL.Repositories
         {
         }
 
-        public async Task<IEnumerable<WhitelistJoinToken>> GetTokensOfGroup(string groupId)
+        public async Task<IEnumerable<WhitelistJoinToken>> GetTokensOfGroupAsync(string groupId)
         {
             return await this.dbContext.Set<WhitelistJoinToken>()
                 .Where(t => t.GroupId == groupId)
                 .ToListAsync();
         }
 
-        public Task<WhitelistJoinToken> FindByIdOrNull(string tokenId)
+        public Task<WhitelistJoinToken> FindByIdOrNullAsync(string tokenId)
         {
             return this.dbContext.Set<WhitelistJoinToken>()
                 .FirstOrDefaultAsync(t => t.Id == tokenId);
         }
 
-        public Task<WhitelistJoinToken> FindByGroupAndValueOrNull(string groupId, string value)
+        public Task<WhitelistJoinToken> FindByGroupAndValueOrNullAsync(string groupId, string value)
         {
             return this.dbContext.Set<WhitelistJoinToken>()
                 .FirstOrDefaultAsync(t => t.GroupId == groupId && t.Token == value);
         }
 
-        public void AddToken(WhitelistJoinToken token)
+        public void AddTokenAsync(WhitelistJoinToken token)
         {
             this.dbContext.Set<WhitelistJoinToken>().Add(token);
         }
 
-        public void DeleteToken(WhitelistJoinToken token)
+        public void DeleteTokenAsync(WhitelistJoinToken token)
         {
             this.dbContext.Set<WhitelistJoinToken>().Remove(token);
         }

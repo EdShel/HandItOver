@@ -21,11 +21,11 @@ namespace HandItOver.BackEnd.API.Controllers
         }
 
         [HttpPost("token")]
-        public async Task<IActionResult> OnNewTokenGenerated([FromBody] FirebaseTokenModel model)
+        public async Task<IActionResult> OnNewTokenGeneratedAsync([FromBody] FirebaseTokenModel model)
         {
             string userId = this.User.FindFirstValue(AuthConstants.Claims.ID);
             string tokenValue = model.FirebaseClientToken;
-            await this.firebaseTokenSerivce.RegisterFirebaseToken(userId, tokenValue);
+            await this.firebaseTokenSerivce.RegisterFirebaseTokenAsync(userId, tokenValue);
             return Ok();
         }
 

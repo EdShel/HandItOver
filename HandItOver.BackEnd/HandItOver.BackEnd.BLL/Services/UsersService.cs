@@ -26,17 +26,17 @@ namespace HandItOver.BackEnd.BLL.Services
         public async Task<UserAccountInfoResult> GetInfoByIdAsync(string id)
         {
             AppUser? user = await this.userRepository.FindByIdOrNullAsync(id);
-            return await MakeUserInfo(user);
+            return await MakeUserInfoAsync(user);
         }
 
         public async Task<UserAccountInfoResult> GetInfoByEmailAsync(string email)
         {
             AppUser user = await this.userRepository.FindByEmailOrNullAsync(email)
                 ?? throw new NotFoundException("User with this email");
-            return await MakeUserInfo(user);
+            return await MakeUserInfoAsync(user);
         }
 
-        public async Task<IEnumerable<UserPublicInfoResult>> FindByNameOrEmail(string seachQuery)
+        public async Task<IEnumerable<UserPublicInfoResult>> FindByNameOrEmailAsync(string seachQuery)
         {
             IEnumerable<AppUser> users = await this.userRepository.FindByNameOrEmailAsync(seachQuery);
             return users.Select(user => new UserPublicInfoResult(
@@ -46,7 +46,7 @@ namespace HandItOver.BackEnd.BLL.Services
             ));
         }
 
-        private async Task<UserAccountInfoResult> MakeUserInfo(AppUser? user)
+        private async Task<UserAccountInfoResult> MakeUserInfoAsync(AppUser? user)
         {
             if (user == null)
             {
@@ -61,7 +61,7 @@ namespace HandItOver.BackEnd.BLL.Services
             );
         }
 
-        public async Task<UsersPaginatedResult> GetUsersPaginated(UsersPaginatedRequest request)
+        public async Task<UsersPaginatedResult> GetUsersPaginatedAsync(UsersPaginatedRequest request)
         {
             if (request.PageIndex < 0)
             {

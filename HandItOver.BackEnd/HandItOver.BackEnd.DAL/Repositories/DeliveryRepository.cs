@@ -12,7 +12,7 @@ namespace HandItOver.BackEnd.DAL.Repositories
         {
         }
 
-        public async Task<IEnumerable<Delivery>> GetAllTaken()
+        public async Task<IEnumerable<Delivery>> GetAllTakenAsync()
         {
             return await this.dbContext.Set<Delivery>()
                 .Where(d => d.Taken != null)

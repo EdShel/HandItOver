@@ -23,15 +23,15 @@ namespace HandItOver.BackEnd.API.Controllers
 
         [HttpGet("{groupId}/whitelist")]
         [Authorize(AuthConstants.Policies.MAILBOX_GROUP_OWNER_ONLY)]
-        public async Task<IActionResult> GetWhitelist([FromRoute] string groupId)
+        public async Task<IActionResult> GetWhitelistAsync([FromRoute] string groupId)
         {
-            WhitelistInfo result = await this.mailboxAccessControlService.GetMailboxWhitelist(groupId);
+            WhitelistInfo result = await this.mailboxAccessControlService.GetMailboxWhitelistAsync(groupId);
             return new JsonResult(result);
         }
 
         [HttpPost("{groupId}/whitelist")]
         [Authorize(AuthConstants.Policies.MAILBOX_GROUP_OWNER_ONLY)]
-        public async Task<IActionResult> AddUserToWhitelist(
+        public async Task<IActionResult> AddUserToWhitelistAsync(
             [FromRoute] string groupId,
             [FromBody] UserModel user)
         {
@@ -44,7 +44,7 @@ namespace HandItOver.BackEnd.API.Controllers
 
         [HttpDelete("{groupId}/whitelist/{email}")]
         [Authorize(AuthConstants.Policies.MAILBOX_GROUP_OWNER_ONLY)]
-        public async Task<IActionResult> RemoveUserFromWhitelist(
+        public async Task<IActionResult> RemoveUserFromWhitelistAsync(
             [FromRoute] string groupId,
             [FromRoute] string email)
         {
@@ -57,7 +57,7 @@ namespace HandItOver.BackEnd.API.Controllers
 
         [HttpPost("{groupId}/whitelist/token")]
         [Authorize(AuthConstants.Policies.MAILBOX_GROUP_OWNER_ONLY)]
-        public async Task<IActionResult> CreateJoinToken(
+        public async Task<IActionResult> CreateJoinTokenAsync(
             [FromRoute] string groupId)
         {
             var token = await this.mailboxAccessControlService.CreateWhitelistJoinTokenAsync(groupId);
@@ -66,7 +66,7 @@ namespace HandItOver.BackEnd.API.Controllers
 
         [HttpGet("{groupId}/whitelist/token")]
         [Authorize(AuthConstants.Policies.MAILBOX_GROUP_OWNER_ONLY)]
-        public async Task<IActionResult> ViewJoinTokens(
+        public async Task<IActionResult> ViewJoinTokensAsync(
             [FromRoute] string groupId)
         {
             var tokens = await this.mailboxAccessControlService.GetAllTokensAsync(groupId);
@@ -75,21 +75,21 @@ namespace HandItOver.BackEnd.API.Controllers
 
         [HttpDelete("{groupId}/whitelist/token/{tokenId}")]
         [Authorize(AuthConstants.Policies.MAILBOX_GROUP_OWNER_ONLY)]
-        public async Task<IActionResult> DeleteJoinToken(
+        public async Task<IActionResult> DeleteJoinTokenAsync(
             [FromRoute] string groupId,
             [FromRoute] string tokenId)
         {
-            await this.mailboxAccessControlService.DeleteToken(groupId, tokenId);
+            await this.mailboxAccessControlService.DeleteTokenAsync(groupId, tokenId);
             return NoContent();
         }
 
         [HttpPost("{groupId}/whitelist/join")]
         [Authorize]
-        public async Task<IActionResult> ViewJoinTokens(
+        public async Task<IActionResult> ViewJoinTokensAsync(
             [FromRoute] string groupId,
             [FromQuery] string joinToken)
         {
-            await this.mailboxAccessControlService.JoinWhitelistByToken(
+            await this.mailboxAccessControlService.JoinWhitelistByTokenAsync(
                 groupId,
                 joinToken,
                 this.User.FindFirstValue(AuthConstants.Claims.EMAIL)

@@ -7,7 +7,7 @@ namespace HandItOver.BackEnd.BLL.Interfaces
     public interface IMailboxService
     {
         Task<MailboxAuthResult> AuthorizeMailboxAsync(MailboxAuthRequest request);
-        Task<MailboxViewResult> GetMailbox(string mailboxId);
-        Task<IEnumerable<MailboxViewResult>> GetOwnedMailboxes(string userId);
+        Task<MailboxViewResult> GetMailboxAsync(string mailboxId);
+        Task<IEnumerable<MailboxViewResult>> GetOwnedMailboxesAsync(string userId);
     }
 }

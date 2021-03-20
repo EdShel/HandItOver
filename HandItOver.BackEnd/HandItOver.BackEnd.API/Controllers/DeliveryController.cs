@@ -23,48 +23,48 @@ namespace HandItOver.BackEnd.API.Controllers
 
         [HttpPost("arrived")]
         [Authorize(Roles = AuthConstants.Roles.MAILBOX)]
-        public async Task<IActionResult> DeliveryArrived([FromBody] DeliveryArrivedModel model)
+        public async Task<IActionResult> DeliveryArrivedAsync([FromBody] DeliveryArrivedModel model)
         {
             string mailboxId = this.User.FindFirstValue(AuthConstants.Claims.MAILBOX_ID);
             var request = new DeliveryArrivedRequest(mailboxId, model.Weight);
-            await this.deliveryService.HandleDeliveryArrival(request);
+            await this.deliveryService.HandleDeliveryArrivalAsync(request);
             return Ok();
         }
 
 
         [HttpPost("{deliveryId}/open")]
         [Authorize(AuthConstants.Policies.DELIVERY_ADDRESSEE_ONLY)]
-        public async Task<IActionResult> OpenMailbox([FromRoute] string deliveryId)
+        public async Task<IActionResult> OpenMailboxAsync([FromRoute] string deliveryId)
         {
-            await this.deliveryService.RequestOpeningDelivery(deliveryId);
+            await this.deliveryService.RequestOpeningDeliveryAsync(deliveryId);
             return Ok();
         }
 
         [HttpGet("mailboxStatus")]
         [Authorize(Roles = AuthConstants.Roles.MAILBOX)]
-        public async Task<IActionResult> GetStatus()
+        public async Task<IActionResult> GetStatusAsync()
         {
             string mailboxId = this.User.FindFirstValue(AuthConstants.Claims.MAILBOX_ID);
-            var result = await this.deliveryService.GetMailboxStatus(mailboxId);
+            var result = await this.deliveryService.GetMailboxStatusAsync(mailboxId);
             return new JsonResult(result);
         }
 
         [HttpPost("stolen")]
         [Authorize(Roles = AuthConstants.Roles.MAILBOX)]
-        public async Task<IActionResult> DeliveryStolen()
+        public async Task<IActionResult> DeliveryStolenAsync()
         {
             string mailboxId = this.User.FindFirstValue(AuthConstants.Claims.MAILBOX_ID);
-            await this.deliveryService.HandleDeliveryDisappeared(mailboxId);
+            await this.deliveryService.HandleDeliveryDisappearedAsync(mailboxId);
             return Ok();
         }
 
         [HttpPost("{deliveryId}/giveAway")]
         [Authorize(AuthConstants.Policies.DELIVERY_ADDRESSEE_ONLY)]
-        public async Task<IActionResult> GiveAwayRight(
+        public async Task<IActionResult> GiveAwayRightAsync(
             [FromRoute] string deliveryId,
             [FromBody] DeliveryGiveAwayModel model)
         {
-            await this.deliveryService.GiveAwayDeliveryRight(deliveryId, model.NewAddresseeId);
+            await this.deliveryService.GiveAwayDeliveryRightAsync(deliveryId, model.NewAddresseeId);
             return Ok();
         }
 
@@ -72,7 +72,7 @@ namespace HandItOver.BackEnd.API.Controllers
         public async Task<IActionResult> GetActiveDeliveriesAsync()
         {
             string userId = this.User.FindFirstValue(AuthConstants.Claims.ID);
-            var result = await this.deliveryService.GetActiveDeliveries(userId);
+            var result = await this.deliveryService.GetActiveDeliveriesAsync(userId);
             return new JsonResult(result);
         }
     }

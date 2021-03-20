@@ -28,7 +28,7 @@ namespace HandItOver.BackEnd.BLL.Services
             this.mapper = mapper;
         }
 
-        public async Task<RentResult> RentMailbox(RentRequest request)
+        public async Task<RentResult> RentMailboxAsync(RentRequest request)
         {
             if (request.RentFrom >= request.RentUntil)
             {
@@ -78,7 +78,7 @@ namespace HandItOver.BackEnd.BLL.Services
             return this.mapper.Map<RentResult>(rentRecord);
         }
 
-        public async Task CancelRent(string rentId)
+        public async Task CancelRentAsync(string rentId)
         {
             MailboxRent rent = await this.rentRepository.FindByIdOrNullAsync(rentId)
                 ?? throw new NotFoundException("Rent record");
@@ -86,7 +86,7 @@ namespace HandItOver.BackEnd.BLL.Services
             await this.rentRepository.SaveChangesAsync();
         }
 
-        public async Task<RentResult> GetRent(string rentId)
+        public async Task<RentResult> GetRentAsync(string rentId)
         {
             MailboxRent rent = await this.rentRepository.FindByIdOrNullAsync(rentId)
                 ?? throw new NotFoundException("Rent record");

@@ -6,9 +6,9 @@ namespace HandItOver.BackEnd.BLL.Interfaces
 {
     public interface IMailboxRentService
     {
-        Task CancelRent(string rentId);
-        Task<RentResult> GetRent(string rentId);
+        Task CancelRentAsync(string rentId);
+        Task<RentResult> GetRentAsync(string rentId);
         Task<IEnumerable<RentResult>> GetRentsOfUserAsync(string userId);
-        Task<RentResult> RentMailbox(RentRequest request);
+        Task<RentResult> RentMailboxAsync(RentRequest request);
     }
 }

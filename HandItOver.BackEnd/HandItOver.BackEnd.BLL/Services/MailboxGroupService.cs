@@ -75,7 +75,7 @@ namespace HandItOver.BackEnd.BLL.Services
             return this.mapper.Map<MailboxGroupViewResult>(group);
         }
 
-        public async Task<MailboxGroup> GetMailboxGroupByName(string name)
+        public async Task<MailboxGroup> GetMailboxGroupByNameAsync(string name)
         {
             return await this.mailboxGroupRepository.FindByNameOrNullAsync(name)
                 ?? throw new NotFoundException("Mailbox group");
@@ -89,14 +89,14 @@ namespace HandItOver.BackEnd.BLL.Services
             await this.mailboxGroupRepository.SaveChangesAsync();
         }
 
-        public async Task EditMailboxGroup(MailboxGroupEditRequest request)
+        public async Task EditMailboxGroupAsync(MailboxGroupEditRequest request)
         {
             var mailboxGroup = this.mapper.Map<MailboxGroup>(request);
             this.mailboxGroupRepository.ReplaceMailboxGroup(mailboxGroup);
             await this.mailboxGroupRepository.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<MailboxGroupSearchResult>> FindMailboxes(MailboxGroupSearchRequest request)
+        public async Task<IEnumerable<MailboxGroupSearchResult>> FindMailboxesAsync(MailboxGroupSearchRequest request)
         {
             MailboxGroup[] groups = await this.mailboxGroupRepository.FindByNameOrAddressOrOwnerAsync(request.SearchQuery);
             return groups.Select(group => new MailboxGroupSearchResult(
@@ -138,7 +138,7 @@ namespace HandItOver.BackEnd.BLL.Services
             await this.mailboxGroupRepository.SaveChangesAsync();
         }
 
-        public async Task<MailboxGroupStats> GetStats(string groupId)
+        public async Task<MailboxGroupStats> GetStatsAsync(string groupId)
         {
             MailboxGroup group = await this.mailboxGroupRepository.FindByIdFullInfoAsync(groupId)
                 ?? throw new NotFoundException("Mailbox group");

@@ -27,7 +27,7 @@ namespace HandItOver.BackEnd.BLL.Services
 
         private readonly NotificationsMessagesService notificationsMessagesService;
 
-        private readonly FirebaseNotificationService firebaseNotificationService;
+        private readonly INotificationService firebaseNotificationService;
 
         private readonly ILogger<DeliveryService> logger;
 
@@ -53,7 +53,7 @@ namespace HandItOver.BackEnd.BLL.Services
             this.mapper = mapper;
         }
 
-        public async Task<DeliveryArrivedResult> HandleDeliveryArrival(DeliveryArrivedRequest delivery)
+        public async Task<DeliveryArrivedResult> HandleDeliveryArrivalAsync(DeliveryArrivedRequest delivery)
         {
             if (delivery.Weight <= 0)
             {
@@ -66,48 +66,12 @@ namespace HandItOver.BackEnd.BLL.Services
                 throw new OperationException("Mailbox already contains a delivery.");
             }
 
-            string addresse;
-            DateTime? terminalTime;
-            if (mailbox.MailboxGroup == null)
-            {
-                addresse = mailbox.OwnerId;
-                terminalTime = null;
-            }
-            else
-            {
-                MailboxRent? rent = await this.rentRepository.FindForTimeOrNull(mailbox.Id, DateTime.UtcNow);
-                addresse = rent == null ? mailbox.OwnerId : rent.RenterId;
-                terminalTime = mailbox.MailboxGroup.MaxRentTime == null
-                    ? null
-                    : DateTime.UtcNow.Add(mailbox.MailboxGroup.MaxRentTime.Value);
-            }
+            (DateTime? terminalTime, string addressee) = await FindTerminalTimeAndAddressee(mailbox);
+            DateTime predictedTime = await PredictTimeAsync(delivery);
 
-            DateTime predictedTime;
-            var deliveriesToUseInPrediction = await this.deliveryRepository.GetAllTaken();
-            if (!deliveriesToUseInPrediction.Any())
-            {
-                const int basicPredictionDays = 2;
-                predictedTime = DateTime.UtcNow.AddDays(basicPredictionDays);
-            }
-            else
-            {
-                var now = DateTime.UtcNow;
-                predictedTime = now.Add(new DeliveryTimePredictor(
-                    deliveriesToUseInPrediction.Select(
-                        d => new DeliveryPredictionData((int)d.Arrived.DayOfWeek, d.Arrived.Hour, (d.Arrived.Month - 1) / 4, d.Weight, d.Taken!.Value - d.Arrived)
-                    )
-                ).Predict(new DeliveryPredictionData(
-                    (int)now.DayOfWeek,
-                    now.Hour,
-                    (now.Month - 1) / 4,
-                    delivery.Weight,
-                    TimeSpan.Zero
-                ))
-                );
-            }
             Delivery deliveryRecord = new Delivery
             {
-                AddresseeId = addresse,
+                AddresseeId = addressee,
                 MailboxId = delivery.MailboxId,
                 Weight = delivery.Weight,
                 Arrived = DateTime.UtcNow,
@@ -122,6 +86,66 @@ namespace HandItOver.BackEnd.BLL.Services
 
             await this.deliveryRepository.SaveChangesAsync();
 
+            await SendArrivalNotificationAsync(addressee);
+
+            return new DeliveryArrivedResult(deliveryRecord.Id);
+        }
+
+        private async Task<(DateTime?, string)> FindTerminalTimeAndAddressee(Mailbox mailbox)
+        {
+            string addressee;
+            DateTime? terminalTime;
+
+            if (mailbox.MailboxGroup == null)
+            {
+                addressee = mailbox.OwnerId;
+                terminalTime = null;
+            }
+            else
+            {
+                MailboxRent? rent = await this.rentRepository.FindForTimeOrNull(mailbox.Id, DateTime.UtcNow);
+                addressee = rent == null ? mailbox.OwnerId : rent.RenterId;
+                terminalTime = mailbox.MailboxGroup.MaxRentTime == null
+                    ? null
+                    : DateTime.UtcNow.Add(mailbox.MailboxGroup.MaxRentTime.Value);
+            }
+            return (terminalTime, addressee);
+        }
+
+        private async Task<DateTime> PredictTimeAsync(DeliveryArrivedRequest delivery)
+        {
+            var deliveriesToUseInPrediction = await this.deliveryRepository.GetAllTakenAsync();
+            if (!deliveriesToUseInPrediction.Any())
+            {
+                const int basicPredictionDays = 2;
+                return DateTime.UtcNow.AddDays(basicPredictionDays);
+            }
+            DeliveryTimePredictor predictor = new DeliveryTimePredictor(
+                deliveriesToUseInPrediction.Select(
+                    d => new DeliveryPredictionData(
+                        DayOfWeek: (int)d.Arrived.DayOfWeek,
+                        Hour: d.Arrived.Hour,
+                        Season: (d.Arrived.Month - 1) / 4,
+                        Weight: d.Weight,
+                        Duration: d.Taken!.Value - d.Arrived
+                    )
+                )
+            );
+            var now = DateTime.UtcNow;
+            TimeSpan predictedTime = predictor.Predict(
+                new DeliveryPredictionData(
+                    (int)now.DayOfWeek,
+                    now.Hour,
+                    (now.Month - 1) / 4,
+                    delivery.Weight,
+                    TimeSpan.Zero
+                )
+            );
+            return now.Add(predictedTime);
+        }
+
+        private async Task SendArrivalNotificationAsync(string addresse)
+        {
             try
             {
                 var message = this.notificationsMessagesService.DeliveryArrived(addresse);
@@ -131,12 +155,9 @@ namespace HandItOver.BackEnd.BLL.Services
             {
                 this.logger.LogInformation(ex, "Can't send push notification.");
             }
-
-            return new DeliveryArrivedResult(deliveryRecord.Id);
         }
 
-
-        public async Task HandleDeliveryDisappeared(string mailboxId)
+        public async Task HandleDeliveryDisappearedAsync(string mailboxId)
         {
             var delivery = await this.deliveryRepository.GetCurrentDeliveryOrNullAsync(mailboxId)
                 ?? throw new NotFoundException("Delivery");
@@ -150,12 +171,12 @@ namespace HandItOver.BackEnd.BLL.Services
                 this.logger.LogInformation(ex, "Can't send push notification.");
             }
             delivery.Taken = DateTime.UtcNow;
-            deliveryRepository.UpdateDelivery(delivery);
-            await deliveryRepository.SaveChangesAsync();
+            this.deliveryRepository.UpdateDelivery(delivery);
+            await this.deliveryRepository.SaveChangesAsync();
         }
 
 
-        public async Task RequestOpeningDelivery(string deliveryId)
+        public async Task RequestOpeningDeliveryAsync(string deliveryId)
         {
             Delivery currentDelivery = await this.deliveryRepository.FindByIdWithMailboxOrNullAsync(deliveryId)
                 ?? throw new NotFoundException("Delivery");
@@ -168,7 +189,7 @@ namespace HandItOver.BackEnd.BLL.Services
             await this.deliveryRepository.SaveChangesAsync();
         }
 
-        public async Task<MailboxStatus> GetMailboxStatus(string mailboxId)
+        public async Task<MailboxStatus> GetMailboxStatusAsync(string mailboxId)
         {
             Mailbox mailbox = await this.mailboxRepository.FindByIdOrNullAsync(mailboxId)
                 ?? throw new NotFoundException("Mailbox");
@@ -210,7 +231,7 @@ namespace HandItOver.BackEnd.BLL.Services
             );
         }
 
-        public async Task GiveAwayDeliveryRight(string deliveryId, string newAddresseeId)
+        public async Task GiveAwayDeliveryRightAsync(string deliveryId, string newAddresseeId)
         {
             Delivery delivery = await this.deliveryRepository.FindByIdOrNull(deliveryId)
                 ?? throw new NotFoundException("Delivery");
@@ -221,7 +242,7 @@ namespace HandItOver.BackEnd.BLL.Services
             await this.deliveryRepository.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<ActiveDeliveryResult>> GetActiveDeliveries(string userId)
+        public async Task<IEnumerable<ActiveDeliveryResult>> GetActiveDeliveriesAsync(string userId)
         {
             IEnumerable<Delivery> deliveries = await this.deliveryRepository.GetActiveDeliveriesOfUserAsync(userId);
             return this.mapper.Map<IEnumerable<ActiveDeliveryResult>>(deliveries);

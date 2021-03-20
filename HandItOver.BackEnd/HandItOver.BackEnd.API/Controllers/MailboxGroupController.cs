@@ -28,7 +28,7 @@ namespace HandItOver.BackEnd.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateGroup([FromBody] MailboxGroupCreateModel model)
+        public async Task<IActionResult> CreateGroupAsync([FromBody] MailboxGroupCreateModel model)
         {
             var request = new MailboxGroupCreateRequest(
                 this.User.FindFirst(AuthConstants.Claims.ID)!.Value,
@@ -45,23 +45,23 @@ namespace HandItOver.BackEnd.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById([FromRoute] string id)
+        public async Task<IActionResult> GetByIdAsync([FromRoute] string id)
         {
             var result = await this.mailboxGroupService.GetMailboxGroupById(id);
             return new JsonResult(result);
         }
 
         [HttpGet]
-        public async Task<IActionResult> FindBySearchRequest([FromQuery] string search)
+        public async Task<IActionResult> FindBySearchRequestAsync([FromQuery] string search)
         {
             var request = new MailboxGroupSearchRequest(search);
-            var result = await this.mailboxGroupService.FindMailboxes(request);
+            var result = await this.mailboxGroupService.FindMailboxesAsync(request);
             return new JsonResult(result);
         }
 
         [HttpDelete("{groupId}")]
         [Authorize(AuthConstants.Policies.MAILBOX_GROUP_OWNER_ONLY)]
-        public async Task<IActionResult> DeleteGroup([FromRoute] string groupId)
+        public async Task<IActionResult> DeleteGroupAsync([FromRoute] string groupId)
         {
             await this.mailboxGroupService.DeleteMailboxGroupAsync(groupId);
             return NoContent();
@@ -69,7 +69,7 @@ namespace HandItOver.BackEnd.API.Controllers
 
         [HttpPut("{groupId}")]
         [Authorize(AuthConstants.Policies.MAILBOX_GROUP_OWNER_ONLY)]
-        public async Task<IActionResult> EditGroup(
+        public async Task<IActionResult> EditGroupAsync(
             [FromRoute] string groupId,
             [FromBody] MailboxGroupEditModel model)
         {
@@ -79,13 +79,13 @@ namespace HandItOver.BackEnd.API.Controllers
                 model.WhitelistOnly,
                 model.MaxRentTime
             );
-            await this.mailboxGroupService.EditMailboxGroup(request);
+            await this.mailboxGroupService.EditMailboxGroupAsync(request);
             return Ok();
         }
 
         [HttpPost("{groupId}/mailboxes")]
         [Authorize(AuthConstants.Policies.MAILBOX_GROUP_OWNER_ONLY)]
-        public async Task<IActionResult> AddMailbox(
+        public async Task<IActionResult> AddMailboxAsync(
             [FromRoute] string groupId,
             [FromBody] MailboxAddModel model)
         {
@@ -97,7 +97,7 @@ namespace HandItOver.BackEnd.API.Controllers
 
         [HttpDelete("{groupId}/mailboxes/{mailboxId}")]
         [Authorize(AuthConstants.Policies.MAILBOX_GROUP_OWNER_ONLY)]
-        public async Task<IActionResult> RemoveMailboxFromGroup(
+        public async Task<IActionResult> RemoveMailboxFromGroupAsync(
             [FromRoute] string groupId,
             [FromRoute] string mailboxId)
         {
@@ -106,14 +106,14 @@ namespace HandItOver.BackEnd.API.Controllers
         }
 
         [HttpGet("{id}/stats")]
-        public async Task<IActionResult> ViewStats([FromRoute] string id)
+        public async Task<IActionResult> ViewStatsAsync([FromRoute] string id)
         {
-            var result = await this.mailboxGroupService.GetStats(id);
+            var result = await this.mailboxGroupService.GetStatsAsync(id);
             return new JsonResult(result);
         }
 
         [HttpPost("{id}/rent")]
-        public async Task<IActionResult> RentMailbox(
+        public async Task<IActionResult> RentMailboxAsync(
             [FromRoute] string id,
             [FromBody] RentModel model)
         {
@@ -124,28 +124,28 @@ namespace HandItOver.BackEnd.API.Controllers
                 RentFrom: model.RentFrom,
                 RentUntil: model.RentUntil
             );
-            var result = await this.mailboxRentService.RentMailbox(request);
+            var result = await this.mailboxRentService.RentMailboxAsync(request);
             return new JsonResult(result);
         }
 
         [HttpDelete("rent/{rentId}")]
         [Authorize(AuthConstants.Policies.RENTER_OR_OWNER_ONLY)]
-        public async Task<IActionResult> CancelRent([FromRoute] string rentId)
+        public async Task<IActionResult> CancelRentAsync([FromRoute] string rentId)
         {
-            await this.mailboxRentService.CancelRent(rentId);
+            await this.mailboxRentService.CancelRentAsync(rentId);
             return NoContent();
         }
 
         [HttpGet("rent/{rentId}")]
         [Authorize(AuthConstants.Policies.RENTER_OR_OWNER_ONLY)]
-        public async Task<IActionResult> ViewRent([FromRoute] string rentId)
+        public async Task<IActionResult> ViewRentAsync([FromRoute] string rentId)
         {
-            var result = await this.mailboxRentService.GetRent(rentId);
+            var result = await this.mailboxRentService.GetRentAsync(rentId);
             return new JsonResult(result);
         }
 
         [HttpGet("rent")]
-        public async Task<IActionResult> ViewRents()
+        public async Task<IActionResult> ViewRentsAsync()
         {
             string userId = this.User.FindFirst(AuthConstants.Claims.ID)!.Value;
             var result = await this.mailboxRentService.GetRentsOfUserAsync(userId);

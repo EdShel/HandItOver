@@ -85,13 +85,13 @@ namespace HandItOver.BackEnd.BLL.Services
             return new ClaimsIdentity(claims);
         }
 
-        public async Task<IEnumerable<MailboxViewResult>> GetOwnedMailboxes(string userId)
+        public async Task<IEnumerable<MailboxViewResult>> GetOwnedMailboxesAsync(string userId)
         {
             var mailboxes = await this.mailboxRepository.FindByOwnerAsync(userId);
             return this.mapper.Map<IEnumerable<MailboxViewResult>>(mailboxes);
         }
 
-        public async Task<MailboxViewResult> GetMailbox(string mailboxId)
+        public async Task<MailboxViewResult> GetMailboxAsync(string mailboxId)
         {
             var mailbox = await this.mailboxRepository.FindByIdOrNullAsync(mailboxId)
                    ?? throw new NotFoundException("Mailbox");

@@ -54,7 +54,7 @@ namespace HandItOver.BackEnd.API.Controllers
         }
 
         [HttpGet("sslExpiration")]
-        public async Task<IActionResult> GetSslExpirationDate()
+        public async Task<IActionResult> GetSslExpirationDateAsync()
         {
             string url = $"{this.HttpContext.Request.Scheme}://{this.HttpContext.Request.Host}/healthCheck";
             return new JsonResult(new
@@ -94,7 +94,7 @@ namespace HandItOver.BackEnd.API.Controllers
                 PageIndex: pageIndex,
                 PageSize: pageSize
             );
-            var result = await this.usersService.GetUsersPaginated(request);
+            var result = await this.usersService.GetUsersPaginatedAsync(request);
             return new JsonResult(result);
         }
     }

@@ -15,14 +15,26 @@ namespace HandItOver.BackEnd.BLL.Services
         {
             if (deliveries == null || !deliveries.Any())
             {
-                throw new ArgumentNullException(nameof(deliveries), "Data must contain at least one entry.");
+                throw new ArgumentNullException(
+                    paramName: nameof(deliveries),
+                    message: "Data must contain at least one entry."
+                );
             }
             this.deliveries = deliveries;
         }
 
         public TimeSpan Predict(DeliveryPredictionData newDelivery)
         {
-            var clusters = this.deliveries.GroupBy(
+            var clusters = GetDeliveryClustersByHours();
+            var distancesToClusters = FindDistancesToClusters(newDelivery, clusters);
+            int nearestCluster = FindNearestCluster(distancesToClusters);
+
+            return TimeSpan.FromHours(nearestCluster);
+        }
+
+        protected virtual IList<IGrouping<int, DeliveryPredictionData>> GetDeliveryClustersByHours()
+        {
+            return this.deliveries.GroupBy(
                 k => k.Duration.TotalHours switch
                 {
                     <= 4 => 4,
@@ -34,7 +46,13 @@ namespace HandItOver.BackEnd.BLL.Services
                 },
                 v => v
             ).ToList();
-            var distancesToClusters = clusters.ToDictionary(
+        }
+
+        protected virtual IDictionary<int, float> FindDistancesToClusters(
+            DeliveryPredictionData newDelivery, 
+            IList<IGrouping<int, DeliveryPredictionData>> clusters)
+        {
+            return clusters.ToDictionary(
                 cluster => cluster.Key,
                 cluster =>
                 {
@@ -47,9 +65,13 @@ namespace HandItOver.BackEnd.BLL.Services
                     );
                     float dispersion = cluster.Sum(d => DistanceSqrBetweenPoints(d, clusterCenter)) / cluster.Count();
                     float probability = DistanceSqrBetweenPoints(newDelivery, clusterCenter);
-                    return probability;
+                    return probability / dispersion;
                 }
             );
+        }
+
+        private static int FindNearestCluster(IDictionary<int, float> distancesToClusters)
+        {
             KeyValuePair<int, float> nearestCluster = distancesToClusters.First();
             foreach (var cluster in distancesToClusters.Skip(1))
             {
@@ -59,10 +81,10 @@ namespace HandItOver.BackEnd.BLL.Services
                 }
             }
 
-            return TimeSpan.FromHours(nearestCluster.Key);
+            return nearestCluster.Key;
         }
 
-        private static float DistanceSqrBetweenPoints(DeliveryPredictionData first, DeliveryPredictionData second)
+        protected virtual float DistanceSqrBetweenPoints(DeliveryPredictionData first, DeliveryPredictionData second)
         {
             int daysDistance = DistanceBetweenDaysOfWeek(first.DayOfWeek, second.DayOfWeek);
             int hoursDistance = DistanceBetweenHours(first.Hour, second.DayOfWeek);
