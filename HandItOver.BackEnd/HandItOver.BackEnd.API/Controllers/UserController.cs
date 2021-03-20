@@ -1,5 +1,5 @@
-﻿using HandItOver.BackEnd.BLL.Models.Users;
-using HandItOver.BackEnd.BLL.Services;
+﻿using HandItOver.BackEnd.BLL.Interfaces;
+using HandItOver.BackEnd.BLL.Models.Users;
 using HandItOver.BackEnd.Infrastructure.Models.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,9 +12,9 @@ namespace HandItOver.BackEnd.API.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly UsersService usersService;
+        private readonly IUsersService usersService;
 
-        public UserController(UsersService usersService)
+        public UserController(IUsersService usersService)
         {
             this.usersService = usersService;
         }

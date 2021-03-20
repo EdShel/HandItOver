@@ -1,10 +1,11 @@
-﻿using HandItOver.BackEnd.DAL.Entities;
+﻿using HandItOver.BackEnd.BLL.Interfaces;
+using HandItOver.BackEnd.DAL.Entities;
 using HandItOver.BackEnd.DAL.Repositories;
 using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.BLL.Services
 {
-    public class FirebaseTokenSerivce
+    public class FirebaseTokenSerivce : IFirebaseTokenSerivce
     {
         private readonly FirebaseTokenRepository firebaseTokenRepository;
 

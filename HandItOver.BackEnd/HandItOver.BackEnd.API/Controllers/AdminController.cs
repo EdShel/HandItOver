@@ -1,4 +1,5 @@
 ﻿using HandItOver.BackEnd.API.Models.Admin;
+using HandItOver.BackEnd.BLL.Interfaces;
 using HandItOver.BackEnd.BLL.Models.Users;
 using HandItOver.BackEnd.BLL.Services;
 using HandItOver.BackEnd.BLL.Services.Admin;
@@ -21,14 +22,14 @@ namespace HandItOver.BackEnd.API.Controllers
 
         private readonly CertExpirationService certExpirationService;
 
-        private readonly UsersService usersService;
+        private readonly IUsersService usersService;
 
         private readonly ConfigurationService configurationService;
 
         public AdminController(
             DatabaseBackupService databaseBackupService,
             CertExpirationService certExpirationService,
-            UsersService usersService,
+            IUsersService usersService,
             ConfigurationService configurationService)
         {
             this.databaseBackupService = databaseBackupService;

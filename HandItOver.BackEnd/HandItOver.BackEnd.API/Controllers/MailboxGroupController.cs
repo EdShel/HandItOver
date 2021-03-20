@@ -1,12 +1,10 @@
 ﻿using HandItOver.BackEnd.API.Models.MailboxGroup;
+using HandItOver.BackEnd.BLL.Interfaces;
 using HandItOver.BackEnd.BLL.Models.MailboxGroup;
 using HandItOver.BackEnd.BLL.Models.MailboxRent;
-using HandItOver.BackEnd.BLL.Services;
-using HandItOver.BackEnd.DAL.Entities;
 using HandItOver.BackEnd.Infrastructure.Models.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -17,13 +15,13 @@ namespace HandItOver.BackEnd.API.Controllers
     [Route("[controller]")]
     public class MailboxGroupController : ControllerBase
     {
-        private readonly MailboxGroupService mailboxGroupService;
+        private readonly IMailboxGroupService mailboxGroupService;
 
-        private readonly MailboxRentService mailboxRentService;
+        private readonly IMailboxRentService mailboxRentService;
 
         public MailboxGroupController(
-            MailboxGroupService mailboxGroupService,
-            MailboxRentService mailboxRentService)
+            IMailboxGroupService mailboxGroupService,
+            IMailboxRentService mailboxRentService)
         {
             this.mailboxGroupService = mailboxGroupService;
             this.mailboxRentService = mailboxRentService;

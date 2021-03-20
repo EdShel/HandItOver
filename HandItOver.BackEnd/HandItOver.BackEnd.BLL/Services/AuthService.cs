@@ -1,4 +1,5 @@
-﻿using HandItOver.BackEnd.BLL.Models.Auth;
+﻿using HandItOver.BackEnd.BLL.Interfaces;
+using HandItOver.BackEnd.BLL.Models.Auth;
 using HandItOver.BackEnd.DAL.Entities.Auth;
 using HandItOver.BackEnd.DAL.Repositories;
 using HandItOver.BackEnd.Infrastructure.Exceptions;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.BLL.Services
 {
-    public class AuthService
+    public class AuthService : IAuthService
     {
         private readonly UserRepository usersRepository;
 

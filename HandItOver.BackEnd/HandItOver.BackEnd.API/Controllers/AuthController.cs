@@ -1,6 +1,6 @@
 ﻿using HandItOver.BackEnd.API.Models.Auth;
+using HandItOver.BackEnd.BLL.Interfaces;
 using HandItOver.BackEnd.BLL.Models.Auth;
-using HandItOver.BackEnd.BLL.Services;
 using HandItOver.BackEnd.Infrastructure.Exceptions;
 using HandItOver.BackEnd.Infrastructure.Models.Auth;
 using Microsoft.AspNetCore.Authorization;
@@ -16,9 +16,9 @@ namespace HandItOver.BackEnd.API.Controllers
     [Route("[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly AuthService authService;
+        private readonly IAuthService authService;
 
-        public AuthController(AuthService authService)
+        public AuthController(IAuthService authService)
         {
             this.authService = authService;
         }

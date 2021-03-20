@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using HandItOver.BackEnd.BLL.Interfaces;
 using HandItOver.BackEnd.BLL.Models.Mailbox;
 using HandItOver.BackEnd.DAL.Entities;
 using HandItOver.BackEnd.DAL.Entities.Auth;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.BLL.Services
 {
-    public class MailboxService
+    public class MailboxService : IMailboxService
     {
         private readonly UserRepository userRepository;
 

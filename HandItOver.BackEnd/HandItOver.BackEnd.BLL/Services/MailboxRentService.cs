@@ -1,16 +1,16 @@
 ﻿using AutoMapper;
+using HandItOver.BackEnd.BLL.Interfaces;
 using HandItOver.BackEnd.BLL.Models.MailboxRent;
 using HandItOver.BackEnd.DAL.Entities;
 using HandItOver.BackEnd.DAL.Repositories;
 using HandItOver.BackEnd.Infrastructure.Exceptions;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.BLL.Services
 {
-    public class MailboxRentService
+    public class MailboxRentService : IMailboxRentService
     {
         private readonly MailboxGroupRepository mailboxGroupRepository;
 

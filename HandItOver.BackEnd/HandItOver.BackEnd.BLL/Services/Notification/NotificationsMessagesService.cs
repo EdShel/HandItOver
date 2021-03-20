@@ -29,6 +29,5 @@ namespace HandItOver.BackEnd.BLL.Services.Notification
             public string Title { get; set; } = null!;
             public string Body { get; set; } = null!;
         }
-
     }
 }

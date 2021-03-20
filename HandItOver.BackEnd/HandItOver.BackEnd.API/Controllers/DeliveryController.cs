@@ -1,6 +1,6 @@
 ﻿using HandItOver.BackEnd.API.Models.Delivery;
+using HandItOver.BackEnd.BLL.Interfaces;
 using HandItOver.BackEnd.BLL.Models.Delivery;
-using HandItOver.BackEnd.BLL.Services;
 using HandItOver.BackEnd.Infrastructure.Models.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,9 +14,9 @@ namespace HandItOver.BackEnd.API.Controllers
     [Authorize]
     public class DeliveryController : ControllerBase
     {
-        private readonly DeliveryService deliveryService;
+        private readonly IDeliveryService deliveryService;
 
-        public DeliveryController(DeliveryService deliveryService)
+        public DeliveryController(IDeliveryService deliveryService)
         {
             this.deliveryService = deliveryService;
         }

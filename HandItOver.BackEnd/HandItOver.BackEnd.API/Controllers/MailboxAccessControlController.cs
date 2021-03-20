@@ -1,6 +1,6 @@
 ﻿using HandItOver.BackEnd.API.Models.MailboxAccessControl;
+using HandItOver.BackEnd.BLL.Interfaces;
 using HandItOver.BackEnd.BLL.Models.MailboxAccessControl;
-using HandItOver.BackEnd.BLL.Services;
 using HandItOver.BackEnd.Infrastructure.Models.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,9 +14,9 @@ namespace HandItOver.BackEnd.API.Controllers
     [Authorize]
     public class MailboxAccessControlController : ControllerBase
     {
-        private readonly MailboxAccessControlService mailboxAccessControlService;
+        private readonly IMailboxAccessControlService mailboxAccessControlService;
 
-        public MailboxAccessControlController(MailboxAccessControlService mailboxAccessControlService)
+        public MailboxAccessControlController(IMailboxAccessControlService mailboxAccessControlService)
         {
             this.mailboxAccessControlService = mailboxAccessControlService;
         }

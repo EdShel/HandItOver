@@ -1,4 +1,5 @@
-﻿using HandItOver.BackEnd.BLL.ResourceAccess;
+﻿using HandItOver.BackEnd.BLL.Interfaces;
+using HandItOver.BackEnd.BLL.ResourceAccess;
 using HandItOver.BackEnd.BLL.Services;
 using HandItOver.BackEnd.BLL.Services.Admin;
 using HandItOver.BackEnd.BLL.Services.Notification;
@@ -117,12 +118,12 @@ namespace HandItOver.BackEnd.API.Extensions
             services.AddScoped<FirebaseTokenRepository>();
             services.AddSingleton<FirebaseRepository>();
 
-            services.AddScoped<MailboxService>();
-            services.AddScoped<MailboxAccessControlService>();
-            services.AddScoped<MailboxGroupService>();
-            services.AddScoped<MailboxRentService>();
-            services.AddScoped<DeliveryService>();
-            services.AddScoped<FirebaseTokenSerivce>();
+            services.AddScoped<IMailboxService, MailboxService>();
+            services.AddScoped<IMailboxAccessControlService, MailboxAccessControlService>();
+            services.AddScoped<IMailboxGroupService, MailboxGroupService>();
+            services.AddScoped<IMailboxRentService, MailboxRentService>();
+            services.AddScoped<IDeliveryService, DeliveryService>();
+            services.AddScoped<IFirebaseTokenSerivce, FirebaseTokenSerivce>();
             services.AddScoped<NotificationsMessagesService>();
             services.AddScoped<FirebaseNotificationService>();
 

@@ -1,5 +1,5 @@
 ﻿using HandItOver.BackEnd.API.Models.Firebase;
-using HandItOver.BackEnd.BLL.Services;
+using HandItOver.BackEnd.BLL.Interfaces;
 using HandItOver.BackEnd.Infrastructure.Models.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,9 +13,9 @@ namespace HandItOver.BackEnd.API.Controllers
     [Authorize]
     public class FirebaseController : ControllerBase
     {
-        private readonly FirebaseTokenSerivce firebaseTokenSerivce;
+        private readonly IFirebaseTokenSerivce firebaseTokenSerivce;
 
-        public FirebaseController(FirebaseTokenSerivce firebaseTokenSerivce)
+        public FirebaseController(IFirebaseTokenSerivce firebaseTokenSerivce)
         {
             this.firebaseTokenSerivce = firebaseTokenSerivce;
         }

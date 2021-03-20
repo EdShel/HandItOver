@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using HandItOver.BackEnd.BLL.Interfaces;
 using HandItOver.BackEnd.BLL.Models.Delivery;
+using HandItOver.BackEnd.BLL.Models.DeliveryTimePredictor;
 using HandItOver.BackEnd.BLL.Services.Notification;
 using HandItOver.BackEnd.DAL.Entities;
 using HandItOver.BackEnd.DAL.Entities.Auth;
@@ -13,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.BLL.Services
 {
-    public class DeliveryService
+    public class DeliveryService : IDeliveryService
     {
         private readonly MailboxRepository mailboxRepository;
 

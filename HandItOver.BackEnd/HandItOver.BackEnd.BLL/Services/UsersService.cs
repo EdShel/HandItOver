@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using HandItOver.BackEnd.BLL.Interfaces;
 using HandItOver.BackEnd.BLL.Models.Users;
 using HandItOver.BackEnd.DAL.Entities.Auth;
 using HandItOver.BackEnd.DAL.Repositories;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.BLL.Services
 {
-    public class UsersService
+    public class UsersService : IUsersService
     {
         private readonly UserRepository userRepository;
 

@@ -1,19 +1,13 @@
-﻿using System;
+﻿using HandItOver.BackEnd.BLL.Interfaces;
+using HandItOver.BackEnd.BLL.Models.DeliveryTimePredictor;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace HandItOver.BackEnd.BLL.Services
 {
-    public record DeliveryPredictionData(
-        int DayOfWeek,
-        int Hour,
-        int Season,
-        float Weight,
-        TimeSpan Duration
-    );
-
-    public class DeliveryTimePredictor
+    public class DeliveryTimePredictor : IDeliveryTimePredictor
     {
         private readonly IEnumerable<DeliveryPredictionData> deliveries;
 
@@ -57,7 +51,7 @@ namespace HandItOver.BackEnd.BLL.Services
                 }
             );
             KeyValuePair<int, float> nearestCluster = distancesToClusters.First();
-            foreach(var cluster in distancesToClusters.Skip(1))
+            foreach (var cluster in distancesToClusters.Skip(1))
             {
                 if (cluster.Value < nearestCluster.Value)
                 {
