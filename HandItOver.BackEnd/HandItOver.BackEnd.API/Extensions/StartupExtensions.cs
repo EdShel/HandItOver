@@ -42,8 +42,8 @@ namespace HandItOver.BackEnd.API.Extensions
             AddRefreshTokenFactory(services, configuration);
 
             services.AddScoped<UserRepository>();
-            services.AddScoped<UsersService>();
-            services.AddScoped<AuthService>();
+            services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<IAuthService, AuthService>();
 
             services.AddAuthorization(options =>
             {
