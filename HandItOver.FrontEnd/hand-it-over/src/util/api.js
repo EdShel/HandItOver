@@ -4,25 +4,29 @@ const apiUrl = 'https://192.168.1.16:5003'
 
 const authScheme = 'Bearer'
 
-function getAuthToken() {
-    return localStorage.getItem('authToken');
+function isAuthorized() {
+    return getAuth() !== null;
 }
 
-function setAuthToken(newAuthToken) {
-    return localStorage.setItem('authToken', newAuthToken);
+function getAuth() {
+    return JSON.parse(localStorage.getItem('auth'));
 }
 
-function getRefreshToken() {
-    return localStorage.getItem('refreshToken');
+function setAuth(authToken, refreshToken, email) {
+    localStorage.setItem('auth', JSON.stringify({
+        authToken,
+        refreshToken,
+        email
+    }));
 }
 
-function setRefreshToken(newRefreshToken) {
-    return localStorage.getItem('refreshToken', newRefreshToken);
+function removeAuth() {
+    localStorage.removeItem('auth');
 }
 
 axios.interceptors.request.use(r => {
     if (isAuthorized()) {
-        let authToken = getAuthToken();
+        let authToken = getAuth().authToken;
         r.headers.Authorization = `${authScheme} ${authToken}`;
     }
     return r;
@@ -40,32 +44,47 @@ axios.interceptors.response.use(r => {
 
         return axios.post(apiUrl + '/auth/refresh',
             {
-                refreshToken: getRefreshToken()
+                refreshToken: getAuth().refreshToken
             }).then(r => {
                 let data = r.data;
-                setAuthToken(data.authToken);
-                setRefreshToken(data.refreshToken);
+                let auth = getAuth();
+                setAuth(data.authToken, data.refreshToken, auth.email);
                 return axios(originalRequest);
             }).catch(e => {
-                deauthorize();
+                removeAuth();
                 return Promise.reject(e);
             });
     }
     return Promise.reject(error);
 });
 
-function isAuthorized() {
-    return getAuthToken() !== null;
+function register(email, fullName, password, role){
+    return sendPost('/auth/register', null, {
+        email, fullName, password, role
+    });
 }
 
-function authorize(token, refreshToken) {
-    setAuthToken(token);
-    setRefreshToken(refreshToken);
+function login(email, password) {
+    return sendPost('/auth/login', null, { email, password })
+        .then(r => {
+            let data = r.data;
+            setAuth(data.token, data.refreshToken, data.email);
+        });
 }
 
-function deauthorize() {
-    setAuthToken(null);
-    setRefreshToken(null);
+function logout() {
+    let auth = getAuth();
+    if (!auth){
+        throw new Error("Already logged out.")
+    }
+    return sendPost('/auth/revoke', null, { refreshToken: auth.refreshToken })
+        .then(function() {
+            removeAuth();
+        })
+}
+
+function sendPost(url, params, data) {
+    return axios.post(apiUrl + url, data, { params });
 }
 
 function sendGet(url, params) {
@@ -75,7 +94,9 @@ function sendGet(url, params) {
 }
 
 export default {
-    authorize,
-    deauthorize,
+    getAuth,
+    register,
+    login,
+    logout,
     sendGet
 };

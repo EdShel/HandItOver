@@ -1,9 +1,11 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png" />
-    <router-link to="/">{{ currentDate }}</router-link>
+    <router-link to="/">{{ userName }}</router-link>
     <router-link to="/admin">Haha lol</router-link>
     <router-view></router-view>
+    <button @click="authorize">Authoruze</button>
+    <button @click="logout">Deauthourzr</button>
   </div>
 </template>
 
@@ -13,16 +15,39 @@ export default {
   name: "App",
   data: function () {
     return {
-      currentDate: null
+      userName: null,
     };
   },
   mounted() {
-    api.sendGet('/healthCheck')
-    .then(r => {
-      let data = r.data;
-      this.currentDate = data.date;
-    })
-  }
+    this.getAuthInfo();
+  },
+  methods: {
+    getAuthInfo() {
+      let auth = api.getAuth();
+      if (auth){
+        this.userName = auth.email;
+      }
+      else{
+        this.userName = "Unauthorized";
+      }
+    },
+    authorize() {
+      api
+        .login("eduard.sheliemietiev@nure.ua", "qwerty")
+        .then(() => {
+          console.log(api.getAuth());
+          this.getAuthInfo();
+        })
+        .catch(() => {
+          alert("cannot login");
+        });
+    },
+    logout() {
+      api.logout().then(() => {
+        this.getAuthInfo();
+      })
+    }
+  },
 };
 </script>
 
