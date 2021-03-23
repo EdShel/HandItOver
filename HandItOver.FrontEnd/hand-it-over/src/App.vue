@@ -1,19 +1,29 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome, butch!!!!!!!!!!"/>
+    <img alt="Vue logo" src="./assets/logo.png" />
+    <router-link to="/">{{ currentDate }}</router-link>
+    <router-link to="/admin">Haha lol</router-link>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import api from "./util/api.js";
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
+  name: "App",
+  data: function () {
+    return {
+      currentDate: null
+    };
+  },
+  mounted() {
+    api.sendGet('/healthCheck')
+    .then(r => {
+      let data = r.data;
+      this.currentDate = data.date;
+    })
   }
-}
+};
 </script>
 
 <style>
