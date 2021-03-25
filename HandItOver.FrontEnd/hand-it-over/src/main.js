@@ -11,7 +11,6 @@ const routes = [
   { path: '/', component: HelloWorld },
   { path: '/admin', component: Admin }
 ]
-
 const router = new VueRouter({ routes, mode: 'history' })
 
 new Vue({

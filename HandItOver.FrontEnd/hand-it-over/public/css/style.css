@@ -1,0 +1,23 @@
+.modal:not(.visible) {
+    visibility: hidden;
+}
+
+.modal.visible {
+    background: rgba(0, 0, 0, 0.8);
+    display: block;
+    visibility: visible;
+}
+
+.inline-input {
+    display: flex;
+    align-items: center;
+}
+
+    .inline-input label {
+        margin-right: 5px;
+        margin-bottom: 0;
+    }
+
+    .inline-input select {
+        flex: 2;
+    }

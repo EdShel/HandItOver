@@ -1,0 +1,94 @@
+<template>
+  <div id="navSection" v-cloak>
+    <login-modal ref="loginModal"></login-modal>
+    <register-modal ref="registerModal"></register-modal>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <router-link to="/" class="navbar-brand">Hand It Over</router-link>
+      <button
+        class="navbar-toggler"
+        type="button"
+        v-on:click="$refs.hiddenNav.classList.toggle('show')"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" ref="hiddenNav">
+        <ul class="navbar-nav mr-auto">
+          <template v-if="!isAuthorized">
+            <li>
+              <a class="nav-link" href="#" v-on:click.stop="showLogin">Login</a>
+            </li>
+            <li>
+              <a class="nav-link" href="#" v-on:click.stop="showRegister"
+                >Register</a
+              >
+            </li>
+          </template>
+          <template v-else>
+            <template v-if="isAdmin">
+              <li>
+                <router-link to="/admin" class="nav-link"
+                  >Admin panel</router-link
+                >
+              </li>
+            </template>
+            <li>
+              <router-link to="/" class="nav-link"
+                >Something.......</router-link
+              >
+            </li>
+            <li>
+              <a class="nav-link" href="#" v-on:click.prevent="logout"
+                >Logout</a
+              >
+            </li>
+          </template>
+        </ul>
+        <div class="form-inline my-2 my-lg-0">
+          <p>Language selector here</p>
+        </div>
+      </div>
+    </nav>
+  </div>
+</template>
+
+<script>
+import LoginModal from "~/components/LoginModal";
+import RegisterModal from "~/components/RegisterModal";
+import api from "../util/api.js";
+
+export default {
+  name: "AppHeader",
+
+  components: {
+    LoginModal,
+    RegisterModal
+  },
+  computed: {
+    isAuthorized() {
+      return api.isAuthorized();
+    },
+    isAdmin() {
+      return api.isAdmin();
+    },
+  },
+  methods: {
+    showLogin() {
+      console.log("Showing");
+      this.$refs.loginModal.show();
+    },
+    showRegister() {
+      console.log("Showing");
+      this.$refs.registerModal.show();
+    },
+    logout() {
+      api.logout();
+      location.reload();
+    },
+  },
+};
+</script>
+
+<style>
+</style>

@@ -4,19 +4,28 @@ const apiUrl = 'https://192.168.1.16:5003'
 
 const authScheme = 'Bearer'
 
+const adminRole = 'admin';
+const userRole = 'user';
+
 function isAuthorized() {
     return getAuth() !== null;
+}
+
+function isAdmin() {
+    let auth = getAuth();
+    return auth && auth.role === 'admin';
 }
 
 function getAuth() {
     return JSON.parse(localStorage.getItem('auth'));
 }
 
-function setAuth(authToken, refreshToken, email) {
+function setAuth(authToken, refreshToken, email, role) {
     localStorage.setItem('auth', JSON.stringify({
         authToken,
         refreshToken,
-        email
+        email,
+        role
     }));
 }
 
@@ -58,7 +67,7 @@ axios.interceptors.response.use(r => {
     return Promise.reject(error);
 });
 
-function register(email, fullName, password, role){
+function register(email, fullName, password, role) {
     return sendPost('/auth/register', null, {
         email, fullName, password, role
     });
@@ -74,11 +83,11 @@ function login(email, password) {
 
 function logout() {
     let auth = getAuth();
-    if (!auth){
+    if (!auth) {
         throw new Error("Already logged out.")
     }
     return sendPost('/auth/revoke', null, { refreshToken: auth.refreshToken })
-        .then(function() {
+        .then(function () {
             removeAuth();
         })
 }
@@ -94,6 +103,8 @@ function sendGet(url, params) {
 }
 
 export default {
+    isAuthorized,
+    isAdmin,
     getAuth,
     register,
     login,
