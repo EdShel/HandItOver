@@ -17,10 +17,10 @@
         <ul class="navbar-nav mr-auto">
           <template v-if="!isAuthorized">
             <li>
-              <a class="nav-link" href="#" v-on:click.stop="showLogin">Login</a>
+              <a class="nav-link" href="#" v-on:click.prevent="showLogin">Login</a>
             </li>
             <li>
-              <a class="nav-link" href="#" v-on:click.stop="showRegister"
+              <a class="nav-link" href="#" v-on:click.prevent="showRegister"
                 >Register</a
               >
             </li>
@@ -63,7 +63,7 @@ export default {
 
   components: {
     LoginModal,
-    RegisterModal
+    RegisterModal,
   },
   computed: {
     isAuthorized() {
@@ -83,8 +83,9 @@ export default {
       this.$refs.registerModal.show();
     },
     logout() {
-      api.logout();
-      location.reload();
+      api.logout().finally(function(){
+        location.reload();
+      });
     },
   },
 };

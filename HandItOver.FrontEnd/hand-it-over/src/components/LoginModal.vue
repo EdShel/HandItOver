@@ -8,11 +8,11 @@
   >
     <div>
       <label for="emailText">Email</label>
-      <input type="text" id="emailText" v-bind="email" />
+      <input type="text" id="emailText" v-model="email" />
     </div>
     <div>
       <label for="passwordText">Password</label>
-      <input type="text" id="passwordText" v-bind="password" />
+      <input type="text" id="passwordText" v-model="password" />
     </div>
   </modal-window>
 </template>
@@ -36,16 +36,18 @@ export default {
       show() {
           this.$refs.modalWindow.openModal();
       },
-      hideLogin() {
+      hide() {
           this.$refs.modalWindow.closeModal();
       },
       loginPressed(){
         api.login(this.email, this.password)
-        .then(function(){
-            this.hideLogin();
+        .then(() => {
+            this.hide();
+            location.reload();
         })
-        .catch(() => {
-            console.log("So sad, can't login.")
+        .catch((e) => {
+            console.log("So sad, can't login because of ");
+            console.log(e);
         })
       }
   }

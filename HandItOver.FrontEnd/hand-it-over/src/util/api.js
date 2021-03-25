@@ -44,13 +44,14 @@ axios.interceptors.request.use(r => {
 axios.interceptors.response.use(r => {
     return r;
 }, function (error) {
+    console.log("Oh shit, error");
     console.log(error);
     const originalRequest = error.config;
     if (error.response.status === 401
         && isAuthorized()
         && !originalRequest.isRetry) {
         originalRequest.isRetry = true;
-
+        console.log("reloading");
         return axios.post(apiUrl + '/auth/refresh',
             {
                 refreshToken: getAuth().refreshToken
@@ -64,6 +65,7 @@ axios.interceptors.response.use(r => {
                 return Promise.reject(e);
             });
     }
+    console.log("not refreshing");
     return Promise.reject(error);
 });
 
@@ -78,6 +80,7 @@ function login(email, password) {
         .then(r => {
             let data = r.data;
             setAuth(data.token, data.refreshToken, data.email);
+            return r;
         });
 }
 
@@ -87,8 +90,9 @@ function logout() {
         throw new Error("Already logged out.")
     }
     return sendPost('/auth/revoke', null, { refreshToken: auth.refreshToken })
-        .then(function () {
+        .finally(function (r) {
             removeAuth();
+            return r;
         })
 }
 
