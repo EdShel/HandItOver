@@ -20,11 +20,12 @@ function getAuth() {
     return JSON.parse(localStorage.getItem('auth'));
 }
 
-function setAuth(authToken, refreshToken, email, role) {
+function setAuth(authToken, refreshToken, email, fullName, role) {
     localStorage.setItem('auth', JSON.stringify({
         authToken,
         refreshToken,
         email,
+        fullName,
         role
     }));
 }
@@ -79,7 +80,7 @@ function login(email, password) {
     return sendPost('/auth/login', null, { email, password })
         .then(r => {
             let data = r.data;
-            setAuth(data.token, data.refreshToken, data.email);
+            setAuth(data.token, data.refreshToken, data.email, data.fullName, data.role);
             return r;
         });
 }

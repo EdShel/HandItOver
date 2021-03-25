@@ -91,7 +91,9 @@ namespace HandItOver.BackEnd.BLL.Services
             return new LoginResult(
                 Token: this.tokenService.GenerateAuthToken(tokenClaims),
                 Email: user.Email,
-                RefreshToken: newRefreshToken.Value
+                RefreshToken: newRefreshToken.Value,
+                FullName: user.FullName,
+                Role: (await this.usersRepository.GetUserRolesAsync(user)).First()
             );
         }
 
