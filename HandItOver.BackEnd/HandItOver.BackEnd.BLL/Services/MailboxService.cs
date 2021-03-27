@@ -57,6 +57,12 @@ namespace HandItOver.BackEnd.BLL.Services
                 };
                 this.mailboxRepository.CreateMailbox(mailbox);
             }
+			else
+			{
+				mailbox.Address = request.Address;
+				mailbox.Size = request.Size;
+				this.mailboxRepository.UpdateMailbox(mailbox);
+			}
             IRefreshToken refreshToken = this.refreshTokenFactory.GenerateRefreshToken();
             RefreshToken refreshTokenRecord = new RefreshToken
             {

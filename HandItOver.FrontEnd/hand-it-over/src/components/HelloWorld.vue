@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
     <div v-for="x in 100" :key="x">
-      Kik
+      Lol kek
     </div>
   </div>
 </template>

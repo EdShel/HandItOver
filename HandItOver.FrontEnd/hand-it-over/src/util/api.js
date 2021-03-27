@@ -114,5 +114,6 @@ export default {
     register,
     login,
     logout,
+    sendPost,
     sendGet
 };

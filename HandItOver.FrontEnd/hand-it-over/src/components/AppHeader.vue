@@ -17,7 +17,9 @@
         <ul class="navbar-nav mr-auto">
           <template v-if="!isAuthorized">
             <li>
-              <a class="nav-link" href="#" v-on:click.prevent="showLogin">Login</a>
+              <a class="nav-link" href="#" v-on:click.prevent="showLogin"
+                >Login</a
+              >
             </li>
             <li>
               <a class="nav-link" href="#" v-on:click.prevent="showRegister"
@@ -34,8 +36,8 @@
               </li>
             </template>
             <li>
-              <router-link to="/" class="nav-link"
-                >Something.......</router-link
+              <router-link to="/mailbox" class="nav-link"
+                >My mailboxes</router-link
               >
             </li>
             <li>
@@ -83,7 +85,7 @@ export default {
       this.$refs.registerModal.show();
     },
     logout() {
-      api.logout().finally(function(){
+      api.logout().finally(function () {
         location.reload();
       });
     },
