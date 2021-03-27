@@ -1,5 +1,8 @@
 <template>
   <div>
+    <router-link v-bind:to="'/group/' + mailboxGroupId" class="nav-link"
+                  >Edit group</router-link
+                >
       <slot></slot>
   </div>
 </template>
