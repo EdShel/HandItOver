@@ -7,8 +7,19 @@
     />
 
     <h3>Mailboxes</h3>
+    <mailbox-page-group-item
+      v-for="(mailboxes, groupId) in mailboxGroups"
+      :key="groupId"
+      v-bind:mailboxGroupId="groupId"
+    >
+      <mailbox-page-item
+        v-for="box in mailboxes"
+        :key="box.id"
+        v-bind:mailbox="box" />
+    </mailbox-page-group-item>
+
     <mailbox-page-item
-      v-for="box in mailboxes"
+      v-for="box in mailboxesWithoutGroups"
       :key="box.id"
       v-bind:mailbox="box"
       v-on:create-group="creatingGroupForMailbox(box.id)"
@@ -20,13 +31,19 @@
 import api from "~/util/api";
 import MailboxPageItem from "~/components/mailboxes/MailboxPageItem";
 import MailboxPageGroupModal from "~/components/mailboxes/MailboxPageGroupModal";
+import MailboxPageGroupItem from "./MailboxPageGroupItem.vue";
 
 export default {
   name: "MailboxPage",
-  components: { MailboxPageItem, MailboxPageGroupModal },
+  components: {
+    MailboxPageItem,
+    MailboxPageGroupModal,
+    MailboxPageGroupItem,
+  },
   data: function () {
     return {
-      mailboxes: [],
+      mailboxGroups: {},
+      mailboxesWithoutGroups: [],
       selectedMailboxesIds: [],
     };
   },
@@ -39,7 +56,10 @@ export default {
         .sendGet("/mailbox/my")
         .then((r) => {
           let data = r.data;
-          this.mailboxes = data;
+          let groupedByMailboxGroup = groupBy(data, "groupId");
+          this.mailboxesWithoutGroups = groupedByMailboxGroup[null];
+          delete groupedByMailboxGroup[null];
+          this.mailboxGroups = groupedByMailboxGroup;
         })
         .catch((e) => {});
     },
@@ -52,6 +72,13 @@ export default {
     },
   },
 };
+
+function groupBy(collection, key) {
+  return collection.reduce(function (map, x) {
+    (map[x[key]] = map[x[key]] || []).push(x);
+    return map;
+  }, {});
+}
 </script>
 
 <style scoped>
