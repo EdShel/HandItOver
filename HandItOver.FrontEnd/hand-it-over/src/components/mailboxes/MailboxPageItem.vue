@@ -2,6 +2,9 @@
   <div>
     <p>{{ mailbox.address }}</p>
     <button v-if="!mailbox.groupId" @click="createGroup">Add to group</button>
+    <button v-if="mailbox.groupId" @click="removeFromGroup">
+      Remove from group
+    </button>
   </div>
 </template>
 
@@ -13,7 +16,10 @@ export default {
   },
   methods: {
     createGroup() {
-      this.$emit("create-group", this.mailbox.id);
+      this.$emit("create-group");
+    },
+    removeFromGroup() {
+      this.$emit("remove-from-group");
     },
   },
 };

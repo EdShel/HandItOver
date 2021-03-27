@@ -15,7 +15,9 @@
       <mailbox-page-item
         v-for="box in mailboxes"
         :key="box.id"
-        v-bind:mailbox="box" />
+        v-bind:mailbox="box"
+        v-on:remove-from-group="removeMailboxFromGroup(box.id, groupId)"
+      />
     </mailbox-page-group-item>
 
     <mailbox-page-item
@@ -69,6 +71,15 @@ export default {
     },
     createdGroupForMailbox() {
       this.updateMailboxesList();
+    },
+    removeMailboxFromGroup(mailboxId, groupId) {
+      // TODO: check if have rents etc
+      api
+        .sendDelete(`/mailboxGroup/${groupId}/mailboxes/${mailboxId}`)
+        .then((r) => {
+          this.updateMailboxesList();
+        })
+        .catch((e) => {});
     },
   },
 };
