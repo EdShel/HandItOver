@@ -102,9 +102,10 @@ namespace HandItOver.BackEnd.BLL.Services
         {
             MailboxGroup[] groups = await this.mailboxGroupRepository.FindByNameOrAddressOrOwnerAsync(request.SearchQuery);
             return groups.Select(group => new MailboxGroupSearchResult(
-                Id: group.GroupId,
+                GroupId: group.GroupId,
                 Owner: group.Owner.FullName,
-                Name: group.Name
+                Name: group.Name,
+                Addresses: group.Mailboxes.Select(mb => mb.Address).Distinct()
             ));
         }
 

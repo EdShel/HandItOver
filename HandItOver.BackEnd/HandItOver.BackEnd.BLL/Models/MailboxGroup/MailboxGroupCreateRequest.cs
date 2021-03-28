@@ -65,9 +65,10 @@ namespace HandItOver.BackEnd.BLL.Models.MailboxGroup
     );
 
     public record MailboxGroupSearchResult(
-        string Id,
+        string GroupId,
         string Owner,
-        string Name
+        string Name,
+        IEnumerable<string> Addresses
     );
 
     public record MailboxGroupEditRequest(

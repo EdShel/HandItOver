@@ -1,21 +1,21 @@
 <template>
-  <div class="hello">
-    <div v-for="x in 100" :key="x">
-      Lol kek
-    </div>
+  <div>
+    <rent-search></rent-search>
   </div>
 </template>
 
 <script>
+import RentSearch from "~/components/main/RentSearch";
+
 export default {
-  name: 'HelloWorld',
+  name: "MainPage",
+  components: { RentSearch },
   props: {
-    msg: String
-  }
-}
+    msg: String,
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 </style>

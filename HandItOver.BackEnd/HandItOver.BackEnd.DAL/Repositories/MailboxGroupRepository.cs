@@ -77,12 +77,15 @@ namespace HandItOver.BackEnd.DAL.Repositories
 
         public Task<MailboxGroup[]> FindByNameOrAddressOrOwnerAsync(string searchParam)
         {
+            const int maxResults = 10;
             return this.dbContext.Set<MailboxGroup>()
                 .Include(group => group.Owner)
+                .Include(group => group.Mailboxes)
                 .Where(group => group.Name.Contains(searchParam)
                                 || group.Mailboxes.Any(mb => mb.Address.Contains(searchParam))
                                 || group.Owner.FullName.Contains(searchParam)
                                 || group.Owner.Email.Contains(searchParam))
+                .Take(maxResults)
                 .ToArrayAsync();
         }
     }

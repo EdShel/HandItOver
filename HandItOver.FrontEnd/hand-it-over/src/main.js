@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import VueRouter from 'vue-router'
-import HelloWorld from "./components/HelloWorld.vue"
+import MainPage from "~/components/main/MainPage"
 import Admin from './components/Admin.vue'
 import MailboxPage from '~/components/mailboxes/MailboxPage'
 import GroupPage from '~/components/groups/GroupPage'
@@ -10,7 +10,7 @@ Vue.config.productionTip = false
 Vue.use(VueRouter)
 
 const routes = [
-  { path: '/', component: HelloWorld },
+  { path: '/', component: MainPage },
   { path: '/mailbox', component: MailboxPage },
   { path: '/admin', component: Admin },
   {
