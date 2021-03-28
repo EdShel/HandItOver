@@ -86,6 +86,12 @@ namespace HandItOver.BackEnd.BLL.Services
             await this.rentRepository.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<RentResult>> GetRentsForMailboxGroupAsync(string groupId)
+        {
+            IEnumerable<MailboxRent> rents = await this.rentRepository.GetByMailboxGroupAsync(groupId);
+            return this.mapper.Map<IEnumerable<RentResult>>(rents);
+        }
+
         public async Task<RentResult> GetRentAsync(string rentId)
         {
             MailboxRent rent = await this.rentRepository.FindByIdOrNullAsync(rentId)
@@ -96,7 +102,7 @@ namespace HandItOver.BackEnd.BLL.Services
 
         public async Task<IEnumerable<RentResult>> GetRentsOfUserAsync(string userId)
         {
-            IEnumerable<MailboxRent> rents = await this.rentRepository.FindByRenterAsync(userId);
+            IEnumerable<MailboxRent> rents = await this.rentRepository.GetByRenterAsync(userId);
             return this.mapper.Map<IEnumerable<RentResult>>(rents);
         }
     }

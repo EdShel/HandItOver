@@ -8,6 +8,7 @@ namespace HandItOver.BackEnd.BLL.Interfaces
     {
         Task CancelRentAsync(string rentId);
         Task<RentResult> GetRentAsync(string rentId);
+        Task<IEnumerable<RentResult>> GetRentsForMailboxGroupAsync(string groupId);
         Task<IEnumerable<RentResult>> GetRentsOfUserAsync(string userId);
         Task<RentResult> RentMailboxAsync(RentRequest request);
     }

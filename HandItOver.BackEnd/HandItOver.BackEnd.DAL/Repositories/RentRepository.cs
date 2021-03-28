@@ -45,11 +45,19 @@ namespace HandItOver.BackEnd.DAL.Repositories
                 .FirstOrDefaultAsync(r => r!.MailboxId == mailboxId && r!.From >= time && time <= r.Until);
         }
 
-        public async Task<IEnumerable<MailboxRent>> FindByRenterAsync(string renterId)
+        public async Task<IEnumerable<MailboxRent>> GetByRenterAsync(string renterId)
         {
             return await this.dbContext.Set<MailboxRent>()
                 .Include(rent => rent.Mailbox)
                 .Where(rent => rent.RenterId == renterId)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<MailboxRent>> GetByMailboxGroupAsync(string groupId)
+        {
+            return await this.dbContext.Set<MailboxRent>()
+                .Include(rent => rent.Mailbox)
+                .Where(rent => rent.Mailbox.GroupId == groupId)
                 .ToListAsync();
         }
 

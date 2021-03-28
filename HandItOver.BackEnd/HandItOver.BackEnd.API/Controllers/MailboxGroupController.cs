@@ -144,6 +144,14 @@ namespace HandItOver.BackEnd.API.Controllers
             return new JsonResult(result);
         }
 
+        [HttpGet("{groupId}/rent")]
+        [Authorize(AuthConstants.Policies.MAILBOX_GROUP_OWNER_ONLY)]
+        public async Task<IActionResult> ViewRentsAsync([FromRoute] string groupId)
+        {
+            var result = await this.mailboxRentService.GetRentsForMailboxGroupAsync(groupId);
+            return new JsonResult(result);
+        }
+
         [HttpGet("rent")]
         public async Task<IActionResult> ViewRentsAsync()
         {
