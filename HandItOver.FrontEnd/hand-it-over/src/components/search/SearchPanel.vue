@@ -1,5 +1,5 @@
 <template>
-  <div class="searchPanel">
+  <div class="search-panel">
     <div class="search-container">
       <input
         type="text"
@@ -111,6 +111,11 @@ function throttle(callback, limit) {
 
 .suggestions {
     position: absolute;
+    width: 100%;
     z-index: 2;
+}
+
+search-item {
+    width: 100%;
 }
 </style>
