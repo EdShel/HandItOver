@@ -70,10 +70,9 @@ namespace HandItOver.BackEnd.DAL.Repositories
                 .ToArrayAsync();
         }
 
-        public void ReplaceMailboxGroup(MailboxGroup group)
+        public void UpdateMailboxGroup(MailboxGroup group)
         {
-            this.dbContext.Set<MailboxGroup>().Attach(group);
-            this.dbContext.Entry(group).State = EntityState.Modified;
+            this.dbContext.Set<MailboxGroup>().Update(group);
         }
 
         public Task<MailboxGroup[]> FindByNameOrAddressOrOwnerAsync(string searchParam)

@@ -101,6 +101,10 @@ function sendPost(url, params, data) {
     return axios.post(apiUrl + url, data, { params });
 }
 
+function sendPut(url, params, data) {
+    return axios.put(apiUrl + url, data, { params });
+}
+
 function sendDelete(url, params) {
     return axios.delete(apiUrl + url, { params });
 }
@@ -119,6 +123,7 @@ export default {
     login,
     logout,
     sendPost,
+    sendPut,
     sendGet,
     sendDelete
 

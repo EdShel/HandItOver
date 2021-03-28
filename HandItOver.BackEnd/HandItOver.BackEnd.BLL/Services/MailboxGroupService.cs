@@ -91,8 +91,10 @@ namespace HandItOver.BackEnd.BLL.Services
 
         public async Task EditMailboxGroupAsync(MailboxGroupEditRequest request)
         {
-            var mailboxGroup = this.mapper.Map<MailboxGroup>(request);
-            this.mailboxGroupRepository.ReplaceMailboxGroup(mailboxGroup);
+            var group = await this.mailboxGroupRepository.FindByIdOrNullAsync(request.GroupId)
+                ?? throw new NotFoundException("Mailbox group");
+            this.mapper.Map(request, group);
+            this.mailboxGroupRepository.UpdateMailboxGroup(group);
             await this.mailboxGroupRepository.SaveChangesAsync();
         }
 

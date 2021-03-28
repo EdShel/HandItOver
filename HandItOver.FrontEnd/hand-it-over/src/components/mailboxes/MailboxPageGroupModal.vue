@@ -34,6 +34,7 @@
 
 <script>
 import api from "~/util/api";
+import date from '~/util/date'
 import ModalWindow from "~/components/ModalWindow";
 export default {
   name: "MailboPageGroupModal",
@@ -55,7 +56,7 @@ export default {
           name: this.groupName,
           firstMailboxId: this.firstMailboxId,
           whitelistOnly: this.whitelistOnly,
-          maxRentTime: hoursToDdHhMmSs(this.maxRentHours),
+          maxRentTime: date.hoursToHMmSs(this.maxRentHours),
         })
         .then((r) => {
           this.$emit("created-group");
@@ -73,14 +74,6 @@ export default {
   },
 };
 
-function hoursToDdHhMmSs(totalHours) {
-  let days = Math.floor(totalHours / 24);
-  let hours = totalHours - days * 24;
-
-  let daysStr = days.toString().padStart(2, "0");
-  let hoursStr = hours.toString().padStart(2, "0");
-  return `${daysStr}:${hoursStr}:00:00`;
-}
 </script>
 label {
     font-size: 1.2em;

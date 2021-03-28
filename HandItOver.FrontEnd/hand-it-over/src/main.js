@@ -13,7 +13,10 @@ const routes = [
   { path: '/', component: HelloWorld },
   { path: '/mailbox', component: MailboxPage },
   { path: '/admin', component: Admin },
-  { path: '/group/:id', component: GroupPage, props: r => ({ groupId: r.params.id }) },
+  {
+    path: '/group/:tab/:id', component: GroupPage, props: r => (
+      { tab: r.params.tab, groupId: r.params.id })
+  },
 ]
 const router = new VueRouter({ routes, mode: 'history' })
 
