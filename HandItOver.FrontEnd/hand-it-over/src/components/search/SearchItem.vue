@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <span v-html="mainTextHtml"></span>
@@ -43,5 +42,17 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+div {
+    width: 100%;
+    cursor: pointer;
+    border: 1px solid black;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    padding: 5px;
+}
+
+div:not(:first-child) {
+    border-top: none;
+    background: rgb(240, 240, 240);
+}
 </style>

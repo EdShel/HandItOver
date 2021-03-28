@@ -6,56 +6,44 @@
       by its name, owner or address.
     </p>
     <div>
-      <input type="text" v-model="searchQuery" v-on:input="search" />
-      <div>
-        <div v-for="r in searchResults" :key="r.groupId">
-          <search-item
-            v-bind:query="searchQuery"
-            v-bind:mainText="r.name"
-            v-bind:secondaryText="getSearchSecondaryText(r)"
-          />
-        </div>
-      </div>
+      <search-panel
+        v-bind:dataProvider="searchMailboxes"
+        v-bind:mainTextProvider="nameSelector"
+        v-bind:secondaryTextProvider="secondaryTextSelector"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import api from "~/util/api";
-import SearchItem from "~/components/main/SearchItem";
+import SearchPanel from '~/components/search/SearchPanel'
 
 export default {
   name: "RentSearch",
-  components: { SearchItem },
-  data() {
-    return {
-      searchQuery: "",
-      searchResults: [],
-    };
-  },
+  components: {SearchPanel},
   methods: {
-    search() {
-      if (!this.searchQuery){
-        this.searchResults = [];
-        return;
-      }
-      api
-        .sendGet("/mailboxGroup", { search: this.searchQuery })
+    searchMailboxes(searchQuery) {
+      return api
+        .sendGet("/mailboxGroup", { search: searchQuery })
         .then((r) => {
           let data = r.data;
-          this.searchResults = data;
-        })
-        .catch((e) => {});
+          return data;
+        });
     },
-    getSearchSecondaryText(result) {
+    nameSelector(group){
+      return group.name;
+    },
+    secondaryTextSelector(result) {
       return {
         owner: result.owner,
-        addresses: result.addresses
+        addresses: result.addresses,
       };
-    }
+    },
   },
 };
 </script>
 
-<style>
+<style scoped>
+
 </style>
