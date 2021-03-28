@@ -3,7 +3,7 @@
     <input
       type="text"
       v-model="searchQuery"
-      v-on:input="search"
+      v-on:input="throttledSearch"
       class="search-field"
     />
     <div>
@@ -11,6 +11,7 @@
         v-for="r in searchResults"
         :key="r.groupId"
         v-bind:query="searchQuery"
+        v-on:keyup.enter="search"
         v-bind:mainText="mainTextProvider(r)"
         v-bind:secondaryText="secondaryTextProvider(r)"
       />
@@ -35,6 +36,12 @@ export default {
       searchResults: [],
     };
   },
+  computed: {
+    throttledSearch() {
+      const searchDelayMs = 500;
+      return throttle(this.search, searchDelayMs);
+    },
+  },
   methods: {
     search() {
       if (!this.searchQuery) {
@@ -48,9 +55,29 @@ export default {
         .catch((e) => {
           this.searchResults = [];
         });
-    }
+    },
   },
 };
+
+function throttle(callback, limit) {
+  let wait = false;
+  let lastUnexecutedArg = null;
+  return function (arg) {
+    if (!wait) {
+      callback.call(this, arg);
+      wait = true;
+      setTimeout(function () {
+        if (lastUnexecutedArg) {
+          callback.call(this, lastUnexecutedArg);
+          lastUnexecutedArg = null;
+        }
+        wait = false;
+      }, limit);
+    } else {
+      lastUnexecutedArg = arg;
+    }
+  };
+}
 </script>
 
 <style scoped>
