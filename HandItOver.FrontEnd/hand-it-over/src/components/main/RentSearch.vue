@@ -10,6 +10,7 @@
         v-bind:dataProvider="searchMailboxes"
         v-bind:mainTextProvider="nameSelector"
         v-bind:secondaryTextProvider="secondaryTextSelector"
+        v-on:found-item="onMailboxGroupFound"
       />
     </div>
   </div>
@@ -40,6 +41,10 @@ export default {
         addresses: result.addresses,
       };
     },
+    onMailboxGroupFound(group) {
+      console.log(group);
+      this.$router.push(`/rent/${group.groupId}`);
+    }
   },
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-on:click="selected">
     <span v-html="mainTextHtml"></span>
     <span v-if="secondaryTextHtml.length"> - </span>
     <i
@@ -39,6 +39,11 @@ export default {
       return matchedProps;
     },
   },
+  methods: {
+    selected(){
+      this.$emit('selected-item');
+    }
+  }
 };
 </script>
 
@@ -49,6 +54,10 @@ div {
     border: 1px solid black;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     padding: 5px;
+}
+
+div:first-child {
+  background: #fff;
 }
 
 div:not(:first-child) {

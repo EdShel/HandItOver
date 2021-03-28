@@ -1,19 +1,23 @@
 <template>
-  <div>
-    <input
-      type="text"
-      v-model="searchQuery"
-      v-on:input="throttledSearch"
-      class="search-field"
-    />
-    <div>
+  <div class="searchPanel">
+    <div class="search-container">
+      <input
+        type="text"
+        v-model="searchQuery"
+        v-on:input="throttledSearch"
+        v-on:keyup.enter="found(searchResults[0])"
+        class="search-field"
+      />
+      <div class="search-icon">TODO: place magnifier icon</div>
+    </div>
+    <div class="suggestions">
       <search-item
         v-for="r in searchResults"
         :key="r.groupId"
         v-bind:query="searchQuery"
-        v-on:keyup.enter="search"
         v-bind:mainText="mainTextProvider(r)"
         v-bind:secondaryText="secondaryTextProvider(r)"
+        v-on:selected-item="found(r)"
       />
     </div>
   </div>
@@ -56,6 +60,11 @@ export default {
           this.searchResults = [];
         });
     },
+    found(item) {
+        if (item){
+            this.$emit('found-item', item);
+        }
+    }
   },
 };
 
@@ -84,5 +93,24 @@ function throttle(callback, limit) {
 .search-field {
   width: 100%;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.search-panel {
+    position: relative;
+}
+
+.search-container {
+    position: relative;
+}
+
+.search-icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.suggestions {
+    position: absolute;
+    z-index: 2;
 }
 </style>
