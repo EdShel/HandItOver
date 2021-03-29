@@ -14,6 +14,7 @@
         <label for="rentFromDate">Rent start</label>
         <input id="rentFromDate" type="datetime" v-model="rentInfo.rentFrom" />
         <date-picker v-bind:daysForwardCount="Number(14)"></date-picker>
+          <time-picker ref="timePicker"></time-picker>
       </div>
       <div>
         <label for="rentDurationRange">Rent duration (minutes)</label>
@@ -36,6 +37,7 @@
 import api from "~/util/api";
 import date from "~/util/date";
 import DatePicker from "~/components/controls/DatePicker";
+import TimePicker from "~/components/controls/TimePicker";
 
 export default {
   name: "RentPage",
@@ -43,7 +45,8 @@ export default {
     groupId: String,
   },
   components: {
-    DatePicker
+    DatePicker,
+    TimePicker,
   },
   data() {
     return {
@@ -54,6 +57,14 @@ export default {
         rentDurationMinutes: 120,
       },
     };
+  },
+  computed: {
+    rentTimeHours() {
+      return this.$refs.timePicker.hours;
+    },
+    rentTimeMinutes() {
+      return this.$refs.timePicker.minutes;
+    },
   },
   mounted() {
     api
