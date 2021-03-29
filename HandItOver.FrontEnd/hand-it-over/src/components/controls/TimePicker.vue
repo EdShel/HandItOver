@@ -1,7 +1,7 @@
 <template>
   <clock-background v-bind:hours="hours" v-bind:minutes="minutes">
     <div class="time-picker">
-      <div class="hours">
+      <div class="selector hours">
         <label for="hourSelect">Hours</label>
         <select id="hourSelect" v-model="hours">
           <option v-for="(x, i) in 24" :key="i" v-bind:value="i">
@@ -9,7 +9,7 @@
           </option>
         </select>
       </div>
-      <div class="minutes">
+      <div class="selector minutes">
         <label for="minuteSelect">Minutes</label>
         <select id="minuteSelect" v-model="minutes">
           <option v-for="(x, i) in 12" :key="i" v-bind:value="i * 5">
@@ -48,14 +48,21 @@ export default {
   flex-grow: 1;
 }
 
-.hours {
+.selector {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+}
+
+label {
+    font-size: 1.2em;
+    font-weight: bold;
 }
 
 select {
   min-width: auto;
   width: 50%;
+  border: 2px solid rgb(179, 179, 179);
 }
 </style>
