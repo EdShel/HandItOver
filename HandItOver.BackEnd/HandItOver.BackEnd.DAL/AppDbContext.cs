@@ -3,6 +3,7 @@ using HandItOver.BackEnd.DAL.Entities.Auth;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace HandItOver.BackEnd.DAL
@@ -119,6 +120,12 @@ namespace HandItOver.BackEnd.DAL
                     .WithMany(user => user.RentedMailboxes)
                     .HasForeignKey(rent => rent.RenterId)
                     .OnDelete(DeleteBehavior.NoAction);
+
+                b.Property(rent => rent.From)
+                    .HasConversion(v => v, v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
+
+                b.Property(rent => rent.Until)
+                    .HasConversion(v => v, v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
             });
 
             builder.Entity<Delivery>(b =>
@@ -129,6 +136,21 @@ namespace HandItOver.BackEnd.DAL
                     .WithMany(user => user.Deliveries)
                     .HasForeignKey(d => d.AddresseeId)
                     .OnDelete(DeleteBehavior.NoAction);
+
+                b.Property(rent => rent.Arrived)
+                    .HasConversion(v => v, v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
+
+                b.Property(rent => rent.Taken)
+                    .HasConversion(v => v, v => v.HasValue 
+                        ? DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v);
+
+                b.Property(rent => rent.PredictedTakingTime)
+                    .HasConversion(v => v, v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
+
+                b.Property(rent => rent.TerminalTime)
+                    .HasConversion(v => v, v => v.HasValue
+                        ? DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v);
+
             });
 
             builder.Entity<WhitelistJoinToken>(b =>

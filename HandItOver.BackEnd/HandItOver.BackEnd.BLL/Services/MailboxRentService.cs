@@ -52,7 +52,7 @@ namespace HandItOver.BackEnd.BLL.Services
                 throw new NoRightsException($"rent more than for {mailboxGroup.MaxRentTime.Value.TotalHours} hours.");
             }
 
-            Mailbox[] possibleToRent = await FindMailboxesToRent(request);
+            IList<Mailbox> possibleToRent = await FindMailboxesToRent(request);
             Mailbox toRent = possibleToRent.OrderBy(m => m.Size).First();
             MailboxRent rentRecord = new MailboxRent
             {
@@ -68,29 +68,33 @@ namespace HandItOver.BackEnd.BLL.Services
             return this.mapper.Map<RentResult>(rentRecord);
         }
 
-        private async Task<Mailbox[]> FindMailboxesToRent(RentRequest request)
+        private async Task<IList<Mailbox>> FindMailboxesToRent(RentRequest request)
         {
-            var notRentedForPeriod = await this.mailboxGroupRepository
-                .MailboxesWithoutRentAsync(request.GroupId, request.RentFrom, request.RentUntil);
-            var willBeFreeToRent = new List<Mailbox>();
-            foreach (var mb in notRentedForPeriod)
-            {
-                if (await this.deliveryRepository.WillBeWithoutCurrentDeliveryAtAsync(mb.Id, request.RentFrom))
-                {
-                    willBeFreeToRent.Add(mb);
-                }
-            }
-            if (!willBeFreeToRent.Any())
-            {
-                throw new OperationException("No available mailboxes for the period.");
-            }
-            var possibleToRent = willBeFreeToRent.Where(m => request.PackageSize <= m.Size).ToArray();
-            if (possibleToRent.Length == 0)
+            var mailboxesOfSuitableSize = await this.mailboxGroupRepository
+                .GetMailboxesOfSizeOrBiggerAsync(request.GroupId, request.PackageSize);
+            if (!mailboxesOfSuitableSize.Any())
             {
                 throw new OperationException("No mailboxes of suitable size.");
             }
 
-            return possibleToRent;
+            var vacantIntervals = (await Task.WhenAll(
+                mailboxesOfSuitableSize.Select(mb => GetVacantTimeIntervalsForMailboxAsync(mb))
+            )).Zip(mailboxesOfSuitableSize);
+
+            var vacantRightNow = vacantIntervals.Where(
+                mb => mb.First.Any(
+                    interval => interval.Begin <= request.RentUntil 
+                        && (interval.End == null || request.RentFrom <= interval.End.Value)
+                )
+            ).Select(mb => mb.Second)
+             .ToList();
+
+            if (!vacantRightNow.Any())
+            {
+                throw new OperationException("No available mailboxes for the period.");
+            }
+
+            return vacantRightNow;
         }
 
         private static bool IsUserAllowedToRentGroup(string userId, MailboxGroup mailboxGroup)
@@ -100,66 +104,19 @@ namespace HandItOver.BackEnd.BLL.Services
                 || mailboxGroup.Whitelisted.Any(u => u.Id == userId);
         }
 
-        public async Task<IEnumerable<TimeInterval>> FindNearestIntervalsToRent(RentTimeCheckRequest request)
+        public async Task<IList<TimeInterval>> FindVacantIntervalsToRent(RentTimeCheckRequest request)
         {
             MailboxGroup group = await this.mailboxGroupRepository.FindByIdWithMailboxesOrNullAsync(request.GroupId)
                 ?? throw new NotFoundException("Mailbox group");
             var freeIntervals = new List<TimeInterval>();
-            var now = DateTime.UtcNow;
             foreach (var mailbox in group.Mailboxes)
             {
                 if (mailbox.Size < request.PackageSize)
                 {
                     continue;
                 }
-                var intervals = (await this.rentRepository.FindRentsIntervalsAsync(mailbox.Id)).ToList();
 
-                var delivery = await this.deliveryRepository.GetCurrentDeliveryOrNullAsync(mailbox.Id);
-                if (delivery != null)
-                {
-                    intervals.Insert(0, new TimeInterval(delivery.Arrived, delivery.TerminalTime));
-                }
-
-                var firstInterval = intervals.FirstOrDefault();
-                var vacantIntervalsOfThisMailbox = new List<TimeInterval>();
-                if (firstInterval == null)
-                {
-                    vacantIntervalsOfThisMailbox.Add(new TimeInterval(now, null));
-                    continue;
-                }
-                else
-                {
-                    DateTime lastVacantTime = now;
-                    foreach (var currentRentInterval in intervals)
-                    {
-                        bool isIntervalInPast = currentRentInterval.End.HasValue && currentRentInterval.End < lastVacantTime;
-                        if (isIntervalInPast)
-                        {
-                            continue;
-                        }
-
-                        if (!currentRentInterval.DoesContain(lastVacantTime))
-                        {
-                            vacantIntervalsOfThisMailbox.Add(new TimeInterval(lastVacantTime, currentRentInterval.Begin));
-                        }
-                        bool isThisRentLimitless = currentRentInterval.End == null;
-                        if (!isThisRentLimitless)
-                        {
-                            lastVacantTime = currentRentInterval.End!.Value;
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                    vacantIntervalsOfThisMailbox.Add(new TimeInterval(lastVacantTime, null));
-                }
-
-                const int minRentTimeMinutes = 15;
-                vacantIntervalsOfThisMailbox.RemoveAll(
-                    interval => interval.GetDuration() != null
-                        && interval.GetDuration()!.Value.TotalMinutes < minRentTimeMinutes
-                );
+                var vacantIntervalsOfThisMailbox = await GetVacantTimeIntervalsForMailboxAsync(mailbox);
 
                 vacantIntervalsOfThisMailbox.RemoveAll(
                     interval => freeIntervals.Any(addedInterval => addedInterval.DoesFullyContain(interval))
@@ -172,6 +129,61 @@ namespace HandItOver.BackEnd.BLL.Services
                 freeIntervals.AddRange(vacantIntervalsOfThisMailbox);
             }
             return freeIntervals.OrderBy(interval => interval.Begin).ToList();
+        }
+
+        private async Task<List<TimeInterval>> GetVacantTimeIntervalsForMailboxAsync(Mailbox mailbox)
+        {
+            var intervals = (await this.rentRepository.FindRentsIntervalsAsync(mailbox.Id)).ToList();
+
+            var delivery = await this.deliveryRepository.GetCurrentDeliveryOrNullAsync(mailbox.Id);
+            if (delivery != null)
+            {
+                intervals.Insert(0, new TimeInterval(delivery.Arrived, delivery.TerminalTime));
+            }
+
+            var firstInterval = intervals.FirstOrDefault();
+            if (firstInterval == null)
+            {
+                return new List<TimeInterval>(1) { new TimeInterval(DateTime.UtcNow, null) };
+            }
+
+            var vacantIntervalsOfThisMailbox = new List<TimeInterval>();
+            DateTime lastVacantTime = DateTime.UtcNow;
+            foreach (var currentRentInterval in intervals)
+            {
+                bool isIntervalInPast = currentRentInterval.End.HasValue && currentRentInterval.End < lastVacantTime;
+                if (isIntervalInPast)
+                {
+                    continue;
+                }
+
+                if (!currentRentInterval.DoesContain(lastVacantTime))
+                {
+                    vacantIntervalsOfThisMailbox.Add(new TimeInterval(lastVacantTime, currentRentInterval.Begin));
+                }
+                bool isThisRentLimitless = currentRentInterval.End == null;
+                if (!isThisRentLimitless)
+                {
+                    lastVacantTime = currentRentInterval.End!.Value;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            vacantIntervalsOfThisMailbox.Add(new TimeInterval(lastVacantTime, null));
+            RemoveShortIntervals(vacantIntervalsOfThisMailbox);
+
+            return vacantIntervalsOfThisMailbox;
+        }
+
+        private static void RemoveShortIntervals(List<TimeInterval> vacantIntervalsOfThisMailbox)
+        {
+            const int minRentTimeMinutes = 15;
+            vacantIntervalsOfThisMailbox.RemoveAll(
+                interval => interval.GetDuration() != null
+                    && interval.GetDuration()!.Value.TotalMinutes < minRentTimeMinutes
+            );
         }
 
         public async Task CancelRentAsync(string rentId)

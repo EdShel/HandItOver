@@ -8,7 +8,7 @@ namespace HandItOver.BackEnd.BLL.Interfaces
     public interface IMailboxRentService
     {
         Task CancelRentAsync(string rentId);
-        Task<IEnumerable<TimeInterval>> FindNearestIntervalsToRent(RentTimeCheckRequest request);
+        Task<IList<TimeInterval>> FindVacantIntervalsToRent(RentTimeCheckRequest request);
         Task<RentResult> GetRentAsync(string rentId);
         Task<IEnumerable<RentResult>> GetRentsForMailboxGroupAsync(string groupId);
         Task<IEnumerable<RentResult>> GetRentsOfUserAsync(string userId);

@@ -1,6 +1,7 @@
 ﻿using HandItOver.BackEnd.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -88,6 +89,13 @@ namespace HandItOver.BackEnd.DAL.Repositories
                 .OrderByDescending(group => group.Mailboxes.Count)
                 .Take(maxResults)
                 .ToArrayAsync();
+        }
+
+        public async Task<IEnumerable<Mailbox>> GetMailboxesOfSizeOrBiggerAsync(string groupId, MailboxSize size)
+        {
+            return await this.dbContext.Set<Mailbox>()
+                .Where(mb => mb.GroupId == groupId && (int)mb.Size >= (int)size)
+                .ToListAsync();
         }
     }
 }

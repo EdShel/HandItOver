@@ -140,7 +140,7 @@ namespace HandItOver.BackEnd.API.Controllers
                 RenterId: this.User.FindFirstValue(AuthConstants.Claims.ID),
                 PackageSize: model.PackageSize
             );
-            var result = await this.mailboxRentService.FindNearestIntervalsToRent(request);
+            var result = await this.mailboxRentService.FindVacantIntervalsToRent(request);
             return new JsonResult(result);
         }
 
