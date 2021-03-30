@@ -33,13 +33,13 @@
       ></date-picker>
     </div>
     <div class="row" v-if="$refs.datePicker">
+      <div class="col col-lg-4 col-md-6 col-sm-6 col-xs-6">
+        <time-picker  ref="timePicker"></time-picker>
+      </div>
       <div class="col col-lg-8 col-md-6 col-sm-6 col-xs-6">
         <vacant-intervals-table
           v-bind:intervals="vacantIntervalsForSelectedDay"
         />
-      </div>
-      <div class="col col-lg-4 col-md-6 col-sm-6 col-xs-6">
-        <time-picker  ref="timePicker"></time-picker>
       </div>
       <div>
         <button v-on:click="renting">Rent</button>

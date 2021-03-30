@@ -1,5 +1,7 @@
 <template>
-    <table>
+<div>
+    <h3>Vacant intervals of the day</h3>
+    <table class="table">
         <tr>
             <th>Begin</th>
             <th>End</th>
@@ -9,6 +11,7 @@
             <td> {{ timeString(interval.end) }} </td>
         </tr>
     </table>
+</div>
 </template>
 
 <script>
@@ -27,6 +30,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+h3 {
+    text-align: center;
+}
 </style>
