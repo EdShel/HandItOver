@@ -81,10 +81,10 @@ namespace HandItOver.BackEnd.BLL.Services
                 mailboxesOfSuitableSize.Select(mb => GetVacantTimeIntervalsForMailboxAsync(mb))
             )).Zip(mailboxesOfSuitableSize);
 
+            TimeInterval rentInterval = new TimeInterval(request.RentFrom, request.RentUntil);
             var vacantRightNow = vacantIntervals.Where(
                 mb => mb.First.Any(
-                    interval => interval.Begin <= request.RentUntil 
-                        && (interval.End == null || request.RentFrom <= interval.End.Value)
+                    interval => interval.DoesFullyContain(rentInterval)
                 )
             ).Select(mb => mb.Second)
              .ToList();

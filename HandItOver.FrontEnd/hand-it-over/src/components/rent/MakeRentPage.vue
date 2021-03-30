@@ -2,43 +2,44 @@
   <div>
     <h3>Rent options</h3>
     <div v-if="group">
-      <div class="row">
-        <div class="col col-lg-8 col-md-6 col-sm-6 col-xs-6">
-          <div>
-            <label for="packageSizeSelect">Package size</label>
-            <select id="packageSizeSelect" v-model="rentPackageSize">
-              <option value="0">Small</option>
-              <option value="1">Medium</option>
-              <option value="2">Large</option>
-            </select>
-          </div>
-          <div>
-            <label for="rentDurationRange"
-              >Rent duration: {{ rentDurationMinutes }} minutes</label
-            >
-            <input
-              type="range"
-              min="15"
-              v-bind:max="group.maxRentMinutes"
-              step="5"
-              v-model="rentDurationMinutes"
-            />
-          </div>
-        </div>
-        <div class="col col-lg-4 col-md-6 col-sm-6 col-xs-6">
-          <time-picker ref="timePicker"></time-picker>
-        </div>
-      </div>
       <div>
-        <label for="rentFromDate">Rent start</label>
-        <date-picker
-          ref="datePicker"
-          v-bind:daysForwardCount="Number(14)"
-        ></date-picker>
+        <div>
+          <label for="packageSizeSelect">Package size</label>
+          <select id="packageSizeSelect" v-model="rentPackageSize">
+            <option value="0">Small</option>
+            <option value="1">Medium</option>
+            <option value="2">Large</option>
+          </select>
+        </div>
+        <div>
+          <label for="rentDurationRange"
+            >Rent duration: {{ rentDurationMinutes }} minutes</label
+          >
+          <input
+            type="range"
+            min="15"
+            v-bind:max="group.maxRentMinutes"
+            step="5"
+            v-model="rentDurationMinutes"
+          />
+        </div>
       </div>
-      <div v-if="$refs.datePicker">
-      {{ vacantIntervalsForSelectedDay }}
-
+    </div>
+    <div>
+      <label for="rentFromDate">Rent start</label>
+      <date-picker
+        ref="datePicker"
+        v-bind:daysForwardCount="Number(14)"
+      ></date-picker>
+    </div>
+    <div class="row" v-if="$refs.datePicker">
+      <div class="col col-lg-8 col-md-6 col-sm-6 col-xs-6">
+        <vacant-intervals-table
+          v-bind:intervals="vacantIntervalsForSelectedDay"
+        />
+      </div>
+      <div class="col col-lg-4 col-md-6 col-sm-6 col-xs-6">
+        <time-picker  ref="timePicker"></time-picker>
       </div>
       <div>
         <button v-on:click="renting">Rent</button>
@@ -52,6 +53,7 @@ import api from "~/util/api";
 import date from "~/util/date";
 import DatePicker from "~/components/controls/DatePicker";
 import TimePicker from "~/components/controls/TimePicker";
+import VacantIntervalsTable from "~/components/rent/VacantIntervalsTable";
 
 export default {
   name: "MakeRentPage",
@@ -61,6 +63,7 @@ export default {
   components: {
     DatePicker,
     TimePicker,
+    VacantIntervalsTable,
   },
   data() {
     return {
@@ -96,20 +99,23 @@ export default {
       return until;
     },
     vacantIntervalsForSelectedDay() {
-      let selectedDay = date.setToMidnight(this.rentFromTime);
+      let selectedDay = new Date(this.rentDate);
       let nextDay = new Date(selectedDay);
       nextDay.setDate(nextDay.getDate() + 1);
 
-      let vacantIntervals = [];
+      let vacantIntervalsForDay = [];
       for (let interval of this.vacantIntervals) {
-        if (interval.end < selectedDay && interval.start < nextDay) {
+        let intervalOverlapsSelectedDay =
+          selectedDay.getTime() <= interval.end.getTime() 
+          && interval.begin.getTime() <= nextDay.getTime();
+        if (!intervalOverlapsSelectedDay) {
           continue;
         }
         let intervalStart = date.max(selectedDay, interval.begin);
         let intervalEnd = date.min(nextDay, interval.end);
-        vacantIntervals.push({begin: intervalStart, end: intervalEnd});
+        vacantIntervalsForDay.push({ begin: intervalStart, end: intervalEnd });
       }
-      return vacantIntervals;
+      return vacantIntervalsForDay;
     },
   },
   mounted() {
@@ -129,9 +135,12 @@ export default {
         packageSize: 1, // TODO: wtf
       })
       .then((r) => {
+        console.log(r.data);
         this.vacantIntervals = r.data.map((interval) => ({
           begin: new Date(interval.begin),
-          end: interval.end ? new Date(interval.end) : new Date(8640000000000000),
+          end: interval.end
+            ? new Date(interval.end)
+            : new Date(8640000000000000),
         }));
       })
       .catch((e) => {});
@@ -150,7 +159,6 @@ export default {
         })
         .catch((e) => {});
     },
-   
   },
 };
 </script>

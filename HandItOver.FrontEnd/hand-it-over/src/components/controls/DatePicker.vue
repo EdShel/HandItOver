@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import date from '~/util/date'
+
 export default {
   name: "DatePicker",
   props: {
@@ -27,9 +29,9 @@ export default {
   },
   computed: {
     date() {
-      let now = new Date();
-      now.setDate(now.getDate() + this.selectedDateIndex);
-      return now;
+      let selectedDate = new Date();
+      selectedDate.setDate(selectedDate.getDate() + this.selectedDateIndex);
+      return date.setToMidnight(selectedDate);
     },
   },
   methods: {

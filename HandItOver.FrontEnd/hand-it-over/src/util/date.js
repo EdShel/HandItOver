@@ -41,11 +41,26 @@ function min(firstDate, secondDate) {
     return secondDate;
 }
 
+function localTimeString(date) {
+    return date.toLocaleTimeString('uk')
+}
+
+function localDateString(date) {
+    return date.toLocaleDateString('uk')
+}
+
+function localString(date) {
+    return date.toLocaleString('uk')
+}
+
 export default {
     hoursToHMmSs,
     hhMmSsToSeconds,
     secondsToHoursFloor,
     setToMidnight,
     max,
-    min
+    min,
+    localTimeString,
+    localDateString,
+    localString
 }
