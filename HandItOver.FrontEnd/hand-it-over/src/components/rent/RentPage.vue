@@ -1,88 +1,27 @@
 <template>
-  <div>
-    <h3>Rent options</h3>
-    <div v-if="group">
-      <div>
-        <label for="packageSizeSelect">Package size</label>
-        <select id="packageSizeSelect" v-model="rentInfo.packageSize">
-          <option value="0">Small</option>
-          <option value="1">Medium</option>
-          <option value="2">Large</option>
-        </select>
-      </div>
-      <div>
-        <label for="rentFromDate">Rent start</label>
-        <input id="rentFromDate" type="datetime" v-model="rentInfo.rentFrom" />
-        <date-picker v-bind:daysForwardCount="Number(14)"></date-picker>
-          <time-picker ref="timePicker"></time-picker>
-      </div>
-      <div>
-        <label for="rentDurationRange">Rent duration (minutes)</label>
-        <input
-          type="range"
-          min="15"
-          v-bind:max="group.maxRentMinutes"
-          step="5"
-          v-model="rentInfo.rentDurationMinutes"
-        />
-      </div>
-      <div>
-        <button v-on:click="renting">Rent</button>
-      </div>
-    </div>
-  </div>
+  <div v-if="rent">{{ rent.rentId }} - {{ rent.from }} - {{ rent.until }}</div>
 </template>
 
 <script>
 import api from "~/util/api";
-import date from "~/util/date";
-import DatePicker from "~/components/controls/DatePicker";
-import TimePicker from "~/components/controls/TimePicker";
 
 export default {
   name: "RentPage",
   props: {
-    groupId: String,
-  },
-  components: {
-    DatePicker,
-    TimePicker,
+    rentId: String,
   },
   data() {
     return {
-      group: {},
-      rentInfo: {
-        packageSize: 1,
-        rentFrom: new Date(),
-        rentDurationMinutes: 120,
-      },
+      rent: {},
     };
-  },
-  computed: {
-    rentTimeHours() {
-      return this.$refs.timePicker.hours;
-    },
-    rentTimeMinutes() {
-      return this.$refs.timePicker.minutes;
-    },
   },
   mounted() {
     api
-      .sendGet(`/mailboxGroup/${this.groupId}`)
+      .sendGet(`/mailboxGroup/rent/${this.rentId}`)
       .then((r) => {
-        let data = r.data;
-        this.group = {
-          name: data.name,
-          maxRentMinutes: date.hhMmSsToSeconds(data.maxRentTime) / 60,
-          whitelistOnly: data.whitelistOnly,
-        };
+        this.rent = r.data;
       })
       .catch((e) => {});
-  },
-  methods: {
-    renting() {
-      console.log("Renting mailbox");
-    },
   },
 };
 </script>

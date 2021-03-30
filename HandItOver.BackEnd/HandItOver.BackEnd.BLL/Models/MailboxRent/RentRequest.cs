@@ -18,4 +18,10 @@ namespace HandItOver.BackEnd.BLL.Models.MailboxRent
         DateTime From,
         DateTime Until
     );
+
+    public record RentTimeCheckRequest(
+        string GroupId,
+        string RenterId,
+        MailboxSize PackageSize
+    );
 }

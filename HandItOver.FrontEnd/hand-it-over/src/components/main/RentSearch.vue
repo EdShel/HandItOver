@@ -42,8 +42,7 @@ export default {
       };
     },
     onMailboxGroupFound(group) {
-      console.log(group);
-      this.$router.push(`/rent/${group.groupId}`);
+      this.$router.push(`/rentMailbox/${group.groupId}`);
     }
   },
 };

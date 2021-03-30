@@ -1,5 +1,6 @@
 ﻿using HandItOver.BackEnd.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -47,6 +48,16 @@ namespace HandItOver.BackEnd.DAL.Repositories
         public void UpdateDelivery(Delivery delivery)
         {
             this.dbContext.Set<Delivery>().Update(delivery);
+        }
+
+        public async Task<bool> WillBeWithoutCurrentDeliveryAtAsync(string mailboxId, DateTime time)
+        {
+            var currentDelivery = await GetCurrentDeliveryOrNullAsync(mailboxId);
+            if (currentDelivery == null)
+            {
+                return true;
+            }
+            return currentDelivery.TerminalTime != null && currentDelivery.TerminalTime.Value < time;
         }
 
         public Task<Delivery?> GetCurrentDeliveryOrNullAsync(string mailboxId)

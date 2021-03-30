@@ -12,14 +12,14 @@ namespace HandItOver.BackEnd.DAL.Repositories
         {
         }
 
-        public Task<MailboxGroup?> FindByNameOrNullAsync(string name)
+        public Task<MailboxGroup?> FindByNameWithMailboxesOrNullAsync(string name)
         {
             return this.dbContext.Set<MailboxGroup?>()
                 .Include(m => m!.Mailboxes)
                 .FirstOrDefaultAsync(m => m!.Name == name);
         }
 
-        public Task<MailboxGroup?> FindByIdOrNullAsync(string id)
+        public Task<MailboxGroup?> FindByIdWithMailboxesOrNullAsync(string id)
         {
             return this.dbContext.Set<MailboxGroup?>()
                 .Include(m => m!.Mailboxes)
@@ -37,7 +37,7 @@ namespace HandItOver.BackEnd.DAL.Repositories
                 .FirstOrDefaultAsync(m => m!.GroupId == id);
         }
 
-        public Task<MailboxGroup?> GetWhitelistByIdAsync(string id)
+        public Task<MailboxGroup?> FindWithWhitelistById(string id)
         {
             return this.dbContext.Set<MailboxGroup?>()
                 .Include(m => m!.Whitelisted)
@@ -62,7 +62,7 @@ namespace HandItOver.BackEnd.DAL.Repositories
         }
 
         // All mailboxes that have no rents periods intersection [rentBegin, rentEnd)
-        public Task<Mailbox[]> MailboxesWithoutRent(string groupId, DateTime rentBegin, DateTime rentEnd)
+        public Task<Mailbox[]> MailboxesWithoutRentAsync(string groupId, DateTime rentBegin, DateTime rentEnd)
         {
             return this.dbContext.Set<Mailbox>()
                 .Where(mb => mb.GroupId == groupId
@@ -85,6 +85,7 @@ namespace HandItOver.BackEnd.DAL.Repositories
                                 || group.Mailboxes.Any(mb => mb.Address.Contains(searchParam))
                                 || group.Owner.FullName.Contains(searchParam)
                                 || group.Owner.Email.Contains(searchParam))
+                .OrderByDescending(group => group.Mailboxes.Count)
                 .Take(maxResults)
                 .ToArrayAsync();
         }

@@ -5,6 +5,7 @@ import MainPage from "~/components/main/MainPage"
 import Admin from './components/Admin.vue'
 import MailboxPage from '~/components/mailboxes/MailboxPage'
 import GroupPage from '~/components/groups/GroupPage'
+import MakeRentPage from '~/components/rent/MakeRentPage'
 import RentPage from '~/components/rent/RentPage'
 
 Vue.config.productionTip = false
@@ -19,8 +20,12 @@ const routes = [
       { tab: r.params.tab, groupId: r.params.id })
   },
   {
-    path: '/rent/:id', component: RentPage, props: r => (
+    path: '/rentMailbox/:id', component: MakeRentPage, props: r => (
       { groupId: r.params.id })
+  },
+  {
+    path: '/rent/:id', component: RentPage, props: r => (
+      { rentId: r.params.id })
   },
 ]
 const router = new VueRouter({ routes, mode: 'history' })

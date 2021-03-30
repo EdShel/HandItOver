@@ -6,6 +6,7 @@ using HandItOver.BackEnd.Infrastructure.Models.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.API.Controllers
@@ -91,7 +92,8 @@ namespace HandItOver.BackEnd.API.Controllers
         {
             await this.mailboxGroupService.AddMailboxToGroupAsync(
                 groupId: groupId,
-                mailboxId: model.MailboxId);
+                mailboxId: model.MailboxId
+            );
             return Ok();
         }
 
@@ -125,6 +127,20 @@ namespace HandItOver.BackEnd.API.Controllers
                 RentUntil: model.RentUntil
             );
             var result = await this.mailboxRentService.RentMailboxAsync(request);
+            return new JsonResult(result);
+        }
+
+        [HttpGet("{id}/rentTime")]
+        public async Task<IActionResult> GetVacantRentTimeAsync(
+            [FromRoute] string id,
+            [FromQuery] RentCheckModel model)
+        {
+            var request = new RentTimeCheckRequest(
+                GroupId: id,
+                RenterId: this.User.FindFirstValue(AuthConstants.Claims.ID),
+                PackageSize: model.PackageSize
+            );
+            var result = await this.mailboxRentService.FindNearestIntervalsToRent(request);
             return new JsonResult(result);
         }
 

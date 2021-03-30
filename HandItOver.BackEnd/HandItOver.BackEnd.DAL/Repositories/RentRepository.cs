@@ -1,4 +1,5 @@
 ﻿using HandItOver.BackEnd.DAL.Entities;
+using HandItOver.BackEnd.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -64,6 +65,16 @@ namespace HandItOver.BackEnd.DAL.Repositories
         public void DeleteRent(MailboxRent rent)
         {
             this.dbContext.Set<MailboxRent>().Remove(rent);
+        }
+
+        public async Task<IEnumerable<TimeInterval>> FindRentsIntervalsAsync(string mailboxId)
+        {
+            DateTime now = DateTime.UtcNow;
+            return await this.dbContext.Set<MailboxRent>()
+                .Where(r => r.MailboxId == mailboxId && !r.Mailbox.Deliveries.Any(d => d.Taken == null) && r.Until >= now)
+                .OrderBy(r => r.From)
+                .Select(r => new TimeInterval(r.From, r.Until))
+                .ToListAsync();
         }
     }
 }

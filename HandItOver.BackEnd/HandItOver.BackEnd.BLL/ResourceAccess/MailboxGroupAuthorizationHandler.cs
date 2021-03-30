@@ -16,7 +16,7 @@ namespace HandItOver.BackEnd.BLL.ResourceAccess
 
         protected override async Task<bool> IsOwnerAsync(string userId, string groupId)
         {
-            MailboxGroup mailboxGroup = await this.mailboxGroupRepository.FindByIdOrNullAsync(groupId)
+            MailboxGroup mailboxGroup = await this.mailboxGroupRepository.FindByIdWithMailboxesOrNullAsync(groupId)
                 ?? throw new NotFoundException("Mailbox group");
             return mailboxGroup.OwnerId == userId;
         }

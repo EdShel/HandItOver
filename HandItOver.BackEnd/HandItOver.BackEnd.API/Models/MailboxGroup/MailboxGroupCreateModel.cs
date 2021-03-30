@@ -23,4 +23,8 @@ namespace HandItOver.BackEnd.API.Models.MailboxGroup
         DateTime RentFrom,
         DateTime RentUntil
     );
+
+    public record RentCheckModel(
+        MailboxSize PackageSize
+    );
 }

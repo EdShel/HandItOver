@@ -38,7 +38,7 @@ namespace HandItOver.BackEnd.BLL.Services
             AppUser owner = await this.userRepository.FindByIdOrNullAsync(request.OwnerId)
                 ?? throw new NotFoundException("Mailbox group owner");
 
-            MailboxGroup? existantGroup = await this.mailboxGroupRepository.FindByNameOrNullAsync(request.Name);
+            MailboxGroup? existantGroup = await this.mailboxGroupRepository.FindByNameWithMailboxesOrNullAsync(request.Name);
             if (existantGroup != null)
             {
                 throw new RecordAlreadyExistsException("Mailbox group");
@@ -70,20 +70,20 @@ namespace HandItOver.BackEnd.BLL.Services
 
         public async Task<MailboxGroupViewResult> GetMailboxGroupById(string groupId)
         {
-            var group = await this.mailboxGroupRepository.FindByIdOrNullAsync(groupId)
+            var group = await this.mailboxGroupRepository.FindByIdWithMailboxesOrNullAsync(groupId)
                 ?? throw new NotFoundException("Mailbox group");
             return this.mapper.Map<MailboxGroupViewResult>(group);
         }
 
         public async Task<MailboxGroup> GetMailboxGroupByNameAsync(string name)
         {
-            return await this.mailboxGroupRepository.FindByNameOrNullAsync(name)
+            return await this.mailboxGroupRepository.FindByNameWithMailboxesOrNullAsync(name)
                 ?? throw new NotFoundException("Mailbox group");
         }
 
         public async Task DeleteMailboxGroupAsync(string mailboxGroupId)
         {
-            MailboxGroup mailboxGroup = await this.mailboxGroupRepository.FindByIdOrNullAsync(mailboxGroupId)
+            MailboxGroup mailboxGroup = await this.mailboxGroupRepository.FindByIdWithMailboxesOrNullAsync(mailboxGroupId)
                 ?? throw new NotFoundException("Mailbox group");
             this.mailboxGroupRepository.DeleteMailboxGroup(mailboxGroup);
             await this.mailboxGroupRepository.SaveChangesAsync();
@@ -91,7 +91,7 @@ namespace HandItOver.BackEnd.BLL.Services
 
         public async Task EditMailboxGroupAsync(MailboxGroupEditRequest request)
         {
-            var group = await this.mailboxGroupRepository.FindByIdOrNullAsync(request.GroupId)
+            var group = await this.mailboxGroupRepository.FindByIdWithMailboxesOrNullAsync(request.GroupId)
                 ?? throw new NotFoundException("Mailbox group");
             this.mapper.Map(request, group);
             this.mailboxGroupRepository.UpdateMailboxGroup(group);
@@ -111,7 +111,7 @@ namespace HandItOver.BackEnd.BLL.Services
 
         public async Task AddMailboxToGroupAsync(string groupId, string mailboxId)
         {
-            MailboxGroup group = await this.mailboxGroupRepository.FindByIdOrNullAsync(groupId)
+            MailboxGroup group = await this.mailboxGroupRepository.FindByIdWithMailboxesOrNullAsync(groupId)
                 ?? throw new NotFoundException("Mailbox group");
             Mailbox mailbox = await this.mailboxRepository.FindByIdOrNullAsync(mailboxId)
                 ?? throw new NotFoundException("Mailbox");
@@ -127,7 +127,7 @@ namespace HandItOver.BackEnd.BLL.Services
 
         public async Task RemoveMailboxFromGroupAsync(string groupId, string mailboxId)
         {
-            MailboxGroup group = await this.mailboxGroupRepository.FindByIdOrNullAsync(groupId)
+            MailboxGroup group = await this.mailboxGroupRepository.FindByIdWithMailboxesOrNullAsync(groupId)
                 ?? throw new NotFoundException("Mailbox group");
             Mailbox mailbox = await this.mailboxRepository.FindByIdOrNullAsync(mailboxId)
                 ?? throw new NotFoundException("Mailbox");

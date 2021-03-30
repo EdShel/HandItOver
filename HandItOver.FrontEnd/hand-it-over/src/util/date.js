@@ -18,8 +18,34 @@ function secondsToHoursFloor(seconds) {
     return Math.floor(seconds / 3600);
 }
 
+function setToMidnight(date) {
+    date = new Date(date);
+    date.setHours(0);
+    date.setMinutes(0);
+    date.setSeconds(0);
+    date.setMilliseconds(0);
+    return date;
+}
+
+function max(firstDate, secondDate) {
+    if (firstDate.getTime() > secondDate.getTime()) {
+        return firstDate;
+    }
+    return secondDate;
+}
+
+function min(firstDate, secondDate) {
+    if (firstDate.getTime() < secondDate.getTime()) {
+        return firstDate;
+    }
+    return secondDate;
+}
+
 export default {
     hoursToHMmSs,
     hhMmSsToSeconds,
-    secondsToHoursFloor
+    secondsToHoursFloor,
+    setToMidnight,
+    max,
+    min
 }
