@@ -24,4 +24,8 @@ namespace HandItOver.BackEnd.BLL.Models.Mailbox
         string Address,
         bool IsOpen
     );
+
+    public record MailboxEditRequest(
+        string Address        
+    );
 }

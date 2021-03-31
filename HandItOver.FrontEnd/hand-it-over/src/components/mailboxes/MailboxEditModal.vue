@@ -1,0 +1,67 @@
+<template>
+  <modal-window
+    ref="modalWindow"
+    header="Edit mailbox"
+    close-text="Close"
+    ok-text="Edit"
+    v-on:ok="editPressed"
+  >
+    <div>
+      <label for="addressText">Mailbox address</label>
+      <input id="addressText" type="text" v-model="edit.address" />
+    </div>
+  </modal-window>
+</template>
+
+<script>
+import api from "~/util/api";
+import ModalWindow from "~/components/controls/ModalWindow";
+
+export default {
+  name: "MailboxEditModal",
+  props: {
+    mailbox: {},
+  },
+  components: { ModalWindow },
+  data: function () {
+    return {
+      edit: {
+        address: "",
+      },
+    };
+  },
+  mounted() {},
+  methods: {
+    editPressed() {
+      api
+        .sendPatch(`/mailbox/${this.mailbox.id}`, null, {
+          address: this.edit.address,
+        })
+        .then((r) => {
+          this.edit.address = r.data.address;
+          this.mailbox.address = r.data.address;
+
+          this.$emit("edited-mailbox", r.data);
+          this.hide();
+        })
+        .catch((e) => {});
+    },
+    show() {
+      this.$refs.modalWindow.openModal();
+      this.edit.address = this.mailbox.address;
+    },
+    hide() {
+      this.$refs.modalWindow.closeModal();
+    },
+  },
+};
+</script>
+label {
+    font-size: 1.2em;
+}
+
+label, input {
+    display: block;
+    width: 100%;
+}
+<style>

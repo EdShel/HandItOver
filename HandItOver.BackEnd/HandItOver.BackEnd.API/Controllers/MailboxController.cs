@@ -49,6 +49,17 @@ namespace HandItOver.BackEnd.API.Controllers
             return new JsonResult(result);
         }
 
+
+        [HttpPatch("{mailboxId}")]
+        [Authorize(Policy = AuthConstants.Policies.MAILBOX_OWNER_ONLY)]
+        public async Task<IActionResult> EditMailboxAsync(
+            [FromRoute] string mailboxId, 
+            [FromBody] MailboxEditRequest model)
+        {
+            var result = await this.mailboxService.EditMailboxAsync(mailboxId, model);
+            return new JsonResult(result);
+        }
+
         [HttpGet]
         [Authorize(Roles = AuthConstants.Roles.MAILBOX)]
         public async Task<IActionResult> GetInfoAsync()

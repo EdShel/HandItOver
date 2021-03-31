@@ -103,5 +103,15 @@ namespace HandItOver.BackEnd.BLL.Services
                    ?? throw new NotFoundException("Mailbox");
             return this.mapper.Map<MailboxViewResult>(mailbox);
         }
+
+        public async Task<MailboxViewResult> EditMailboxAsync(string mailboxId, MailboxEditRequest changes)
+        {
+            var mailbox = await this.mailboxRepository.FindByIdOrNullAsync(mailboxId)
+                ?? throw new NotFoundException("Mailbox");
+            this.mapper.Map(changes, mailbox);
+            this.mailboxRepository.UpdateMailbox(mailbox);
+            await this.mailboxRepository.SaveChangesAsync();
+            return this.mapper.Map<MailboxViewResult>(mailbox);
+        }
     }
 }

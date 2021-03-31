@@ -33,6 +33,7 @@ namespace HandItOver.BackEnd.API.Extensions
                 CreateMap<DAL.Entities.Delivery, BLL.Models.Delivery.DeliveryResult>();
                 CreateMap<DAL.Entities.Mailbox, BLL.Models.Mailbox.MailboxViewResult>();
                 CreateMap<BLL.Models.MailboxGroup.MailboxGroupEditRequest, DAL.Entities.MailboxGroup>();
+                CreateMap<BLL.Models.Mailbox.MailboxEditRequest, DAL.Entities.Mailbox>();
             }
         }
     }

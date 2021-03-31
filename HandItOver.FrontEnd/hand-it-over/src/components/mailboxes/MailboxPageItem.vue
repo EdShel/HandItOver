@@ -5,6 +5,7 @@
     <button v-if="mailbox.groupId" @click="removeFromGroup">
       Remove from group
     </button>
+    <button @click="editMailbox">Edit</button>
   </div>
 </template>
 
@@ -20,6 +21,9 @@ export default {
     },
     removeFromGroup() {
       this.$emit("remove-from-group");
+    },
+    editMailbox() {
+      this.$emit("edit-mailbox");
     },
   },
 };

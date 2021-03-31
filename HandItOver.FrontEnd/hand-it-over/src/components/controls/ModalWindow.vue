@@ -66,7 +66,7 @@ export default {
 .modal-content {
   border-width: 16px;
   border-style: solid;
-  border-image: url(../assets/9patchDeliveryNote.png) 16 repeat;
+  border-image: url(../../assets/9patchDeliveryNote.png) 16 repeat;
 }
 
 .invoice-enter-active,
@@ -102,13 +102,13 @@ export default {
 }
 
 .bttn-primary {
-  background: url(../assets/okButton.png);
+  background: url(../../assets/okButton.png);
   transform: rotate(-10deg);
   color: #fff;
 }
 
 .bttn-secondary {
-  background: url(../assets/closeButton.png);
+  background: url(../../assets/closeButton.png);
   background-repeat: no-repeat;
   background-size: 96px 96px;
   color: #e03c28;

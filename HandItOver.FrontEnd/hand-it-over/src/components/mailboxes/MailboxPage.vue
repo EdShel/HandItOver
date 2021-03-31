@@ -6,6 +6,12 @@
       v-on:created-group="createdGroupForMailbox"
     />
 
+    <mailbox-edit-modal
+      ref="editModal"
+      v-bind:mailbox="editedMailbox"
+      v-on:edited-mailbox="onMailboxEdited"
+    />
+
     <h3>Mailboxes</h3>
     <mailbox-page-group-item
       v-for="(mailboxes, groupId) in mailboxGroups"
@@ -17,6 +23,7 @@
         :key="box.id"
         v-bind:mailbox="box"
         v-on:remove-from-group="removeMailboxFromGroup(box.id, groupId)"
+        v-on:edit-mailbox="onMailboxEditing(box)"
       />
     </mailbox-page-group-item>
 
@@ -25,6 +32,7 @@
       :key="box.id"
       v-bind:mailbox="box"
       v-on:create-group="creatingGroupForMailbox(box.id)"
+      v-on:edit-mailbox="onMailboxEditing(box)"
     />
   </div>
 </template>
@@ -33,6 +41,7 @@
 import api from "~/util/api";
 import MailboxPageItem from "~/components/mailboxes/MailboxPageItem";
 import MailboxPageGroupModal from "~/components/mailboxes/MailboxPageGroupModal";
+import MailboxEditModal from "~/components/mailboxes/MailboxEditModal";
 import MailboxPageGroupItem from "./MailboxPageGroupItem.vue";
 
 export default {
@@ -41,12 +50,14 @@ export default {
     MailboxPageItem,
     MailboxPageGroupModal,
     MailboxPageGroupItem,
+    MailboxEditModal,
   },
   data: function () {
     return {
       mailboxGroups: {},
       mailboxesWithoutGroups: [],
       selectedMailboxesIds: [],
+      editedMailbox: {}
     };
   },
   mounted() {
@@ -80,6 +91,12 @@ export default {
           this.updateMailboxesList();
         })
         .catch((e) => {});
+    },
+    onMailboxEditing(mailbox) {
+      this.editedMailbox = mailbox;
+      this.$refs.editModal.show();
+    },
+    onMailboxEdited(mailbox) {
     },
   },
 };
