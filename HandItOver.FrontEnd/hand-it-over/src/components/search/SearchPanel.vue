@@ -62,6 +62,7 @@ export default {
     },
     found(item) {
         if (item){
+            this.searchQuery = this.mainTextProvider(item);
             this.$emit('found-item', item);
         }
     }

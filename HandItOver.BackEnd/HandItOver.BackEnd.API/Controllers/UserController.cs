@@ -10,6 +10,7 @@ namespace HandItOver.BackEnd.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUsersService usersService;
@@ -19,7 +20,7 @@ namespace HandItOver.BackEnd.API.Controllers
             this.usersService = usersService;
         }
 
-        [HttpGet("me"), Authorize]
+        [HttpGet("me") ]
         public async Task<IActionResult> GetInfoAboutCurrentUserAsync()
         {
             string userId = this.User.FindFirst(AuthConstants.Claims.ID)?.Value ?? string.Empty;
@@ -27,24 +28,41 @@ namespace HandItOver.BackEnd.API.Controllers
             return new JsonResult(user);
         }
 
-        [HttpGet("byId/{userId}"), Authorize]
+        [HttpGet("byId/{userId}")]
         public async Task<IActionResult> GetInfoAboutUserByIdAsync([FromRoute] string userId)
         {
             UserAccountInfoResult user = await this.usersService.GetInfoByIdAsync(userId);
             return new JsonResult(user);
         }
 
-        [HttpGet("byEmail"), Authorize]
+        [HttpGet("byEmail")]
         public async Task<IActionResult> GetInfoAboutAnotherUserAsync([FromQuery] string email)
         {
             UserAccountInfoResult user = await this.usersService.GetInfoByEmailAsync(email);
             return new JsonResult(user);
         }
 
-        [HttpGet, Authorize]
+        [HttpGet]
         public async Task<IActionResult> SearchAsync([FromQuery, Required] string search)
         {
             var result = await this.usersService.FindByNameOrEmailAsync(search);
+            return new JsonResult(result);
+        }
+
+
+        [HttpGet("paginated")]
+        public async Task<IActionResult> SearchPaginatedAsync(
+            [FromQuery, Required] int pageIndex,
+            [FromQuery, Required] int pageSize,
+            [FromQuery] string? search
+        )
+        {
+            var request = new UsersPaginatedRequest(
+                SearchQuery: search,
+                PageIndex: pageIndex,
+                PageSize: pageSize
+            );
+            var result = await this.usersService.GetUsersPaginatedAsync(request);
             return new JsonResult(result);
         }
     }

@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import ModalWindow from "./ModalWindow";
+import ModalWindow from "~/components/controls/ModalWindow";
 import api from '../util/api.js'
 
 export default {

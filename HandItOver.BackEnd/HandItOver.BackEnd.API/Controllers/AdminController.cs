@@ -80,21 +80,5 @@ namespace HandItOver.BackEnd.API.Controllers
             await this.configurationService.UpdateConfigurationsAsync(configFile, content);
             return Ok();
         }
-
-        [HttpGet("users")]
-        public async Task<IActionResult> SearchPaginatedAsync(
-            [FromQuery, Required] int pageIndex,
-            [FromQuery, Required] int pageSize,
-            [FromQuery] string? search
-        )
-        {
-            var request = new UsersPaginatedRequest(
-                SearchQuery: search,
-                PageIndex: pageIndex,
-                PageSize: pageSize
-            );
-            var result = await this.usersService.GetUsersPaginatedAsync(request);
-            return new JsonResult(result);
-        }
     }
 }

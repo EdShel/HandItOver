@@ -35,7 +35,7 @@
 <script>
 import api from "~/util/api";
 import date from '~/util/date'
-import ModalWindow from "~/components/ModalWindow";
+import ModalWindow from "~/components/controls/ModalWindow";
 export default {
   name: "MailboPageGroupModal",
   props: {

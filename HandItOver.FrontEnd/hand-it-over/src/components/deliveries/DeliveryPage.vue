@@ -1,6 +1,11 @@
 <template>
   <div>
     <div v-if="delivery">
+      <delivery-give-away-modal 
+        v-bind:deliveryId="deliveryId"
+        v-on:given-away="onGivenAway"
+      />
+
       <span> Weight: {{ delivery.weight }} </span>
       <span> Arrived: {{ formatDateString(delivery.arrived) }} </span>
       <span>
@@ -44,9 +49,13 @@
 <script>
 import api from "~/util/api";
 import dateUtil from "~/util/date";
+import DeliveryGiveAwayModal from "~/components/deliveries/DeliveryGiveAwayModal";
 
 export default {
   name: "DeliveryPage",
+  components: {
+    DeliveryGiveAwayModal,
+  },
   props: {
     deliveryId: String,
   },
@@ -72,6 +81,9 @@ export default {
     formatDate(date) {
       return dateUtil.localString(date);
     },
+    onGivenAway(newAddressee) {
+        this.addressee = newAddressee;
+    }
   },
 };
 </script>
