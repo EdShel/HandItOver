@@ -38,13 +38,13 @@ export default {
         };
     },
     mounted() {
-        api.sendGet('/delivery/active').then(r => {
+        api.sendGet('/delivery/active/').then(r => {
             this.deliveries = r.data.map(d => ({
                 id: d.id,
                 weight: d.weight,
                 mailboxId: d.mailboxId,
-                arrived: d.arrived,
-                termianl: d.terminalTime
+                arrived: new Date(d.arrived),
+                terminal: new Date(d.terminalTime)
             }));
         }).catch(e => {
 

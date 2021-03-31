@@ -44,12 +44,12 @@ namespace HandItOver.BackEnd.API.Extensions
                     Code = context.Response.StatusCode,
                     Message = exception.Message
                 };
-#if DEBUG
+//#if DEBUG
                 if (errorObject.Code == 500)
                 {
                     throw;
                 }
-#endif
+//#endif
                 string jsonError = JsonConvert.SerializeObject(errorObject);
 
                 await context.Response.Body.WriteAsync(

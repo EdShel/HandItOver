@@ -20,7 +20,8 @@ namespace HandItOver.BackEnd.API
             Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((context, builder) =>
                 {
-                    if (context.HostingEnvironment.IsDevelopment())
+                    // TODO: uncomment on a real deployment
+                    //if (context.HostingEnvironment.IsDevelopment())
                     {
                         builder.AddUserSecrets<Program>();
                     }
