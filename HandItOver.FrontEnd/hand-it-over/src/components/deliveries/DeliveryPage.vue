@@ -69,10 +69,10 @@ export default {
   async mounted() {
     let dResult = await api.sendGet(`/delivery/${this.deliveryId}`);
     this.delivery = dResult.data;
-    let mbResult = await api.sendGet(`/mailbox/${dResult.mailboxId}`);
+    let mbResult = await api.sendGet(`/mailbox/${dResult.data.mailboxId}`);
     this.mailbox = mbResult.data;
-    let aResult = await api.sendGet(`/user/byId/${dResult.owner}`);
-    this.addressee = aResult;
+    let aResult = await api.sendGet(`/user/byId/${mbResult.data.ownerId}`);
+    this.addressee = aResult.data;
   },
   methods: {
     formatDateString(date) {
