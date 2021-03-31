@@ -27,6 +27,13 @@ namespace HandItOver.BackEnd.API.Controllers
             return new JsonResult(user);
         }
 
+        [HttpGet("byId/{userId}"), Authorize]
+        public async Task<IActionResult> GetInfoAboutUserByIdAsync([FromRoute] string userId)
+        {
+            UserAccountInfoResult user = await this.usersService.GetInfoByIdAsync(userId);
+            return new JsonResult(user);
+        }
+
         [HttpGet("byEmail"), Authorize]
         public async Task<IActionResult> GetInfoAboutAnotherUserAsync([FromQuery] string email)
         {
