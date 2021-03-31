@@ -12,11 +12,16 @@
       <router-link v-bind:to="`/group/wl/${groupId}`" class="nav-link"
         >Whitelist</router-link
       >
+
+      <router-link v-bind:to="`/group/joinlinks/${groupId}`" class="nav-link"
+        >Join links</router-link
+      >
     </div>
     <div>
       <group-edit v-if="tab === 'edit'" v-bind:groupId="groupId" />
       <rents-edit v-if="tab === 'rents'" v-bind:groupId="groupId" />
       <group-whitelist v-if="tab === 'wl'" v-bind:groupId="groupId" />
+      <join-tokens-tab v-if="tab === 'joinlinks'" v-bind:groupId="groupId" />
     </div>
   </div>
 </template>
@@ -25,10 +30,11 @@
 import GroupEdit from "~/components/groups/GroupEdit";
 import RentsEdit from "~/components/groups/RentsEdit";
 import GroupWhitelist from "~/components/groups/GroupWhitelist";
+import JoinTokensTab from "~/components/groups/JoinTokensTab";
 
 export default {
   name: "GroupPage",
-  components: { GroupEdit, RentsEdit, GroupWhitelist },
+  components: { GroupEdit, RentsEdit, GroupWhitelist, JoinTokensTab },
   props: {
     tab: String,
     groupId: String,

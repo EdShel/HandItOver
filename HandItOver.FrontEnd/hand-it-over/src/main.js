@@ -9,6 +9,7 @@ import MakeRentPage from '~/components/rent/MakeRentPage'
 import RentPage from '~/components/rent/RentPage'
 import UserPage from '~/components/userAccount/UserPage'
 import DeliveryPage from '~/components/deliveries/DeliveryPage'
+import JoinGroupPage from '~/components/joinGroup/JoinGroupPage'
 
 Vue.config.productionTip = false
 Vue.use(VueRouter)
@@ -40,6 +41,10 @@ const routes = [
   {
     path: '/delivery/:id', component: DeliveryPage, props: r => (
       { deliveryId: r.params.id })
+  },
+  {
+    path: '/join/:groupId/:token', component: JoinGroupPage, props: r => (
+      { groupId: r.params.groupId, token: r.params.token })
   },
 ]
 const router = new VueRouter({ routes, mode: 'history' })
