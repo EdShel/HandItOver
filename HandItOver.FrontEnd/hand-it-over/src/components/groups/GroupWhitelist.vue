@@ -14,7 +14,7 @@
                   <th>{{ i + 1 }}</th>
                   <th>{{ user.email }}</th>
                   <th> {{ user.fullName }} </th>
-                  <th> <router-link v-bind:to="`/account/${user.id}`" >View<router-link> </th>
+                  <th> <router-link v-bind:to="`/account/${user.id}`" >View</router-link> </th>
                   <th v-on:click="removeUserPressed(user)">Remove</th>
               </tr>
           </table>

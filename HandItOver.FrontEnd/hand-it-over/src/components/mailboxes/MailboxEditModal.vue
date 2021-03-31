@@ -47,11 +47,11 @@ export default {
         .catch((e) => {});
     },
     show() {
-      this.$refs.modalWindow.openModal();
+      this.$refs.modalWindow.show();
       this.edit.address = this.mailbox.address;
     },
     hide() {
-      this.$refs.modalWindow.closeModal();
+      this.$refs.modalWindow.hide();
     },
   },
 };

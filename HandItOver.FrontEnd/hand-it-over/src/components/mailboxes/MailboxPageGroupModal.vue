@@ -66,10 +66,10 @@ export default {
         });
     },
     show() {
-      this.$refs.modalWindow.openModal();
+      this.$refs.modalWindow.show();
     },
     hide() {
-      this.$refs.modalWindow.closeModal();
+      this.$refs.modalWindow.hide();
     },
   },
 };

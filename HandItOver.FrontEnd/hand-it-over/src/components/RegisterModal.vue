@@ -34,11 +34,11 @@ export default {
   },
   methods: {
       show() {
-          this.$refs.modalWindow.openModal();
+          this.$refs.modalWindow.show();
           this.visible = true;
       },
       hide() {
-          this.$refs.modalWindow.closeModal();
+          this.$refs.modalWindow.hide();
           this.visible = false;
       },
       loginPressed(){

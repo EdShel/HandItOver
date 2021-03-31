@@ -1,39 +1,29 @@
 <template>
-  <modal-window
+  <user-search-modal
     ref="modalWindow"
     header="Give away delivery"
     close-text="Cancel"
     ok-text="Give away"
     v-on:ok="giveAwayPressed"
+    v-on:selected-user="onUserSelected"
   >
-    <div>
-      <div v-if="selectedUser">
-        {{ selectedUser.email }} - {{ selectedUser.fullName }}
-      </div>
-      <div v-else>
-        Type in new addressee's email or full name and select from the list
-        below.
-      </div>
-      <search-panel
-        v-bind:dataProvider="searchUsers"
-        v-bind:mainTextProvider="emailSelector"
-        v-bind:secondaryTextProvider="secondaryTextSelector"
-        v-on:found-item="onUserFound"
-      />
+    <div v-if="selectedUser">
+      {{ selectedUser.email }} - {{ selectedUser.fullName }}
     </div>
-  </modal-window>
+    <div v-else>
+      Type in new addressee's email or full name and select from the list below.
+    </div>
+  </user-search-modal>
 </template>
 
 <script>
 import api from "~/util/api";
-import ModalWindow from "~/components/controls/ModalWindow";
-import SearchPanel from "~/components/search/SearchPanel";
+import UserSearchModal from "~/components/search/UserSearchModal";
 
 export default {
   name: "DeliveryGiveAwayModal",
   components: {
-    ModalWindow,
-    SearchPanel,
+    UserSearchModal,
   },
   props: {
     deliveryId: String,
@@ -44,11 +34,8 @@ export default {
     };
   },
   methods: {
-    show() {
-      this.$refs.modalWindow.openModal();
-    },
-    hide() {
-      this.$refs.modalWindow.closeModal();
+    onUserSelected(user) {
+      this.selectedUser = user;
     },
     async giveAwayPressed() {
       let r = await api.sendPost(
@@ -61,25 +48,11 @@ export default {
       this.hide();
       this.$emit("given-away", this.selectedUser);
     },
-    searchUsers(searchQuery) {
-      return api
-        .sendGet("/user/paginated", {
-          pageIndex: 0,
-          pageSize: 5,
-          search: searchQuery,
-        })
-        .then((r) => r.data.users);
+    show() {
+      this.$refs.modalWindow.show();
     },
-    emailSelector(user) {
-      return user.email;
-    },
-    secondaryTextSelector(user) {
-      return {
-        fullName: user.fullName,
-      };
-    },
-    onUserFound(user) {
-      this.selectedUser = user;
+    hide() {
+      this.$refs.modalWindow.hide();
     },
   },
 };

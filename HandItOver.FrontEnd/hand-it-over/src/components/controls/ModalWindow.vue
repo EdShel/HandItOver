@@ -2,7 +2,7 @@
   <transition name="invoice">
     <div
       class="modal"
-      @mousedown.self="closeModal"
+      @mousedown.self="hide"
       v-if="isVisible"
       :class="{ visible: isVisible }"
     >
@@ -12,7 +12,7 @@
             <h5 class="modal-title" id="exampleModalLongTitle">
               {{ header }}
             </h5>
-            <button type="button" class="close" v-on:click="closeModal">
+            <button type="button" class="close" v-on:click="hide">
               <span>&times;</span>
             </button>
           </div>
@@ -20,7 +20,7 @@
             <slot></slot>
           </div>
           <div class="modal-footer">
-            <div class="bttn bttn-secondary" v-on:click="closeModal">
+            <div class="bttn bttn-secondary" v-on:click="hide">
               <span class="bttn-text">
                 {{ closeText }}
               </span>
@@ -47,10 +47,10 @@ export default {
     };
   },
   methods: {
-    openModal() {
+    show() {
       this.isVisible = true;
     },
-    closeModal() {
+    hide() {
       this.isVisible = false;
       this.$emit("cancel");
     },

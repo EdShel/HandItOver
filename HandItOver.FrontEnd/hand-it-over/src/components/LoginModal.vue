@@ -34,10 +34,10 @@ export default {
   },
   methods: {
       show() {
-          this.$refs.modalWindow.openModal();
+          this.$refs.modalWindow.show();
       },
       hide() {
-          this.$refs.modalWindow.closeModal();
+          this.$refs.modalWindow.hide();
       },
       loginPressed(){
         api.login(this.email, this.password)
