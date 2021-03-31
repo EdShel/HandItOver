@@ -38,7 +38,7 @@ export default {
         };
     },
     mounted() {
-        api.sendGet('/delivery/active/').then(r => {
+        api.sendGet(`/delivery/active/${this.userId}`).then(r => {
             this.deliveries = r.data.map(d => ({
                 id: d.id,
                 weight: d.weight,

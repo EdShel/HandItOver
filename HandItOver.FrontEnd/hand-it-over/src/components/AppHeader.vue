@@ -36,7 +36,7 @@
               </li>
             </template>
             <li>
-              <router-link to="/account" class="nav-link">
+              <router-link to="/myaccount" class="nav-link">
                 My account
               </router-link>
             </li>

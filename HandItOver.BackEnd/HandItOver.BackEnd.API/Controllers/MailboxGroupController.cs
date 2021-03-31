@@ -168,10 +168,18 @@ namespace HandItOver.BackEnd.API.Controllers
             return new JsonResult(result);
         }
 
-        [HttpGet("rent")]
+        [HttpGet("rent/user/my")]
         public async Task<IActionResult> ViewRentsAsync()
         {
             string userId = this.User.FindFirst(AuthConstants.Claims.ID)!.Value;
+            var result = await this.mailboxRentService.GetRentsOfUserAsync(userId);
+            return new JsonResult(result);
+        }
+
+        [HttpGet("rent/user/{userId}")]
+        [Authorize(Roles = AuthConstants.Roles.ADMIN)]
+        public async Task<IActionResult> ViewRentsOfUserAsync([FromRoute] string userId)
+        {
             var result = await this.mailboxRentService.GetRentsOfUserAsync(userId);
             return new JsonResult(result);
         }

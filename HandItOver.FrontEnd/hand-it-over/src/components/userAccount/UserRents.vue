@@ -21,41 +21,40 @@
 </template>
 
 <script>
-import api from '~/util/api'
-import dateUtil from '~/util/date'
+import api from "~/util/api";
+import dateUtil from "~/util/date";
 
 export default {
-    name: 'UserRents',
-    components: {
-
+  name: "UserRents",
+  components: {},
+  props: {
+    userId: String,
+  },
+  data() {
+    return {
+      rents: [],
+    };
+  },
+  mounted() {
+    api
+      .sendGet(`/mailboxGroup/rent/user/${this.userId}`)
+      .then((r) => {
+        this.rents = r.data.map((rent) => ({
+          id: rent.rentId,
+          mailboxId: rent.mailboxId,
+          mailboxSize: rent.mailboxSize,
+          from: new Date(rent.from),
+          until: new Date(rent.until),
+        }));
+      })
+      .catch((e) => {});
+  },
+  methods: {
+    formatDate(date) {
+      return dateUtil.localString(date);
     },
-    props: {
-        userId: String
-    },
-    data() {
-        return{
-            rents: []
-        };
-    },
-    mounted() {
-        api.sendGet('/mailboxGroup/rent/').then(r => {
-            this.rents = r.data.map(rent => ({
-                id: rent.rentId,
-                mailboxId: rent.mailboxId,
-                mailboxSize: rent.mailboxSize,
-                from: new Date(rent.from),
-                until: new Date(rent.until)
-            }));
-        }).catch(e => {
-
-        });
-    },
-    methods: {
-        formatDate(date) {
-            return dateUtil.localString(date);
-        }
-    }
-}
+  },
+};
 </script>
 
 <style>

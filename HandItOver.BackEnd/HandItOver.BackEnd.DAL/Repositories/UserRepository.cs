@@ -102,6 +102,7 @@ namespace HandItOver.BackEnd.DAL.Repositories
             return new UserSearchResult(
                 TotalPages: (int)Math.Ceiling((double)count / pageSize),
                 Users: await users
+                    .OrderBy(u => u.Email)
                     .Skip(pageIndex * pageSize)
                     .Take(pageSize)
                     .ToListAsync()

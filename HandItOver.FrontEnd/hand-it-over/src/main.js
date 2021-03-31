@@ -34,7 +34,7 @@ const routes = [
       { userId: r.params.id })
   },
   {
-    path: '/account', component: UserPage, props: r => (
+    path: '/myaccount', component: UserPage, props: r => (
       { userId: null })
   },
   {

@@ -82,5 +82,13 @@ namespace HandItOver.BackEnd.API.Controllers
             var result = await this.deliveryService.GetActiveDeliveriesAsync(userId);
             return new JsonResult(result);
         }
+
+        [HttpGet("active/{userId}")]
+        [Authorize(Roles = AuthConstants.Roles.ADMIN)]
+        public async Task<IActionResult> GetActiveDeliveriesOfUserAsync([FromRoute] string userId)
+        {
+            var result = await this.deliveryService.GetActiveDeliveriesAsync(userId);
+            return new JsonResult(result);
+        }
     }
 }
