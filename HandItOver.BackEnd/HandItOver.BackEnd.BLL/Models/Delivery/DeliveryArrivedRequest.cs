@@ -25,4 +25,15 @@ namespace HandItOver.BackEnd.BLL.Models.Delivery
         DateTime PredictedTakingTime,
         DateTime? TerminalTime
     );
+
+
+    public record DeliveryResult(
+        string Id,
+        float Weight,
+        string MailboxId,
+        DateTime Arrived,
+        DateTime? Taken,
+        DateTime PredictedTakingTime,
+        DateTime? TerminalTime
+    );
 }

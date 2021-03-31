@@ -7,6 +7,7 @@ namespace HandItOver.BackEnd.BLL.Interfaces
     public interface IDeliveryService
     {
         Task<IEnumerable<ActiveDeliveryResult>> GetActiveDeliveriesAsync(string userId);
+        Task<DeliveryResult> GetDeliveryByIdAsync(string deliveryId);
         Task<MailboxStatus> GetMailboxStatusAsync(string mailboxId);
         Task GiveAwayDeliveryRightAsync(string deliveryId, string newAddresseeId);
         Task<DeliveryArrivedResult> HandleDeliveryArrivalAsync(DeliveryArrivedRequest delivery);

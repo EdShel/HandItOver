@@ -247,5 +247,12 @@ namespace HandItOver.BackEnd.BLL.Services
             IEnumerable<Delivery> deliveries = await this.deliveryRepository.GetActiveDeliveriesOfUserAsync(userId);
             return this.mapper.Map<IEnumerable<ActiveDeliveryResult>>(deliveries);
         }
+
+        public async Task<DeliveryResult> GetDeliveryByIdAsync(string deliveryId)
+        {
+            Delivery delivery = await this.deliveryRepository.FindByIdOrNull(deliveryId)
+                ?? throw new NotFoundException("Delivery");
+            return this.mapper.Map<DeliveryResult>(delivery);
+        }
     }
 }

@@ -63,7 +63,7 @@ namespace HandItOver.BackEnd.API.Extensions
                 );
 
                 options.AddPolicy(
-                    AuthConstants.Policies.DELIVERY_ADDRESSEE_ONLY,
+                    AuthConstants.Policies.DELIVERY_ADDRESSEE_OR_MAILBOX_OWNER_ONLY,
                     policy => policy.Requirements.Add(DeliveryAuthorizationHandler.GetRequirement("deliveryId"))
                 );
             });

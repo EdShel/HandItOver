@@ -16,9 +16,9 @@ namespace HandItOver.BackEnd.BLL.ResourceAccess
 
         protected override async Task<bool> IsOwnerAsync(string userId, string deliveryId)
         {
-            Delivery delivery = await this.deliveryRepository.FindByIdOrNull(deliveryId)
+            Delivery delivery = await this.deliveryRepository.FindByIdWithMailboxOrNullAsync(deliveryId)
                 ?? throw new NotFoundException("Delivery record");
-            return delivery.AddresseeId == userId;
+            return delivery.AddresseeId == userId || delivery.Mailbox.OwnerId == userId;
         }
     }
 }

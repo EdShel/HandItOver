@@ -31,13 +31,20 @@ namespace HandItOver.BackEnd.API.Controllers
             return Ok();
         }
 
-
         [HttpPost("{deliveryId}/open")]
-        [Authorize(AuthConstants.Policies.DELIVERY_ADDRESSEE_ONLY)]
+        [Authorize(AuthConstants.Policies.DELIVERY_ADDRESSEE_OR_MAILBOX_OWNER_ONLY)]
         public async Task<IActionResult> OpenMailboxAsync([FromRoute] string deliveryId)
         {
             await this.deliveryService.RequestOpeningDeliveryAsync(deliveryId);
             return Ok();
+        }
+
+        [HttpGet("{deliveryId}")]
+        [Authorize(AuthConstants.Policies.DELIVERY_ADDRESSEE_OR_MAILBOX_OWNER_ONLY)]
+        public async Task<IActionResult> GetInfoAboutDelivery([FromRoute] string deliveryId)
+        {
+            var delivery = await this.deliveryService.GetDeliveryByIdAsync(deliveryId);
+            return Ok(delivery);
         }
 
         [HttpGet("mailboxStatus")]
@@ -59,7 +66,7 @@ namespace HandItOver.BackEnd.API.Controllers
         }
 
         [HttpPost("{deliveryId}/giveAway")]
-        [Authorize(AuthConstants.Policies.DELIVERY_ADDRESSEE_ONLY)]
+        [Authorize(AuthConstants.Policies.DELIVERY_ADDRESSEE_OR_MAILBOX_OWNER_ONLY)]
         public async Task<IActionResult> GiveAwayRightAsync(
             [FromRoute] string deliveryId,
             [FromBody] DeliveryGiveAwayModel model)
