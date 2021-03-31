@@ -8,7 +8,7 @@
   >
     <div>
       <div v-if="selectedUser">
-        {{ selectedUser.email }} {{ selectedUser.fullName }}
+        {{ selectedUser.email }} - {{ selectedUser.fullName }}
       </div>
       <div v-else>
         Type in new addressee's email or full name and select from the list
@@ -40,7 +40,7 @@ export default {
   },
   data() {
     return {
-      selectedUser: {},
+      selectedUser: null,
     };
   },
   methods: {
@@ -68,7 +68,7 @@ export default {
           pageSize: 5,
           search: searchQuery,
         })
-        .then((r) => r.data);
+        .then((r) => r.data.users);
     },
     emailSelector(user) {
       return user.email;

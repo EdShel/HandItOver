@@ -1,7 +1,8 @@
 <template>
   <div>
     <div v-if="delivery">
-      <delivery-give-away-modal 
+      <delivery-give-away-modal
+        ref="giveAwayModal"
         v-bind:deliveryId="deliveryId"
         v-on:given-away="onGivenAway"
       />
@@ -43,6 +44,9 @@
         <span> Full name: {{ addressee.fullName }} </span>
       </p>
     </div>
+    <div>
+      <button v-on:click="giveAwayPressed">Give away</button>
+    </div>
   </div>
 </template>
 
@@ -81,9 +85,13 @@ export default {
     formatDate(date) {
       return dateUtil.localString(date);
     },
+    giveAwayPressed(){
+        this.$refs.giveAwayModal.show();
+        console.log('show');
+    },
     onGivenAway(newAddressee) {
-        this.addressee = newAddressee;
-    }
+      this.addressee = newAddressee;
+    },
   },
 };
 </script>

@@ -20,20 +20,16 @@
             <slot></slot>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="bttn bttn-secondary"
-              v-on:click="closeModal"
-            >
-              {{ closeText }}
-            </button>
-            <button
-              type="button"
-              class="bttn bttn-primary"
-              v-on:click="$emit('ok')"
-            >
-              {{ okText }}
-            </button>
+            <div class="bttn bttn-secondary" v-on:click="closeModal">
+              <span class="bttn-text">
+                {{ closeText }}
+              </span>
+            </div>
+            <div class="bttn bttn-primary" v-on:click="$emit('ok')">
+              <span class="bttn-text">
+                {{ okText }}
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -63,6 +59,16 @@ export default {
 </script>
 
 <style scoped>
+.modal:not(.visible) {
+  visibility: hidden;
+}
+
+.modal.visible {
+  background: rgba(0, 0, 0, 0.8);
+  display: block;
+  visibility: visible;
+}
+
 .modal-content {
   border-width: 16px;
   border-style: solid;
@@ -95,16 +101,28 @@ export default {
   border: none;
   font-family: "Courier New", Courier, monospace;
   font-weight: bold;
-  text-align: center;
   font-size: 1.2em;
-  transition: transform .5s;
+  transition: transform 0.5s;
   outline: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  cursor: pointer
 }
 
 .bttn-primary {
   background: url(../../assets/okButton.png);
   transform: rotate(-10deg);
   color: #fff;
+  position:relative;
+}
+
+.bttn-primary > .bttn-text {
+  position:absolute;
+  width: calc(100% + 10px);
+  background-color: #2867e0;
+  border-radius: 5px;
 }
 
 .bttn-secondary {
@@ -125,7 +143,7 @@ export default {
 }
 
 .bttn:active {
-  transform: scale(1.50);
+  transform: scale(1.5);
   background-color: none;
 }
 </style>

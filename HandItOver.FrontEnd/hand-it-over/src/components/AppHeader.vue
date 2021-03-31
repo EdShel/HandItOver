@@ -82,11 +82,9 @@ export default {
   },
   methods: {
     showLogin() {
-      console.log("Showing");
       this.$refs.loginModal.show();
     },
     showRegister() {
-      console.log("Showing");
       this.$refs.registerModal.show();
     },
     logout() {

@@ -1,12 +1,4 @@
-.modal:not(.visible) {
-    visibility: hidden;
-}
 
-.modal.visible {
-    background: rgba(0, 0, 0, 0.8);
-    display: block;
-    visibility: visible;
-}
 
 .inline-input {
     display: flex;
