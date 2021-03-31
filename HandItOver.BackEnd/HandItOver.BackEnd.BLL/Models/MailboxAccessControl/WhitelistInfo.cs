@@ -12,6 +12,7 @@ namespace HandItOver.BackEnd.BLL.Models.MailboxAccessControl
     );
     public record WhitelistEntry(
         string Email,
+        string FullName,
         string Id
     );
 

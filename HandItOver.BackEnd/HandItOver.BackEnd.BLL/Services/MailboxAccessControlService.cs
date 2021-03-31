@@ -45,6 +45,7 @@ namespace HandItOver.BackEnd.BLL.Services
                 Entries: mailboxGroup.Whitelisted.Select(
                     u => new WhitelistEntry(
                         Email: u.Email,
+                        FullName: u.FullName,
                         Id: u.Id
                     )
                 )

@@ -16,6 +16,7 @@
     <div>
       <group-edit v-if="tab === 'edit'" v-bind:groupId="groupId" />
       <rents-edit v-if="tab === 'rents'" v-bind:groupId="groupId" />
+      <group-whitelist v-if="tab === 'wl'" v-bind:groupId="groupId" />
     </div>
   </div>
 </template>
@@ -23,10 +24,11 @@
 <script>
 import GroupEdit from "~/components/groups/GroupEdit";
 import RentsEdit from "~/components/groups/RentsEdit";
+import GroupWhitelist from "~/components/groups/GroupWhitelist";
 
 export default {
   name: "GroupPage",
-  components: { GroupEdit, RentsEdit },
+  components: { GroupEdit, RentsEdit, GroupWhitelist },
   props: {
     tab: String,
     groupId: String,
