@@ -61,7 +61,9 @@ namespace HandItOver.BackEnd.BLL.Services
             }
             Mailbox mailbox = await this.mailboxRepository.FindByIdWithGroupOrNullAsync(delivery.MailboxId)
                 ?? throw new WrongValueException("Mailbox");
-            if (!mailbox.IsOpen)
+
+            var alreadyExistingDelivery = await this.deliveryRepository.GetCurrentDeliveryOrNullAsync(delivery.MailboxId);
+            if (alreadyExistingDelivery != null)
             {
                 throw new OperationException("Mailbox already contains a delivery.");
             }

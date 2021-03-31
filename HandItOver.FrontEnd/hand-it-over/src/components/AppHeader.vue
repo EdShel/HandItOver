@@ -36,9 +36,14 @@
               </li>
             </template>
             <li>
+              <router-link to="/account" class="nav-link">
+                My account
+              </router-link>
+            </li>
+            <li>
               <router-link to="/mailbox" class="nav-link"
-                >My mailboxes</router-link
-              >
+                >My mailboxes
+              </router-link>
             </li>
             <li>
               <a class="nav-link" href="#" v-on:click.prevent="logout"
