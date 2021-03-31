@@ -6,11 +6,13 @@
         v-model="searchQuery"
         v-on:input="throttledSearch"
         v-on:keyup.enter="found(searchResults[0])"
+        v-on:focus="onTextInputFocus"
+        v-on:blur="onTextInputLostFocus"
         class="search-field"
       />
       <div class="search-icon">TODO: place magnifier icon</div>
     </div>
-    <div class="suggestions">
+    <div v-if="showSuggestions" class="suggestions">
       <search-item
         v-for="r in searchResults"
         :key="r.groupId"
@@ -38,6 +40,8 @@ export default {
     return {
       searchQuery: "",
       searchResults: [],
+      showSuggestions: false,
+      losingFocusTimeOut: null
     };
   },
   computed: {
@@ -61,11 +65,26 @@ export default {
         });
     },
     found(item) {
-        if (item){
-            this.searchQuery = this.mainTextProvider(item);
-            this.$emit('found-item', item);
-        }
-    }
+      if (item) {
+        this.searchQuery = this.mainTextProvider(item);
+        this.$emit("found-item", item);
+      }
+    },
+    onTextInputFocus() {
+      if (this.losingFocusTimeOut) {
+        clearTimeout(this.losingFocusTimeOut);
+        this.losingFocusTimeOut = null;
+      }
+      this.showSuggestions = true;
+    },
+    onTextInputLostFocus() {
+      if (!this.losingFocusTimeOut){
+        const dontShowSuggestionsAfterMs = 500;
+        this.losingFocusTimeOut = setTimeout(() => {
+          this.showSuggestions = false;
+        }, dontShowSuggestionsAfterMs);
+      }
+    },
   },
 };
 
@@ -97,26 +116,26 @@ function throttle(callback, limit) {
 }
 
 .search-panel {
-    position: relative;
+  position: relative;
 }
 
 .search-container {
-    position: relative;
+  position: relative;
 }
 
 .search-icon {
-    position: absolute;
-    right: 0;
-    top: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
 .suggestions {
-    position: absolute;
-    width: 100%;
-    z-index: 10;
+  position: absolute;
+  width: 100%;
+  z-index: 10;
 }
 
 search-item {
-    width: 100%;
+  width: 100%;
 }
 </style>

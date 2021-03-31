@@ -1,7 +1,7 @@
 <template>
   <div>
     <h3>Rents</h3>
-    <table>
+    <table class="table">
       <tr>
         <th>#</th>
         <th>From</th>
