@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div class="tabs">
       <router-link v-bind:to="`/group/edit/${groupId}`" class="nav-link"
         >Edit</router-link
       >
@@ -14,19 +14,19 @@
       >
     </div>
     <div>
-        <group-edit v-if="tab === 'edit'" v-bind:groupId="groupId" />
-        <rents-edit v-if="tab === 'rents'" v-bind:groupId="groupId" />
+      <group-edit v-if="tab === 'edit'" v-bind:groupId="groupId" />
+      <rents-edit v-if="tab === 'rents'" v-bind:groupId="groupId" />
     </div>
   </div>
 </template>
 
 <script>
-import GroupEdit from '~/components/groups/GroupEdit';
-import RentsEdit from '~/components/groups/RentsEdit';
+import GroupEdit from "~/components/groups/GroupEdit";
+import RentsEdit from "~/components/groups/RentsEdit";
 
 export default {
   name: "GroupPage",
-  components: {GroupEdit, RentsEdit},
+  components: { GroupEdit, RentsEdit },
   props: {
     tab: String,
     groupId: String,
@@ -34,5 +34,32 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.tabs {
+  display: flex;
+  background: rgb(85, 85, 85);
+  overflow: hidden;
+}
+
+.tabs > * {
+  margin: 2px 3px 0 3px;
+  border-radius: 10px 10px 0px 0px;
+  border-bottom: none;
+}
+
+.tabs :not(.router-link-exact-active) {
+  background: #eee;
+  position: relative;
+  top: 4px;
+}
+
+.tabs .router-link-exact-active {
+  background: white;
+  border-radius: 27px 7px 0px 0px;
+}
+
+a {
+  color: #000;
+  font-size: 1.2em;
+}
 </style>
