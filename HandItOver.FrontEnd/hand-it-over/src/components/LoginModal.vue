@@ -46,8 +46,6 @@ export default {
             location.reload();
         })
         .catch((e) => {
-            console.log("So sad, can't login because of ");
-            console.log(e);
         })
       }
   }

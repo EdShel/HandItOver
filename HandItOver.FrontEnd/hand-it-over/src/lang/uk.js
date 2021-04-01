@@ -1,7 +1,5 @@
 export default {
-    uk: {
-        duck: {
-            ducklin: "Kachka"
-        }
+    duck: {
+        ducklin: "Kachka"
     }
 };

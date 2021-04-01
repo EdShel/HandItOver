@@ -87,7 +87,6 @@ export default {
     },
     giveAwayPressed(){
         this.$refs.giveAwayModal.show();
-        console.log('show');
     },
     onGivenAway(newAddressee) {
       this.addressee = newAddressee;

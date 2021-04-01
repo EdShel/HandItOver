@@ -135,7 +135,6 @@ export default {
         packageSize: 1, // TODO: wtf
       })
       .then((r) => {
-        console.log(r.data);
         this.vacantIntervals = r.data.map((interval) => ({
           begin: new Date(interval.begin),
           end: interval.end

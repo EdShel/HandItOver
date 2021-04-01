@@ -4,10 +4,15 @@ import messages from '@/en'
 
 Vue.use(VueI18n);
 
+export const supportedLanguages = [
+    { name: 'English', code: 'en' },
+    { name: 'Українська', code: 'uk' }
+];
+
 export const i18n = new VueI18n({
-    locale: 'en', 
+    locale: 'en',
     fallbackLocale: 'en',
-    messages: messages
+    messages: {en: messages}
 });
 
 const loadedLanguages = ['en'];
@@ -30,9 +35,9 @@ export function loadLanguageAsync(lang) {
     }
 
     // If the language hasn't been loaded yet
-    return import( `@/${lang}.js`).then(
+    return import(`@/${lang}.js`).then(
         messages => {
-            i18n.setLocaleMessage(lang, messages)
+            i18n.setLocaleMessage(lang, messages.default)
             loadedLanguages.push(lang)
             return setI18nLanguage(lang)
         }

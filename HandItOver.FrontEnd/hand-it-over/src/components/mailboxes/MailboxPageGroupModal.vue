@@ -62,7 +62,6 @@ export default {
           this.$emit("created-group");
         })
         .catch((e) => {
-          console.log("Can't create the group");
         });
     },
     show() {

@@ -47,7 +47,6 @@ export default {
             this.hideLogin();
         })
         .catch(() => {
-            console.log("So sad, can't login.")
         })
       }
   }

@@ -58,7 +58,7 @@
           </template>
         </ul>
         <div class="form-inline my-2 my-lg-0">
-          <p>Language selector here</p>
+          <lang-selector />
         </div>
       </div>
     </nav>
@@ -68,6 +68,7 @@
 <script>
 import LoginModal from "~/components/LoginModal";
 import RegisterModal from "~/components/RegisterModal";
+import LangSelector from "~/components/common/LangSelector";
 import api from "../util/api.js";
 
 export default {
@@ -76,6 +77,7 @@ export default {
   components: {
     LoginModal,
     RegisterModal,
+    LangSelector
   },
   computed: {
     isAuthorized() {
