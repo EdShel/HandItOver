@@ -11,9 +11,10 @@ import RentPage from '~/components/rent/RentPage'
 import UserPage from '~/components/userAccount/UserPage'
 import DeliveryPage from '~/components/deliveries/DeliveryPage'
 import JoinGroupPage from '~/components/joinGroup/JoinGroupPage'
+import { i18n, loadLanguageAsync } from '~/i18n'
 
-Vue.config.productionTip = false
-Vue.use(VueRouter)
+Vue.config.productionTip = false;
+Vue.use(VueRouter);
 
 const routes = [
   { path: '/', component: MainPage },
@@ -49,9 +50,14 @@ const routes = [
       { groupId: r.params.groupId, token: r.params.token })
   },
 ]
-const router = new VueRouter({ routes, mode: 'history' })
+const router = new VueRouter({ routes, mode: 'history' });
+router.beforeEach((to, from, next) => {
+  let language = localStorage.getItem('language') || i18n.fallbackLocale;
+  loadLanguageAsync(language).then(() => next());
+});
 
 new Vue({
   render: h => h(App),
-  router: router
+  router: router,
+  i18n: i18n
 }).$mount('#app')

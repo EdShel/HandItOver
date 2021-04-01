@@ -1,6 +1,7 @@
 <template>
   <div>
     <rent-search></rent-search>
+    {{ $t('duck.ducklin') }}
   </div>
 </template>
 
@@ -10,9 +11,6 @@ import RentSearch from "~/components/main/RentSearch";
 export default {
   name: "MainPage",
   components: { RentSearch },
-  props: {
-    msg: String,
-  },
 };
 </script>
 

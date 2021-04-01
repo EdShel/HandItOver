@@ -1,7 +1,7 @@
 <template>
   <div v-if="configTree">
     <config-property-item
-      propertyName="Root"
+      propertyName="appsettings.json"
       v-bind:propertyValue="configTree"
     />
     <button v-on:click="onSaveConfigurationsPressed">
