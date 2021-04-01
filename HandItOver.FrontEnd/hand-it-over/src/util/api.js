@@ -119,6 +119,23 @@ function sendGet(url, params) {
     })
 }
 
+function downloadBlobFile(url, params, fileName) {
+    return axios({
+        url: apiUrl + url,
+        params: params,
+        method: 'GET',
+        responseType: 'blob',
+    }).then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', fileName);
+        document.body.appendChild(link);
+        link.click();
+        URL.revokeObjectURL(url);
+    });
+}
+
 export default {
     isAuthorized,
     isAdmin,
@@ -130,6 +147,6 @@ export default {
     sendPatch,
     sendPut,
     sendGet,
-    sendDelete
-
+    sendDelete,
+    downloadBlobFile
 };
