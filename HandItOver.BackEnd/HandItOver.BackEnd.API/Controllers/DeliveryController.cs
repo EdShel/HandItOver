@@ -90,5 +90,15 @@ namespace HandItOver.BackEnd.API.Controllers
             var result = await this.deliveryService.GetActiveDeliveriesAsync(userId);
             return new JsonResult(result);
         }
+
+        [HttpGet("recent/{mailboxId}")]
+        [Authorize(AuthConstants.Policies.MAILBOX_OWNER_ONLY)]
+        public async Task<IActionResult> GetRecentDeliveriesAsync(
+            [FromRoute] string mailboxId,
+            [FromQuery] int count)
+        {
+            var result = await this.deliveryService.GetRecentDeliveriesAsync(mailboxId, count);
+            return new JsonResult(result);
+        }
     }
 }

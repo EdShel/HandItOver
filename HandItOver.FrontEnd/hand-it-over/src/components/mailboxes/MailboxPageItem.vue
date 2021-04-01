@@ -6,14 +6,32 @@
       Remove from group
     </button>
     <button @click="editMailbox">Edit</button>
+    <button v-on:click="onShowDeliveriesPressed">Show recent deliveries</button>
+    <div v-if="deliveriesAreVisible">
+      <div v-for="delivery in deliveries" :key="delivery.id">
+        <span> Arrived: {{ delivery.arrived }} </span>
+        <span v-if="delivery.taken === null">
+          Predicted taking: {{ delivery.predictedTakingTime }}
+        </span>
+        <span v-else> Taken: {{ delivery.taken }} </span>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import api from "~/util/api";
+
 export default {
   name: "MailboxPageItem",
   props: {
     mailbox: {},
+  },
+  data() {
+    return {
+      deliveries: [],
+      deliveriesAreVisible: false,
+    };
   },
   methods: {
     createGroup() {
@@ -24,6 +42,17 @@ export default {
     },
     editMailbox() {
       this.$emit("edit-mailbox");
+    },
+    async onShowDeliveriesPressed() {
+      if (this.deliveriesAreVisible) {
+        this.deliveriesAreVisible = false;
+        return;
+      }
+      let r = await api.sendGet(`/delivery/recent/${this.mailbox.id}`, {
+        count: 5,
+      });
+      this.deliveries = r.data;
+      this.deliveriesAreVisible = true;
     },
   },
 };

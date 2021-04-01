@@ -250,6 +250,14 @@ namespace HandItOver.BackEnd.BLL.Services
             return this.mapper.Map<IEnumerable<ActiveDeliveryResult>>(deliveries);
         }
 
+        public async Task<IEnumerable<DeliveryResult>> GetRecentDeliveriesAsync(string mailboxId, int count)
+        {
+            const int maxNumberOfDeliveriesPerRequest = 20;
+            count = Math.Clamp(count, 1, maxNumberOfDeliveriesPerRequest);
+            var deliveries = await this.deliveryRepository.GetRecentDeliveriesOfMailboxAsync(mailboxId, count);
+            return this.mapper.Map<IEnumerable<DeliveryResult>>(deliveries);
+        }
+
         public async Task<DeliveryResult> GetDeliveryByIdAsync(string deliveryId)
         {
             Delivery delivery = await this.deliveryRepository.FindByIdOrNull(deliveryId)

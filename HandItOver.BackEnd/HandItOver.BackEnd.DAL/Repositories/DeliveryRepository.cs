@@ -37,6 +37,16 @@ namespace HandItOver.BackEnd.DAL.Repositories
         {
             return await this.dbContext.Set<Delivery>()
                 .Where(d => d.AddresseeId == userId && d.Taken == null)
+                .OrderBy(d => d.Arrived)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Delivery>> GetRecentDeliveriesOfMailboxAsync(string mailboxId, int count)
+        {
+            return await this.dbContext.Set<Delivery>()
+                .Where(d => d.MailboxId == mailboxId)
+                .OrderByDescending(d => d.Arrived)
+                .Take(count)
                 .ToListAsync();
         }
 
