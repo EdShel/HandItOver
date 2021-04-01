@@ -30,9 +30,14 @@
           <template v-else>
             <template v-if="isAdmin">
               <li>
-                <router-link to="/admin" class="nav-link"
-                  >Admin panel</router-link
-                >
+                <router-link to="/admin" class="nav-link">
+                  Admin panel
+                </router-link>
+              </li>
+              <li>
+                <router-link to="/users" class="nav-link">
+                  System users
+                </router-link>
               </li>
             </template>
             <li>

@@ -3,6 +3,7 @@ import App from './App.vue'
 import VueRouter from 'vue-router'
 import MainPage from "~/components/main/MainPage"
 import AdminPage from '~/components/admin/AdminPage'
+import UsersPage from '~/components/admin/UsersPage'
 import MailboxPage from '~/components/mailboxes/MailboxPage'
 import GroupPage from '~/components/groups/GroupPage'
 import MakeRentPage from '~/components/rent/MakeRentPage'
@@ -18,6 +19,7 @@ const routes = [
   { path: '/', component: MainPage },
   { path: '/mailbox', component: MailboxPage },
   { path: '/admin', component: AdminPage },
+  { path: '/users', component: UsersPage },
   {
     path: '/group/:tab/:id', component: GroupPage, props: r => (
       { tab: r.params.tab, groupId: r.params.id })

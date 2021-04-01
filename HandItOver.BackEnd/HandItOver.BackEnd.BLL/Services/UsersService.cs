@@ -72,7 +72,7 @@ namespace HandItOver.BackEnd.BLL.Services
                 throw new WrongValueException(nameof(request.PageSize));
             }
             const int maxPageSize = 100;
-            request = request with { PageSize = Math.Max(request.PageSize, maxPageSize) };
+            request = request with { PageSize = Math.Min(request.PageSize, maxPageSize) };
 
             UserRepository.UserSearchResult usersPaginated = await this.userRepository.SearchUsersPaginatedAsync(
                 query: request.SearchQuery,
