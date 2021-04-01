@@ -8,17 +8,5 @@ namespace HandItOver.BackEnd.API.Models.Auth
         public string RefreshToken { get; set; } = null!;
     }
 
-    public record RegisterModel(
-        string Email,
-        string FullName,
-        string Password,
-        string Role
-    );
-
-    public record LoginModel(
-        string Email,
-        string Password
-    );
-
     public record RevokeModel(string RefreshToken);
 }
