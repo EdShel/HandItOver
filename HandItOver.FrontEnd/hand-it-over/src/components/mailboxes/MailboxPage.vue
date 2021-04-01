@@ -12,6 +12,13 @@
       v-on:edited-mailbox="onMailboxEdited"
     />
 
+    <add-to-group-modal
+      ref="addToGroupModal"
+      v-bind:all-groups="allGroups"
+      v-bind:mailbox="editedMailbox"
+      v-on:added-to-group="onAddedToGroup"
+    />
+
     <h3>Mailboxes</h3>
     <mailbox-page-group-item
       v-for="group in allGroups"
@@ -32,6 +39,7 @@
       :key="box.id"
       v-bind:mailbox="box"
       v-on:create-group="creatingGroupForMailbox(box.id)"
+      v-on:add-to-group="onAddToGroupRequested(box)"
       v-on:edit-mailbox="onMailboxEditing(box)"
     />
   </div>
@@ -43,6 +51,7 @@ import MailboxPageItem from "~/components/mailboxes/MailboxPageItem";
 import MailboxPageGroupModal from "~/components/mailboxes/MailboxPageGroupModal";
 import MailboxEditModal from "~/components/mailboxes/MailboxEditModal";
 import MailboxPageGroupItem from "~/components/mailboxes/MailboxPageGroupItem";
+import AddToGroupModal from "~/components/mailboxes/AddToGroupModal";
 
 export default {
   name: "MailboxPage",
@@ -51,6 +60,7 @@ export default {
     MailboxPageGroupModal,
     MailboxPageGroupItem,
     MailboxEditModal,
+    AddToGroupModal,
   },
   data: function () {
     return {
@@ -66,10 +76,18 @@ export default {
   methods: {
     async updateMailboxesList() {
       let rGroup = await api.sendGet(`/mailboxGroup/my`);
-      this.allGroups = rGroup.data;
+      this.allGroups = rGroup.data.map((group) => {
+        group.mailboxes = group.mailboxes.map((mb) => {
+          mb.groupId = group;
+          return mb;
+        });
+        return group;
+      });
 
       let rMailboxes = await api.sendGet("/mailbox/my");
-      this.mailboxesWithoutGroups = rMailboxes.data.filter(mb => mb.groupId == null);
+      this.mailboxesWithoutGroups = rMailboxes.data.filter(
+        (mb) => mb.groupId == null
+      );
     },
     creatingGroupForMailbox(mailboxId) {
       this.selectedMailboxesIds = [mailboxId];
@@ -92,6 +110,13 @@ export default {
       this.$refs.editModal.show();
     },
     onMailboxEdited(mailbox) {},
+    onAddToGroupRequested(box) {
+      this.editedMailbox = box;
+      this.$refs.addToGroupModal.show();
+    },
+    onAddedToGroup(e) {
+      this.updateMailboxesList();
+    },
   },
 };
 

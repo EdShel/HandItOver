@@ -1,7 +1,10 @@
 <template>
   <div>
     <p>{{ mailbox.address }}</p>
-    <button v-if="!mailbox.groupId" @click="createGroup">Add to group</button>
+    <div v-if="!mailbox.groupId">
+      <button @click="createGroup">Add to new group</button>
+      <button @click="onAddToGroupPressed">Add to existing group</button>
+    </div>
     <button v-if="mailbox.groupId" @click="removeFromGroup">
       Remove from group
     </button>
@@ -54,6 +57,9 @@ export default {
       this.deliveries = r.data;
       this.deliveriesAreVisible = true;
     },
+    onAddToGroupPressed() {
+      this.$emit('add-to-group');
+    }
   },
 };
 </script>
