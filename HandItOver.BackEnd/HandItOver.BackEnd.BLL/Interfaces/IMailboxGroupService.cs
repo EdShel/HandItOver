@@ -12,8 +12,9 @@ namespace HandItOver.BackEnd.BLL.Interfaces
         Task DeleteMailboxGroupAsync(string mailboxGroupId);
         Task EditMailboxGroupAsync(MailboxGroupEditRequest request);
         Task<IEnumerable<MailboxGroupSearchResult>> FindMailboxesAsync(MailboxGroupSearchRequest request);
-        Task<MailboxGroupViewResult> GetMailboxGroupById(string groupId);
+        Task<MailboxGroupViewResult> GetMailboxGroupByIdAsync(string groupId);
         Task<MailboxGroup> GetMailboxGroupByNameAsync(string name);
+        Task<IEnumerable<MailboxGroupViewResult>> GetMailboxGroupByOwnerAsync(string userId);
         Task<MailboxGroupStats> GetStatsAsync(string groupId);
         Task RemoveMailboxFromGroupAsync(string groupId, string mailboxId);
     }

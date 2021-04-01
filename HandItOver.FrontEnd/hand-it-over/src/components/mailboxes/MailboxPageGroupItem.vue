@@ -1,6 +1,7 @@
 <template>
   <div>
-    <router-link v-bind:to="`/group/edit/${mailboxGroupId}`" class="nav-link"
+    {{ mailboxGroup.name }}
+    <router-link v-bind:to="`/group/edit/${mailboxGroup.groupId}`" class="nav-link"
       >Edit group</router-link
     >
     <slot></slot>
@@ -11,7 +12,7 @@
 export default {
   name: "MailboxPageGroupItem",
   props: {
-    mailboxGroupId: {},
+    mailboxGroup: {},
   },
 };
 </script>

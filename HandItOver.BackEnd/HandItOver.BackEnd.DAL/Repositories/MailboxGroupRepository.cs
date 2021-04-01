@@ -27,6 +27,16 @@ namespace HandItOver.BackEnd.DAL.Repositories
                 .FirstOrDefaultAsync(m => m!.GroupId == id);
         }
 
+        public async Task<IEnumerable<MailboxGroup>> GetByOwnerIdWithMailboxesOrNullAsync(string userId)
+        {
+            return await this.dbContext.Set<MailboxGroup>()
+                .Include(m => m!.Mailboxes)
+                .Where(g => g.OwnerId == userId)
+                .OrderByDescending(g => g.Mailboxes.Count)
+                .ToListAsync();
+        }
+
+
         public Task<MailboxGroup?> FindByIdFullInfoAsync(string id)
         {
             return this.dbContext.Set<MailboxGroup?>()

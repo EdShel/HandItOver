@@ -68,11 +68,17 @@ namespace HandItOver.BackEnd.BLL.Services
             );
         }
 
-        public async Task<MailboxGroupViewResult> GetMailboxGroupById(string groupId)
+        public async Task<MailboxGroupViewResult> GetMailboxGroupByIdAsync(string groupId)
         {
             var group = await this.mailboxGroupRepository.FindByIdWithMailboxesOrNullAsync(groupId)
                 ?? throw new NotFoundException("Mailbox group");
             return this.mapper.Map<MailboxGroupViewResult>(group);
+        }
+
+        public async Task<IEnumerable<MailboxGroupViewResult>> GetMailboxGroupByOwnerAsync(string userId)
+        {
+            var groups = await this.mailboxGroupRepository.GetByOwnerIdWithMailboxesOrNullAsync(userId);
+            return this.mapper.Map<IEnumerable<MailboxGroupViewResult>>(groups);
         }
 
         public async Task<MailboxGroup> GetMailboxGroupByNameAsync(string name)

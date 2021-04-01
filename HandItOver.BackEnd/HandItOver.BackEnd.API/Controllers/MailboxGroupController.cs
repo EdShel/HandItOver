@@ -48,7 +48,15 @@ namespace HandItOver.BackEnd.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync([FromRoute] string id)
         {
-            var result = await this.mailboxGroupService.GetMailboxGroupById(id);
+            var result = await this.mailboxGroupService.GetMailboxGroupByIdAsync(id);
+            return new JsonResult(result);
+        }
+
+        [HttpGet("my")]
+        public async Task<IActionResult> GetAllMyGroupsAsync()
+        {
+            string id = this.User.FindFirstValue(AuthConstants.Claims.ID);
+            var result = await this.mailboxGroupService.GetMailboxGroupByOwnerAsync(id);
             return new JsonResult(result);
         }
 

@@ -14,15 +14,15 @@
 
     <h3>Mailboxes</h3>
     <mailbox-page-group-item
-      v-for="(mailboxes, groupId) in mailboxGroups"
-      :key="groupId"
-      v-bind:mailboxGroupId="groupId"
+      v-for="group in allGroups"
+      :key="group.groupId"
+      v-bind:mailboxGroup="group"
     >
       <mailbox-page-item
-        v-for="box in mailboxes"
+        v-for="box in group.mailboxes"
         :key="box.id"
         v-bind:mailbox="box"
-        v-on:remove-from-group="removeMailboxFromGroup(box.id, groupId)"
+        v-on:remove-from-group="removeMailboxFromGroup(box.id, group.groupId)"
         v-on:edit-mailbox="onMailboxEditing(box)"
       />
     </mailbox-page-group-item>
@@ -42,7 +42,7 @@ import api from "~/util/api";
 import MailboxPageItem from "~/components/mailboxes/MailboxPageItem";
 import MailboxPageGroupModal from "~/components/mailboxes/MailboxPageGroupModal";
 import MailboxEditModal from "~/components/mailboxes/MailboxEditModal";
-import MailboxPageGroupItem from "./MailboxPageGroupItem.vue";
+import MailboxPageGroupItem from "~/components/mailboxes/MailboxPageGroupItem";
 
 export default {
   name: "MailboxPage",
@@ -54,27 +54,22 @@ export default {
   },
   data: function () {
     return {
-      mailboxGroups: {},
+      allGroups: [],
       mailboxesWithoutGroups: [],
       selectedMailboxesIds: [],
-      editedMailbox: {}
+      editedMailbox: {},
     };
   },
   mounted() {
     this.updateMailboxesList();
   },
   methods: {
-    updateMailboxesList() {
-      api
-        .sendGet("/mailbox/my")
-        .then((r) => {
-          let data = r.data;
-          let groupedByMailboxGroup = groupBy(data, "groupId");
-          this.mailboxesWithoutGroups = groupedByMailboxGroup[null];
-          delete groupedByMailboxGroup[null];
-          this.mailboxGroups = groupedByMailboxGroup;
-        })
-        .catch((e) => {});
+    async updateMailboxesList() {
+      let rGroup = await api.sendGet(`/mailboxGroup/my`);
+      this.allGroups = rGroup.data;
+
+      let rMailboxes = await api.sendGet("/mailbox/my");
+      this.mailboxesWithoutGroups = rMailboxes.data.filter(mb => mb.groupId == null);
     },
     creatingGroupForMailbox(mailboxId) {
       this.selectedMailboxesIds = [mailboxId];
@@ -96,8 +91,7 @@ export default {
       this.editedMailbox = mailbox;
       this.$refs.editModal.show();
     },
-    onMailboxEdited(mailbox) {
-    },
+    onMailboxEdited(mailbox) {},
   },
 };
 
