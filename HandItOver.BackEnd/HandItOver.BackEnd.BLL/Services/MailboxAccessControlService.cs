@@ -93,7 +93,9 @@ namespace HandItOver.BackEnd.BLL.Services
             const int tokenSize = 36;
             byte[] tokenData = new byte[tokenSize];
             RandomNumberGenerator.Create().GetBytes(tokenData);
-            string tokenValue = Convert.ToBase64String(tokenData);
+            string tokenValue = Convert.ToBase64String(tokenData)
+                .Replace('+', '-')
+                .Replace('/', '_');
 
             var token = new WhitelistJoinToken
             {

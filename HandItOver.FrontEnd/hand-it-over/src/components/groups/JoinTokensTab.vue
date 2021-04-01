@@ -8,14 +8,18 @@
         <th>#</th>
         <th>Join link</th>
         <th>&nbsp;</th>
+        <th>&nbsp;</th>
       </tr>
       <tr v-for="(token, i) in tokens" :key="token.id">
         <td>{{ i + 1 }}</td>
-        <td>{{ createLinkFromToken(token.token) }}</td>
+        <td>
+          <a v-bind:href="createLinkFromToken(token.token)">Click to check</a>
+        </td>
         <td>
           <button v-on:click="onGenerateQRCodePressed(token.token)">
             QR code
           </button>
+          <button v-on:click="onDeleteTokenPressed(token)">Delete</button>
         </td>
       </tr>
     </table>
@@ -61,6 +65,13 @@ export default {
     onGenerateQRCodePressed(token) {
       this.selectedTokenValue = token;
       this.$refs.qrcodeModal.show();
+    },
+    async onDeleteTokenPressed(t) {
+      await api.sendDelete(
+        `/mailboxGroup/${this.groupId}/whitelist/token/${t.id}`
+      );
+      let index = this.tokens.indexOf(t);
+      this.tokens.splice(index, 1);
     },
   },
 };
