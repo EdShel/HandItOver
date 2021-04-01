@@ -61,14 +61,17 @@ export default {
     hide() {
       this.$refs.modalWindow.hide();
     },
-    loginPressed() {
-      api
-        .login(this.email, this.password)
-        .then(() => {
-          this.hide();
-          location.reload();
-        })
-        .catch((e) => {});
+    async loginPressed() {
+      if (!this.validate()) {
+        return;
+      }
+      try {
+        await api.login(this.email, this.password);
+        this.hide();
+        this.$router.go(0);
+      } catch (e) {
+        this.errors.push("Invalid email or password.");
+      }
     },
     validate() {
       let errors = [];
@@ -82,6 +85,7 @@ export default {
       }
 
       this.errors = errors;
+      return errors.length == 0;
     },
   },
 };

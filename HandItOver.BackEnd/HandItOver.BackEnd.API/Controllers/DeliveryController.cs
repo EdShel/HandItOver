@@ -84,7 +84,7 @@ namespace HandItOver.BackEnd.API.Controllers
         }
 
         [HttpGet("active/{userId}")]
-        [Authorize(Roles = AuthConstants.Roles.ADMIN)]
+        [Authorize(AuthConstants.Policies.USER_HIMSELF_ONLY)]
         public async Task<IActionResult> GetActiveDeliveriesOfUserAsync([FromRoute] string userId)
         {
             var result = await this.deliveryService.GetActiveDeliveriesAsync(userId);

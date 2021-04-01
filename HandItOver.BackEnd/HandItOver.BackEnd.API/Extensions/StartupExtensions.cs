@@ -66,12 +66,18 @@ namespace HandItOver.BackEnd.API.Extensions
                     AuthConstants.Policies.DELIVERY_ADDRESSEE_OR_MAILBOX_OWNER_ONLY,
                     policy => policy.Requirements.Add(DeliveryAuthorizationHandler.GetRequirement("deliveryId"))
                 );
+
+                options.AddPolicy(
+                    AuthConstants.Policies.USER_HIMSELF_ONLY,
+                    policy => policy.Requirements.Add(UserHimselfAuthorizationHandler.GetRequirement("userId"))
+                );
             });
 
             services.AddScoped<IAuthorizationHandler, MailboxOwnerAuthorizationHandler>();
             services.AddScoped<IAuthorizationHandler, MailboxGroupAuthorizationHandler>();
             services.AddScoped<IAuthorizationHandler, RentAuthorizationHandler>();
             services.AddScoped<IAuthorizationHandler, DeliveryAuthorizationHandler>();
+            services.AddScoped<IAuthorizationHandler, UserHimselfAuthorizationHandler>();
 
             services.AddSingleton<IClaimsTransformation, ClaimsTransformation>();
 

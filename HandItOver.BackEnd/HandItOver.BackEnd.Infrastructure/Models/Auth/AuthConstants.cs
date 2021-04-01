@@ -31,6 +31,8 @@
             public const string RENTER_OR_OWNER_ONLY = "renterOrOwner";
 
             public const string DELIVERY_ADDRESSEE_OR_MAILBOX_OWNER_ONLY = "addressee";
+
+            public const string USER_HIMSELF_ONLY = "user";
         }
     }
 }

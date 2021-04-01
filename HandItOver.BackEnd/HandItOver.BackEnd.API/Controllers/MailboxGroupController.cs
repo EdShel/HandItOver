@@ -185,7 +185,7 @@ namespace HandItOver.BackEnd.API.Controllers
         }
 
         [HttpGet("rent/user/{userId}")]
-        [Authorize(Roles = AuthConstants.Roles.ADMIN)]
+        [Authorize(AuthConstants.Policies.USER_HIMSELF_ONLY)]
         public async Task<IActionResult> ViewRentsOfUserAsync([FromRoute] string userId)
         {
             var result = await this.mailboxRentService.GetRentsOfUserAsync(userId);

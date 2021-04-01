@@ -8,7 +8,7 @@ namespace HandItOver.BackEnd.API.Models.Auth
         public string Email { get; set; } = null!;
 
         [Required]
-        [StringLength(20, 6)]
+        [StringLength(20, MinimumLength = 6)]
         public string Password { get; set; } = null!;
     }
 }
