@@ -13,7 +13,7 @@
         <td>{{ i + 1 }}</td>
         <td>{{ formatDate(d.arrived) }}</td>
         <td>{{ formatDate(d.terminal) }}</td>
-        <td>{{ d.weight }} kg</td> <!-- TODO: in pounds too -->
+        <td>{{ $t('units.mass', [toLocalMass(d.weight).toFixed(2)]) }}</td> 
         <td><router-link v-bind:to="'/delivery/' + d.id">View</router-link></td>
       </tr>
     </table>
@@ -21,8 +21,9 @@
 </template>
 
 <script>
-import api from '~/util/api'
-import dateUtil from '~/util/date'
+import api from '~/util/api';
+import dateUtil from '~/util/date';
+import { localWeight } from '~/util/units';
 
 export default {
     name: 'UserDeliveries',
@@ -53,6 +54,9 @@ export default {
     methods: {
         formatDate(date) {
             return dateUtil.localString(date);
+        },
+        toLocalMass(mass){
+          return localWeight(this.$t('units.massUnit'), mass);
         }
     }
 }

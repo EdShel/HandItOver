@@ -1,3 +1,5 @@
+import { i18n } from '~/i18n'
+
 function hoursToHMmSs(hours) {
     let hoursStr = hours.toString();
     return `${hoursStr}:00:00`;
@@ -42,15 +44,15 @@ function min(firstDate, secondDate) {
 }
 
 function localTimeString(date) {
-    return date.toLocaleTimeString('uk')
+    return date.toLocaleTimeString(i18n.locale)
 }
 
 function localDateString(date) {
-    return date.toLocaleDateString('uk')
+    return date.toLocaleDateString(i18n.locale)
 }
 
 function localString(date) {
-    return date.toLocaleString('uk')
+    return date.toLocaleString(i18n.locale)
 }
 
 export default {

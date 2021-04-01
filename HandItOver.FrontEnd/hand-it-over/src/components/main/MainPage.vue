@@ -1,7 +1,7 @@
 <template>
   <div>
     <rent-search></rent-search>
-    {{ $t('duck.ducklin') }}
+    {{ $t('duck.ducklin', {name: 'Bob'}) }}
   </div>
 </template>
 
