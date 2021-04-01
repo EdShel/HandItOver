@@ -13,10 +13,22 @@ namespace HandItOver.BackEnd.BLL.Models.MailboxRent
 
     public record RentResult(
         string RentId,
-        string MailboxId,
-        MailboxSize MailboxSize,
+        RentedMailboxResult Mailbox,
         DateTime From,
-        DateTime Until
+        DateTime Until,
+        RenterResult Renter
+    );
+
+    public record RentedMailboxResult(
+        string Id,
+        string Address,
+        MailboxSize Size
+    );
+
+    public record RenterResult(
+        string Id,
+        string FullName,
+        string Email
     );
 
     public record RentTimeCheckRequest(

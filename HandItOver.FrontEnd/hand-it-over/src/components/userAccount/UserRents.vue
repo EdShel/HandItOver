@@ -42,7 +42,7 @@ export default {
         this.rents = r.data.map((rent) => ({
           id: rent.rentId,
           mailboxId: rent.mailboxId,
-          mailboxSize: rent.mailboxSize,
+          mailboxSize: rent.mailbox.size,
           from: new Date(rent.from),
           until: new Date(rent.until),
         }));

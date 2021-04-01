@@ -20,13 +20,13 @@
           <th>&nbsp;</th>
         </tr>
         <tr v-for="(user, i) in whitelisted" :key="user.id">
-          <th>{{ i + 1 }}</th>
-          <th>{{ user.email }}</th>
-          <th>{{ user.fullName }}</th>
-          <th>
+          <td>{{ i + 1 }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.fullName }}</td>
+          <td>
             <router-link v-bind:to="`/account/${user.id}`">View</router-link>
-          </th>
-          <th v-on:click="removeUserPressed(user)">Remove</th>
+          </td>
+          <td v-on:click="removeUserPressed(user)">Remove</td>
         </tr>
       </table>
     </div>
