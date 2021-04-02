@@ -10,7 +10,7 @@
         v-on:blur="onTextInputLostFocus"
         class="search-field"
       />
-      <div class="search-icon">TODO: place magnifier icon</div>
+      <div class="search-icon"><i class="fas fa-search"></i></div>
     </div>
     <div v-if="showSuggestions" class="suggestions">
       <search-item
@@ -108,8 +108,15 @@ export default {
 
 .search-icon {
   position: absolute;
-  right: 0;
+  right: 5px;
   top: 0;
+  bottom: 0;
+}
+
+.search-icon > i{
+  margin: auto 0;
+  font-size: 1.5em;
+  transform: translate(0, 2px);
 }
 
 .suggestions {

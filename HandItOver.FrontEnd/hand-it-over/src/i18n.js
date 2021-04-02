@@ -12,14 +12,16 @@ export const supportedLanguages = [
 export const i18n = new VueI18n({
     locale: 'en',
     fallbackLocale: 'en',
-    messages: {en: messages}
+    messages: { en: messages }
 });
 
 const loadedLanguages = ['en'];
 
 function setI18nLanguage(lang) {
     i18n.locale = lang;
-    document.querySelector('html').setAttribute('lang', lang);
+    let htmlTag = document.querySelector('html');
+    htmlTag.setAttribute('lang', lang);
+    htmlTag.setAttribute('dir', ["ar", "dv", "fa", "ps"].includes(lang) ? 'rtl' : 'ltr');
     return lang
 }
 

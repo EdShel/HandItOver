@@ -2,15 +2,17 @@
   <div>
     <rent-search></rent-search>
     {{ $t('duck.ducklin', {name: 'Bob'}) }}
+    <box-banner />
   </div>
 </template>
 
 <script>
 import RentSearch from "~/components/main/RentSearch";
+import BoxBanner from "~/components/main/BoxBanner";
 
 export default {
   name: "MainPage",
-  components: { RentSearch },
+  components: { RentSearch, BoxBanner },
 };
 </script>
 
