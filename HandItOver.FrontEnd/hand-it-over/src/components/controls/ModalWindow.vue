@@ -2,9 +2,9 @@
   <transition name="invoice">
     <div
       class="modal"
-      @mousedown.self="hide"
+      v-on:mousedown.self="hide"
       v-if="isVisible"
-      :class="{ visible: isVisible }"
+      v-bind:class="{ visible: isVisible }"
     >
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -73,6 +73,7 @@ export default {
   border-width: 16px;
   border-style: solid;
   border-image: url(../../assets/9patchDeliveryNote.png) 16 repeat;
+  transition: transform 0.5s;
 }
 
 .invoice-enter-active,
@@ -82,10 +83,6 @@ export default {
 .invoice-enter,
 .invoice-leave-to {
   opacity: 0;
-}
-
-.modal-content {
-  transition: transform 0.5s;
 }
 
 .invoice-enter .modal-content {

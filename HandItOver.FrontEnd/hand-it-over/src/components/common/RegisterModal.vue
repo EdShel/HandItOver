@@ -7,40 +7,44 @@
     v-on:ok="onRegisterPressed"
   >
     <validation-errors v-bind:errors="errors" />
-    <div>
-      <label for="emailText">Email</label>
+    <div class="row mb-2">
+      <label for="emailText" class="col-sm-3">Email</label>
       <input
         type="email"
         id="emailText"
         v-model="email"
         v-on:input="validateThrottled"
+        class="col-sm-9"
       />
     </div>
-    <div>
-      <label for="fullNameText">Full name</label>
+    <div class="row mb-2">
+      <label for="fullNameText" class="col-sm-3">Full name</label>
       <input
         type="text"
         id="fullNameText"
         v-model="fullName"
         v-on:input="validateThrottled"
+        class="col-sm-9"
       />
     </div>
-    <div>
-      <label for="passwordText">Password</label>
+    <div class="row mb-2">
+      <label for="passwordText" class="col-sm-3">Password</label>
       <input
         type="password"
         id="passwordText"
         v-model="password"
         v-on:input="validateThrottled"
+        class="col-sm-9"
       />
     </div>
-    <div>
-      <label for="passwordRepeatText">Repeat password</label>
+    <div class="row mb-2">
+      <label for="passwordRepeatText" class="col-sm-3">Repeat password</label>
       <input
         type="password"
         id="passwordRepeatText"
         v-model="passwordRepeat"
         v-on:input="validateThrottled"
+        class="col-sm-9"
       />
     </div>
   </modal-window>

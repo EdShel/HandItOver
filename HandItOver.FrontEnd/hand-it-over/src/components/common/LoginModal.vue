@@ -7,24 +7,26 @@
     v-on:ok="loginPressed"
   >
     <validation-errors v-bind:errors="errors" />
-    <div>
-      <label for="emailText">Email</label>
-      <input
-        type="email"
-        id="emailText"
-        v-model="email"
-        v-on:input="validateThrottled"
-      />
-    </div>
-    <div>
-      <label for="passwordText">Password</label>
-      <input
-        type="password"
-        id="passwordText"
-        v-model="password"
-        v-on:input="validateThrottled"
-      />
-    </div>
+      <div class="row mb-2">
+        <label for="emailText" class="col-sm-3">Email</label>
+        <input
+          type="email"
+          id="emailText"
+          v-model="email"
+          v-on:input="validateThrottled"
+          class="col-sm-9"
+        />
+      </div>
+      <div class="row">
+        <label for="passwordText" class="col-sm-3">Password</label>
+        <input
+          type="password"
+          id="passwordText"
+          v-model="password"
+          v-on:input="validateThrottled"
+          class="col-sm-9"
+        />
+      </div>
   </modal-window>
 </template>
 
