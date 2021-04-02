@@ -1,10 +1,10 @@
 <template>
 <div>
-    <h3>Vacant intervals of the day</h3>
+    <h3>{{$t('rent.vacantIntervals')}}</h3>
     <table class="table">
         <tr>
-            <th>Begin</th>
-            <th>End</th>
+            <th>{{$t('rent.begin')}}</th>
+            <th>{{$t('rent.end')}}</th>
         </tr>
         <tr v-for="(interval, i) in intervals" :key="i">
             <td> {{ timeString(interval.begin) }} </td>

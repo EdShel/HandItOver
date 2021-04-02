@@ -19,7 +19,7 @@
       v-on:added-to-group="onAddedToGroup"
     />
 
-    <h3>Mailboxes</h3>
+    <h3>{{$t('page.mailbox')}}</h3>
     <mailbox-page-group-item
       v-for="group in allGroups"
       :key="group.groupId"
@@ -120,12 +120,6 @@ export default {
   },
 };
 
-function groupBy(collection, key) {
-  return collection.reduce(function (map, x) {
-    (map[x[key]] = map[x[key]] || []).push(x);
-    return map;
-  }, {});
-}
 </script>
 
 <style scoped>

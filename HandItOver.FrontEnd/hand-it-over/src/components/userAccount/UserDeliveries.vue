@@ -1,12 +1,12 @@
 <template>
   <div>
-    <h3>Current deliveries</h3>
+    <h3>{{$t('account.currentDeliveries')}}</h3>
     <table class="table table-hover">
       <tr>
         <th>#</th>
-        <th>Arrived</th>
-        <th>Terminal time</th>
-        <th>Weight</th>
+        <th>{{$t('delivery.arrived')}}</th>
+        <th>{{$t('delivery.terminalTime')}}</th>
+        <th>{{$t('delivery.weight')}}</th>
         <th>&nbsp;</th>
       </tr>
       <tr v-for="(d, i) in deliveries" :key="d.id">
@@ -16,7 +16,7 @@
         <td>{{ toLocalMass(d.weight) }}</td>
         <td>
           <router-link v-bind:to="'/delivery/' + d.id"
-            >View delivery</router-link
+            >{{$t('account.viewDeliveryAction')}}</router-link
           >
         </td>
       </tr>

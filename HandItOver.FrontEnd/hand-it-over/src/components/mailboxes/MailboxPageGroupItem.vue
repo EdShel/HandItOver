@@ -10,7 +10,7 @@
         class="nav-link"
       >
         <i class="fas fa-cogs"></i> 
-        Configure
+        {{$t('common.configureAction')}}
       </router-link>
     </div>
     <slot></slot>

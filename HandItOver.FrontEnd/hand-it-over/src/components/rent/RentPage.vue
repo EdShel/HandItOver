@@ -1,24 +1,24 @@
 <template>
   <div v-if="rent">
-    <h3>Viewing rent</h3>
+    <h3>{{$t('rent.viewingRent')}}</h3>
     <p v-if="rent.mailbox">
-      <b><i class="fas fa-box"></i> Mailbox: </b><span>{{ rent.mailbox.address }}</span>
+      <b><i class="fas fa-box"></i> {{$t('mailboxes.mailbox')}}: </b><span>{{ rent.mailbox.address }}</span>
     </p>
     <p v-if="rent.renter">
-      <b><i class="fas fa-user"></i> Renter: </b>
+      <b><i class="fas fa-user"></i> {{$t('rent.renter')}}: </b>
       <router-link v-bind:to="`/account/${rent.renter.id}`">
         {{ rent.renter.fullName }} ({{ rent.renter.email }})
       </router-link>
     </p>
     <p>
-      <b><i class="fas fa-hourglass-start"></i> Start time: </b><span>{{ formatDate(rent.from) }}</span>
+      <b><i class="fas fa-hourglass-start"></i> {{$t('rent.startTime')}}: </b><span>{{ formatDate(rent.from) }}</span>
     </p>
     <p>
-      <b><i class="fas fa-hourglass-end"></i> End time: </b><span>{{ formatDate(rent.until) }}</span>
+      <b><i class="fas fa-hourglass-end"></i> {{$t('rent.endTime')}}: </b><span>{{ formatDate(rent.until) }}</span>
     </p>
     <div>
       <button v-on:click="onDeleteRentPressed" class="btn btn-danger"> 
-        <i class="fas fa-times"></i> Cancel rent
+        <i class="fas fa-times"></i> {{$t('rent.cancelRentAction')}}
         </button>
     </div>
   </div>

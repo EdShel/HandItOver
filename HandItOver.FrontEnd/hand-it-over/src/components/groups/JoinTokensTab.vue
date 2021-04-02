@@ -4,28 +4,28 @@
 
     <button v-on:click="onGenerateLinkPressed" class="btn btn-outline-success">
       <i class="fas fa-plus"></i>
-      Generate new join link
+      {{$t('groups.genJoinTokenAction')}}
       </button>
     <table class="table">
       <tr>
         <th>#</th>
-        <th>Join link</th>
-        <th>QR code</th>
+        <th>{{$t('groups.joinLink')}}</th>
+        <th>{{$t('groups.qrCode')}}</th>
         <th>&nbsp;</th>
       </tr>
       <tr v-for="(token, i) in tokens" :key="token.id">
         <td>{{ i + 1 }}</td>
         <td>
-          <a v-bind:href="createLinkFromToken(token.token)">Click to follow</a>
+          <a v-bind:href="createLinkFromToken(token.token)">{{$t('groups.clickToFollowAction')}}</a>
         </td>
         <td>
           <span v-on:click="onGenerateQRCodePressed(token.token)" class="link">
             <i class="fas fa-qrcode"></i>
-            QR code
+            {{$t('groups.qrCode')}}
           </span>
         </td>
         <td>
-          <span v-on:click="onDeleteTokenPressed(token)" class="delete">Delete</span>
+          <span v-on:click="onDeleteTokenPressed(token)" class="delete">{{$t('common.deleteAction')}}</span>
         </td>
       </tr>
     </table>

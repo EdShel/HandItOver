@@ -7,15 +7,15 @@
     />
 
     <div>
-      <h3>Whitelisted people</h3>
+      <h3>{{$t('groups.whitelistedPeople')}}</h3>
       <button v-on:click="onAddToWhitelistPressed" class="btn btn-success">
-        <i class="fas fa-plus"></i> Add a user to the whitelist
+        <i class="fas fa-plus"></i> {{$t('groups.addUserToWh')}}
       </button>
       <table class="table">
         <tr>
           <th>#</th>
-          <th><i class="fas fa-at"></i> Email</th>
-          <th><i class="fas fa-user"></i> Name</th>
+          <th><i class="fas fa-at"></i> {{$t('users.email')}}</th>
+          <th><i class="fas fa-user"></i> {{$t('users.fullName')}}</th>
           <th>&nbsp;</th>
           <th>&nbsp;</th>
         </tr>
@@ -25,10 +25,10 @@
           <td>{{ user.fullName }}</td>
           <td>
             <router-link v-bind:to="`/account/${user.id}`"
-              >View account</router-link
+              >{{$t('users.viewUser')}}</router-link
             >
           </td>
-          <td v-on:click="removeUserPressed(user)" class="remove">Remove</td>
+          <td v-on:click="removeUserPressed(user)" class="remove">{{$t('common.removeAction')}}</td>
         </tr>
       </table>
     </div>

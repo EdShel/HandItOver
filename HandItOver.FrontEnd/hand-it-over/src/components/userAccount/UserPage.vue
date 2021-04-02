@@ -1,7 +1,7 @@
 <template>
   <div v-if="user">
     <h1>{{ user.fullName }}</h1>
-    <p><b><i class="fas fa-envelope"></i> Email:</b> {{ user.email }}</p>
+    <p><b><i class="fas fa-envelope"></i> {{$t('users.email')}}:</b> {{ user.email }}</p>
     <div>
       <user-rents v-bind:userId="user.id" />
     </div>

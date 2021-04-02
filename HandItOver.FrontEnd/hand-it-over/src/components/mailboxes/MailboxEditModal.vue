@@ -1,13 +1,13 @@
 <template>
   <modal-window
     ref="modalWindow"
-    header="Edit mailbox"
-    close-text="Close"
-    ok-text="Edit"
+    v-bind:header="$t('mailboxes.editMailbox')"
+    v-bind:close-text="$t('common.closeAction')"
+    v-bind:ok-text="$t('groups.edit')"
     v-on:ok="editPressed"
   >
     <div>
-      <label for="addressText">Mailbox address</label>
+      <label for="addressText">{{$t('delivery.mailboxAddress')}}</label>
       <input id="addressText" type="text" v-model="edit.address" />
     </div>
   </modal-window>

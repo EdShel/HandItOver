@@ -1,13 +1,13 @@
 <template>
   <modal-window
     ref="modalWindow"
-    header="Add to group"
-    close-text="Cancel"
-    ok-text="Add"
+    v-bind:header="$t('mailboxes.addToGroup')"
+    v-bind:close-text="$t('common.cancelAction')"
+    v-bind:ok-text="$t('common.addAction')"
     v-on:ok="onAddPressed"
   >
     <div v-if="allGroups.length > 0">
-      <label for="groupSelect">Choose your group</label>
+      <label for="groupSelect">{{$t('mailboxes.chooseGroup')}}</label>
       <select id="groupSelect" v-model="selectedGroup">
         <option
           v-for="group in allGroups"
@@ -18,7 +18,7 @@
         </option>
       </select>
     </div>
-    <div v-else>Create at least one group.</div>
+    <div v-else>{{$t('mailboxes.noGroups')}}</div>
   </modal-window>
 </template>
 

@@ -3,7 +3,7 @@
     <h3>{{ group.name }}</h3>
     <div>
       <div class="row mb-2">
-        <label for="groupNameText" class="col-sm-4">Group name</label>
+        <label for="groupNameText" class="col-sm-4">{{$t('groups.groupName')}}</label>
         <input
           id="groupNameText"
           type="text"
@@ -13,7 +13,7 @@
       </div>
       <div class="row mb-2">
         <label for="whitelistCheckbox" class="col-sm-4"
-          >Only whitelisted users can rent</label
+          >{{$t('groups.whitelistOnly')}}</label
         >
         <input
           id="whitelistCheckbox"
@@ -23,7 +23,7 @@
       </div>
       <div class="row mb-2">
         <label for="maxRentHoursRange" class="col-sm-4"
-          >Max rent hours {{ edit.maxRentHours }}</label
+          >{{$t('groups.maxRentHours')}} {{ edit.maxRentHours }}</label
         >
         <input
           id="maxRentHoursRange"
@@ -38,7 +38,7 @@
       <div>
         <button v-on:click="saveEdit" class="btn btn-primary">
           <i class="fas fa-save"></i>
-          Save changes
+          {{$t('groups.saveChangesAction')}}
         </button>
       </div>
       <div>

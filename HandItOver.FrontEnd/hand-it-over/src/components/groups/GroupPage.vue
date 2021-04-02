@@ -2,19 +2,19 @@
   <div>
     <div class="tabs">
       <router-link v-bind:to="`/group/edit/${groupId}`" class="nav-link"
-        >Edit</router-link
+        >{{$t('groups.edit')}}</router-link
       >
 
       <router-link v-bind:to="`/group/rents/${groupId}`" class="nav-link"
-        >Manage rents</router-link
+        >{{$t('groups.rents')}}</router-link
       >
 
       <router-link v-bind:to="`/group/wl/${groupId}`" class="nav-link"
-        >Whitelist</router-link
+        >{{$t('groups.whitelist')}}</router-link
       >
 
       <router-link v-bind:to="`/group/joinlinks/${groupId}`" class="nav-link"
-        >Join links</router-link
+        >{{$t('groups.joinLinks')}}</router-link
       >
     </div>
     <div>

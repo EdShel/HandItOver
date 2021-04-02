@@ -1,9 +1,9 @@
 <template>
   <modal-window
     ref="modalWindow"
-    header="QR code"
-    close-text="Close"
-    ok-text="Download PNG"
+    v-bind:header="$t('groups.qrCode')"
+    v-bind:close-text="$t('common.closeAction')"
+    v-bind:ok-text="$t('groups.downloadPng')"
     v-on:ok="onOkPressed"
   >
     <vue-qrcode id="qrCodeImage" v-bind:value="link" class="qrCode" />

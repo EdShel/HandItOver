@@ -1,12 +1,12 @@
 <template>
   <div>
-    <h3>Rents</h3>
+    <h3>{{$t('rent.rents')}}</h3>
     <table class="table">
       <tr>
         <th>#</th>
-        <th>From</th>
-        <th>Until</th>
-        <th>Mailbox size</th>
+        <th>{{$t('rent.from')}}</th>
+        <th>{{$t('rent.until')}}</th>
+        <th>{{$t('mailboxes.mailboxSize')}}</th>
         <th>&nbsp;</th>
       </tr>
       <tr v-for="(rent, i) in rents" :key="rent.id">
@@ -14,7 +14,7 @@
         <td>{{ formatDate(rent.from) }}</td>
         <td>{{ formatDate(rent.until) }}</td>
         <td>{{ rent.mailboxSize }}</td>
-        <td><router-link v-bind:to="'/rent/' + rent.id">View rent</router-link></td>
+        <td><router-link v-bind:to="'/rent/' + rent.id">{{$t('rent.viewRentAction')}}</router-link></td>
       </tr>
     </table>
   </div>

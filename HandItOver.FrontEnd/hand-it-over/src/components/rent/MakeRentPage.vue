@@ -1,19 +1,19 @@
 <template>
   <div>
-    <h3>Rent options</h3>
+    <h3>{{$t('rent.rentOptions')}}</h3>
     <div v-if="group">
       <div>
         <div>
-          <label for="packageSizeSelect">Package size</label>
+          <label for="packageSizeSelect">{{$t('rent.packageSize')}}</label>
           <select id="packageSizeSelect" v-model="rentPackageSize">
-            <option value="0">Small</option>
-            <option value="1">Medium</option>
-            <option value="2">Large</option>
+            <option value="0">{{$t('rent.small')}}</option>
+            <option value="1">{{$t('rent.medium')}}</option>
+            <option value="2">{{$t('rent.large')}}</option>
           </select>
         </div>
         <div>
           <label for="rentDurationRange"
-            >Rent duration: {{ rentDurationMinutes }} minutes</label
+            >{{$t('rent.rentDuration')}}: {{ rentDurationMinutes }} {{$t('rent.minutes')}}</label
           >
           <input
             type="range"
@@ -26,7 +26,7 @@
       </div>
     </div>
     <div>
-      <label for="rentFromDate">Rent start</label>
+      <label for="rentFromDate">{{$t('rent.rentStart')}}</label>
       <date-picker
         ref="datePicker"
         v-bind:daysForwardCount="Number(14)"
@@ -42,7 +42,7 @@
         />
       </div>
       <div>
-        <button v-on:click="renting">Rent</button>
+        <button v-on:click="renting">{{$t('rent.rent')}}</button>
       </div>
     </div>
   </div>

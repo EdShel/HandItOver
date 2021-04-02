@@ -3,9 +3,9 @@
     <table class="table">
       <tr>
         <th>#</th>
-        <th><i class="fas fa-hourglass-start"></i> From</th>
-        <th><i class="fas fa-hourglass-end"></i> Until</th>
-        <th><i class="fas fa-user"></i> Renter</th>
+        <th><i class="fas fa-hourglass-start"></i> {{$t('rent.from')}}</th>
+        <th><i class="fas fa-hourglass-end"></i> {{$t('rent.until')}}</th>
+        <th><i class="fas fa-user"></i> {{$t('rent.renter')}}</th>
         <th>&nbsp;</th>
       </tr>
       <tr v-for="(rent, i) in rents" :key="rent.rentId">
@@ -23,7 +23,7 @@
         </td>
         <td>
           <router-link v-bind:to="`/rent/${rent.rentId}`">
-            View rent
+            {{$t('rent.viewRentAction')}}
           </router-link>
         </td>
       </tr>

@@ -7,11 +7,11 @@
     v-on:ok="createPressed"
   >
     <div>
-      <label for="groupNameText">Group name (unique)</label>
+      <label for="groupNameText">{{$t('groups.groupName')}} ({{$t('mailboxes.unique')}})</label>
       <input id="groupNameText" type="text" v-model="groupName" />
     </div>
     <div>
-      <label for="whitelistOnlyCheckbox">Only whitelisted users can rent</label>
+      <label for="whitelistOnlyCheckbox">{{$t('groups.whitelistOnly')}}</label>
       <input
         id="whitelistOnlyCheckbox"
         type="checkbox"
@@ -19,7 +19,7 @@
       />
     </div>
     <div>
-      <label for="maxRentHours">Max rent hours</label>
+      <label for="maxRentHours">{{$t('groups.maxRentHours')}}</label>
       <input
         id="maxRentHours"
         type="range"
@@ -44,7 +44,7 @@ export default {
   components: { ModalWindow },
   data: function () {
     return {
-      groupName: "E.g. Kharkiv ATB Market #2",
+      groupName: this.$t('mailboxes.exampleGroupName'),
       whitelistOnly: false,
       maxRentHours: 8,
     };

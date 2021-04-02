@@ -1,12 +1,12 @@
 <template>
   <div>
     <div v-if="status == 0">
-      <span v-on:click="onJoinPressed" class="join-button">Click to join</span>
+      <span v-on:click="onJoinPressed" class="join-button">{{$t('joinGroup.clickToJoinAction')}}</span>
     </div>
-    <p v-else-if="status == 1">Waiting...</p>
-    <p v-else-if="status == 2">Now you can rent this group.</p>
+    <p v-else-if="status == 1">{{$t('joinGroup.waiting')}}...</p>
+    <p v-else-if="status == 2">{{$t('joinGroup.nowCanRent')}}</p>
     <p v-else-if="status == 3">
-      Sorry, invalid token or you already belong to the whitelist.
+      {{$t('joinGroup.cantJoin')}}
     </p>
   </div>
 </template>

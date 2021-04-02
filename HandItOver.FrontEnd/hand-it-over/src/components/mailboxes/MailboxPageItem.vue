@@ -1,20 +1,20 @@
 <template>
   <div class="groupItem">
     <p>
-      Mailbox address: <i>{{ mailbox.address }}</i>
+      {{$t('delivery.mailboxAddress')}}: <i>{{ mailbox.address }}</i>
     </p>
     <div v-if="!mailbox.groupId">
       <button @click="createGroup">
-        <i class="fas fa-folder"></i> Add to new group
+        <i class="fas fa-folder"></i> {{$t('mailboxes.addToNewGroup')}}
       </button>
       <button @click="onAddToGroupPressed">
-        <i class="fas fa-folder-plus"></i> Add to existing group
+        <i class="fas fa-folder-plus"></i> {{$t('mailboxes.addToExistingGroup')}}
       </button>
     </div>
     <button v-if="mailbox.groupId" @click="removeFromGroup">
-      <i class="fas fa-folder-minus"></i> Remove from group
+      <i class="fas fa-folder-minus"></i> {{$t('mailboxes.removeFromGroupAction')}}
     </button>
-    <button @click="editMailbox"><i class="fas fa-edit"></i> Edit</button>
+    <button @click="editMailbox"><i class="fas fa-edit"></i> {{$t('groups.edit')}}</button>
     <button v-on:click="onShowDeliveriesPressed">
       <i
         class="fas"
@@ -24,13 +24,13 @@
     </button>
     <div v-if="deliveriesAreVisible" class="delivery-container">
       <div v-for="delivery in deliveries" :key="delivery.id" class="delivery">
-        <div><b><i class="fas fa-calendar"></i> Arrived: </b> {{ formatDate(delivery.arrived) }}</div>
+        <div><b><i class="fas fa-calendar"></i> {{$t('delivery.arrived')}}: </b> {{ formatDate(delivery.arrived) }}</div>
         <div v-if="delivery.taken === null">
-          <b><i class="fas fa-calendar-alt"></i> Predicted taking: </b>
+          <b><i class="fas fa-calendar-alt"></i> {{$t('mailboxes.predictedTaking')}}: </b>
           {{ formatDate(delivery.predictedTakingTime) }}
         </div>
         <div v-else>
-          <b><i class="fas fa-calendar-times"></i> Taken: </b>
+          <b><i class="fas fa-calendar-times"></i> {{$t('delivery.taken')}}: </b>
           {{ formatDate(delivery.taken) }}
         </div>
       </div>

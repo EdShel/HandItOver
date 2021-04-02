@@ -7,7 +7,7 @@
     v-on:ok="whitelistPressed"
     v-on:selected-user="onUserSelected"
   >
-  <span>Find a user to add him to the whitelist.</span>
+    <span>{{ $t("groups.findUser") }}</span>
   </user-search-modal>
 </template>
 
