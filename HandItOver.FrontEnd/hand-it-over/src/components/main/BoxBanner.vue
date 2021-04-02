@@ -1,17 +1,25 @@
 <template>
-  <div class="scene">
-    <div class="cube" v-bind:class="currentSideClass" v-on:click="onBoxClicked">
-      <div class="cubeFace cubeFaceFront">
-        <div>Anti-theft protection and much more...</div>
-      </div>
-      <div class="cubeFace cubeFaceBack">
-        <div>Get notified about deliveries</div>
-      </div>
-      <div class="cubeFace cubeFaceRight">
-        <div>Put and open in any time</div>
-      </div>
-      <div class="cubeFace cubeFaceLeft">
-        <div>Rent public mailboxes for your deliveries</div>
+  <div class="box-banner">
+    <div class="back"></div>
+
+    <div class="scene">
+      <div
+        class="cube"
+        v-bind:class="currentSideClass"
+        v-on:click="onBoxClicked"
+      >
+        <div class="cubeFace cubeFaceRight">
+          <div>Put and open in any time</div>
+        </div>
+        <div class="cubeFace cubeFaceBack">
+          <div>Get notified about arrival of packages</div>
+        </div>
+        <div class="cubeFace cubeFaceLeft">
+          <div>Rent public mailboxes for your deliveries</div>
+        </div>
+        <div class="cubeFace cubeFaceFront">
+          <div>Anti-theft protection and much more...</div>
+        </div>
       </div>
     </div>
   </div>
@@ -69,6 +77,19 @@ export default {
 </script>
 
 <style scoped>
+.box-banner {
+  margin-top: 40px;
+  position: relative;
+}
+
+.back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #692e08;
+  clip-path: polygon(0 75%, 100% 0, 100% 100%, 0 100%);
+}
+
 .scene {
   margin: 0 auto;
   width: 500px;

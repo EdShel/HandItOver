@@ -1,7 +1,11 @@
 <template>
   <div>
+    <h1>Hand It Over</h1>
+    <p>
+      Program system for automation of processes associated with handing
+      deliveries over to the addressee.
+    </p>
     <rent-search></rent-search>
-    {{ $t('duck.ducklin', {name: 'Bob'}) }}
     <box-banner />
   </div>
 </template>
@@ -16,6 +20,19 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+h1 {
+  font-size: 3em;
+  text-transform: uppercase;
+  text-align: center;
+  margin-top: 20px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  border-bottom: 1px solid black;
+}
+
+p {
+  font-size: 1.2em;
+  margin: 0 50px;
+  text-align: center;
+}
 </style>

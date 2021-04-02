@@ -93,14 +93,15 @@ export default {
 </script>
 
 <style scoped>
+  .search-panel {
+    position: relative;
+  }
+  
 .search-field {
   width: 100%;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
-.search-panel {
-  position: relative;
-}
 
 .search-container {
   position: relative;

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div>Search mailbox to rent</div>
+  <div v-if="isAuthorized" class="rent-search">
+    <h3>Search mailbox to rent</h3>
     <p>
       You can find a smart mailbox to deliver your packages there. Just search
       by its name, owner or address.
@@ -23,6 +23,11 @@ import SearchPanel from '~/components/search/SearchPanel'
 export default {
   name: "RentSearch",
   components: {SearchPanel},
+  computed: {
+    isAuthorized() {
+      return api.isAuthorized();
+    }
+  },
   methods: {
     searchMailboxes(searchQuery) {
       return api
@@ -49,5 +54,10 @@ export default {
 </script>
 
 <style scoped>
-
+.rent-search {
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
 </style>

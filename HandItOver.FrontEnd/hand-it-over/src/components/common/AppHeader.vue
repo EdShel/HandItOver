@@ -108,6 +108,7 @@ export default {
   background: #fff;
   box-shadow: #0000001c 0 10px 10px;
   color: black;
+  z-index: 9999;
 }
 .navbar {
   padding: 0 10px 10px 10px;

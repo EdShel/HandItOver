@@ -29,27 +29,38 @@ export default {
 
 <style scoped>
 #app {
-    background-color: rgb(223, 221, 221);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .container {
-    margin: 30px auto;
-    background: #fff;
-    flex-grow: 1;
+  background: #fff;
+  flex-grow: 1;
+  padding-top: 20px;
+  padding-bottom: 40px;
 }
 
 footer {
-    margin-top: auto;
+  margin-top: auto;
 
   text-align: center;
-  background: #fff;
+  background-image: url(./assets/cardboard.png);
+  background-position: 0;
+  background-size: 239px;
+  font-size: 1.2em;
+  font-weight: bold;
 }
 
 footer > div {
   box-shadow: #0000001c 0 -10px 10px;
   padding: 20px;
+}
+</style>
+
+<style >
+h1,
+h3 {
+  color: rgb(105 46 8);
 }
 </style>
