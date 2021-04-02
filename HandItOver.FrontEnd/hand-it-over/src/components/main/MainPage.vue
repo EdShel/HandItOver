@@ -2,8 +2,7 @@
   <div>
     <h1>Hand It Over</h1>
     <p>
-      Program system for automation of processes associated with handing
-      deliveries over to the addressee.
+      {{ $t('main.descr') }}
     </p>
     <rent-search></rent-search>
     <box-banner />

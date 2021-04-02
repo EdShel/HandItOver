@@ -1,9 +1,8 @@
 <template>
   <div v-if="isAuthorized" class="rent-search">
-    <h3>Search mailbox to rent</h3>
+    <h3>{{ $t("main.rentSearchHeader") }}</h3>
     <p>
-      You can find a smart mailbox to deliver your packages there. Just search
-      by its name, owner or address.
+      {{ $t("main.rentSearchDescr") }}
     </p>
     <div>
       <search-panel
@@ -18,26 +17,24 @@
 
 <script>
 import api from "~/util/api";
-import SearchPanel from '~/components/search/SearchPanel'
+import SearchPanel from "~/components/search/SearchPanel";
 
 export default {
   name: "RentSearch",
-  components: {SearchPanel},
+  components: { SearchPanel },
   computed: {
     isAuthorized() {
       return api.isAuthorized();
-    }
+    },
   },
   methods: {
     searchMailboxes(searchQuery) {
-      return api
-        .sendGet("/mailboxGroup", { search: searchQuery })
-        .then((r) => {
-          let data = r.data;
-          return data;
-        });
+      return api.sendGet("/mailboxGroup", { search: searchQuery }).then((r) => {
+        let data = r.data;
+        return data;
+      });
     },
-    nameSelector(group){
+    nameSelector(group) {
       return group.name;
     },
     secondaryTextSelector(result) {
@@ -48,7 +45,7 @@ export default {
     },
     onMailboxGroupFound(group) {
       this.$router.push(`/rentMailbox/${group.groupId}`);
-    }
+    },
   },
 };
 </script>

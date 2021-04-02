@@ -18,7 +18,13 @@ export default {
         join: 'Join rent whitelist',
         404: 'Not Found',
     },
-    duck: {
-        ducklin: 'Ducklin {name}'
+    main: {
+        descr: "Program system for automation of processes associated with handing deliveries over to the addressee.",
+        rentSearchHeader: "Search mailbox to rent",
+        rentSearchDescr: "You can find a smart mailbox to deliver your packages there. Just search by its name, owner or address.",
+        banner1: "Put and open in any time",
+        banner2: "Get notified about arrival of packages",
+        banner3: "Rent public mailboxes for your deliveries",
+        banner4: "Anti-theft protection and much more...",
     }
 };

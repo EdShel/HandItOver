@@ -9,16 +9,16 @@
         v-on:click="onBoxClicked"
       >
         <div class="cubeFace cubeFaceRight">
-          <div>Put and open in any time</div>
+          <div>{{ $t("main.banner1") }}</div>
         </div>
         <div class="cubeFace cubeFaceBack">
-          <div>Get notified about arrival of packages</div>
+          <div>{{ $t("main.banner2") }}</div>
         </div>
         <div class="cubeFace cubeFaceLeft">
-          <div>Rent public mailboxes for your deliveries</div>
+          <div>{{ $t("main.banner3") }}</div>
         </div>
         <div class="cubeFace cubeFaceFront">
-          <div>Anti-theft protection and much more...</div>
+          <div>{{ $t("main.banner4") }}</div>
         </div>
       </div>
     </div>
