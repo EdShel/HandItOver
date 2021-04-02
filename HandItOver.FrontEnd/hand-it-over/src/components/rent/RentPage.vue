@@ -1,22 +1,25 @@
 <template>
   <div v-if="rent">
+    <h3>Viewing rent</h3>
     <p v-if="rent.mailbox">
-      <b>Mailbox: </b><span>{{ rent.mailbox.address }}</span>
+      <b><i class="fas fa-box"></i> Mailbox: </b><span>{{ rent.mailbox.address }}</span>
     </p>
     <p v-if="rent.renter">
-      <b>Renter: </b>
+      <b><i class="fas fa-user"></i> Renter: </b>
       <router-link v-bind:to="`/account/${rent.renter.id}`">
         {{ rent.renter.fullName }} ({{ rent.renter.email }})
       </router-link>
     </p>
     <p>
-      <b>Start time: </b><span>{{ formatDate(rent.from) }}</span>
+      <b><i class="fas fa-hourglass-start"></i> Start time: </b><span>{{ formatDate(rent.from) }}</span>
     </p>
     <p>
-      <b>End time: </b><span>{{ formatDate(rent.until) }}</span>
+      <b><i class="fas fa-hourglass-end"></i> End time: </b><span>{{ formatDate(rent.until) }}</span>
     </p>
     <div>
-      <button v-on:click="onDeleteRentPressed">Delete rent</button>
+      <button v-on:click="onDeleteRentPressed" class="btn btn-danger"> 
+        <i class="fas fa-times"></i> Cancel rent
+        </button>
     </div>
   </div>
 </template>
@@ -55,5 +58,17 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+h3 {
+  font-size: 3em;
+  margin-bottom: 30px;
+}
+
+p {
+  font-size: 1.5em;
+}
+
+button {
+  margin-top: 40px;
+}
 </style>

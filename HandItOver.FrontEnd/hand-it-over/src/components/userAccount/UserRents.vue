@@ -14,7 +14,7 @@
         <td>{{ formatDate(rent.from) }}</td>
         <td>{{ formatDate(rent.until) }}</td>
         <td>{{ rent.mailboxSize }}</td>
-        <td><router-link v-bind:to="'/rent/' + rent.id">View</router-link></td>
+        <td><router-link v-bind:to="'/rent/' + rent.id">View rent</router-link></td>
       </tr>
     </table>
   </div>
@@ -57,5 +57,8 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+td, th {
+  text-align: center;
+}
 </style>

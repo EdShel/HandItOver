@@ -14,7 +14,7 @@
         <td>{{ formatDate(d.arrived) }}</td>
         <td>{{ formatDate(d.terminal) }}</td>
         <td>{{ $t('units.mass', [toLocalMass(d.weight).toFixed(2)]) }}</td> 
-        <td><router-link v-bind:to="'/delivery/' + d.id">View</router-link></td>
+        <td><router-link v-bind:to="'/delivery/' + d.id">View delivery</router-link></td>
       </tr>
     </table>
   </div>
@@ -62,5 +62,8 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+td, th {
+  text-align: center;
+}
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div v-if="user">
-    <div>Email: {{ user.email }}</div>
-    <div>Full name: {{ user.fullName }}</div>
+    <h1>{{ user.fullName }}</h1>
+    <p><b><i class="fas fa-envelope"></i> Email:</b> {{ user.email }}</p>
     <div>
       <user-rents v-bind:userId="user.id" />
     </div>
@@ -46,5 +46,8 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+p {
+  font-size: 1.5em;
+}
 </style>
