@@ -8,14 +8,14 @@
 
     <div>
       <h3>Whitelisted people</h3>
-      <button v-on:click="onAddToWhitelistPressed">
-        + Add user to whitelist
+      <button v-on:click="onAddToWhitelistPressed" class="btn btn-success">
+        <i class="fas fa-plus"></i> Add a user to the whitelist
       </button>
       <table class="table">
         <tr>
           <th>#</th>
-          <th>Email</th>
-          <th>Name</th>
+          <th><i class="fas fa-at"></i> Email</th>
+          <th><i class="fas fa-user"></i> Name</th>
           <th>&nbsp;</th>
           <th>&nbsp;</th>
         </tr>
@@ -24,9 +24,11 @@
           <td>{{ user.email }}</td>
           <td>{{ user.fullName }}</td>
           <td>
-            <router-link v-bind:to="`/account/${user.id}`">View</router-link>
+            <router-link v-bind:to="`/account/${user.id}`"
+              >View account</router-link
+            >
           </td>
-          <td v-on:click="removeUserPressed(user)">Remove</td>
+          <td v-on:click="removeUserPressed(user)" class="remove">Remove</td>
         </tr>
       </table>
     </div>
@@ -72,5 +74,22 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+table {
+  margin-top: 20px;
+}
+
+td,
+th {
+  text-align: center;
+}
+
+.remove {
+  color: rgb(167, 17, 17);
+  cursor: pointer;
+}
+
+.remove:hover {
+  text-decoration: underline;
+}
 </style>

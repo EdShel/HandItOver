@@ -6,7 +6,7 @@
     ok-text="Download PNG"
     v-on:ok="onOkPressed"
   >
-    <vue-qrcode id="qrCodeImage" v-bind:value="link" />
+    <vue-qrcode id="qrCodeImage" v-bind:value="link" class="qrCode" />
   </modal-window>
 </template>
 
@@ -46,5 +46,9 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.qrCode {
+  display: block;
+  margin: 0 auto;
+}
 </style>

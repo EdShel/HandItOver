@@ -18,7 +18,7 @@
       >
     </div>
     <div>
-      <group-edit v-if="tab === 'edit'" v-bind:groupId="groupId" />
+      <group-edit-tab v-if="tab === 'edit'" v-bind:groupId="groupId" />
       <rents-edit-tab v-if="tab === 'rents'" v-bind:groupId="groupId" />
       <group-whitelist v-if="tab === 'wl'" v-bind:groupId="groupId" />
       <join-tokens-tab v-if="tab === 'joinlinks'" v-bind:groupId="groupId" />
@@ -27,14 +27,14 @@
 </template>
 
 <script>
-import GroupEdit from "~/components/groups/GroupEdit";
+import GroupEditTab from "~/components/groups/GroupEditTab";
 import RentsEditTab from "~/components/groups/RentsEditTab";
 import GroupWhitelist from "~/components/groups/GroupWhitelist";
 import JoinTokensTab from "~/components/groups/JoinTokensTab";
 
 export default {
   name: "GroupPage",
-  components: { GroupEdit, RentsEditTab, GroupWhitelist, JoinTokensTab },
+  components: { GroupEditTab, RentsEditTab, GroupWhitelist, JoinTokensTab },
   props: {
     tab: String,
     groupId: String,
@@ -47,6 +47,7 @@ export default {
   display: flex;
   background: rgb(85, 85, 85);
   overflow: hidden;
+  margin-bottom: 40px;
 }
 
 .tabs > * {

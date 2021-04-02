@@ -2,24 +2,30 @@
   <div>
     <q-r-code-modal ref="qrcodeModal" v-bind:link="selectedTokenValue" />
 
-    <button v-on:click="onGenerateLinkPressed">Generate new join link</button>
+    <button v-on:click="onGenerateLinkPressed" class="btn btn-outline-success">
+      <i class="fas fa-plus"></i>
+      Generate new join link
+      </button>
     <table class="table">
       <tr>
         <th>#</th>
         <th>Join link</th>
-        <th>&nbsp;</th>
+        <th>QR code</th>
         <th>&nbsp;</th>
       </tr>
       <tr v-for="(token, i) in tokens" :key="token.id">
         <td>{{ i + 1 }}</td>
         <td>
-          <a v-bind:href="createLinkFromToken(token.token)">Click to check</a>
+          <a v-bind:href="createLinkFromToken(token.token)">Click to follow</a>
         </td>
         <td>
-          <button v-on:click="onGenerateQRCodePressed(token.token)">
+          <span v-on:click="onGenerateQRCodePressed(token.token)" class="link">
+            <i class="fas fa-qrcode"></i>
             QR code
-          </button>
-          <button v-on:click="onDeleteTokenPressed(token)">Delete</button>
+          </span>
+        </td>
+        <td>
+          <span v-on:click="onDeleteTokenPressed(token)" class="delete">Delete</span>
         </td>
       </tr>
     </table>
@@ -77,5 +83,24 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+table {
+  margin-top: 20px;
+}
+
+.link {
+  color: rgb(36, 22, 233);
+  cursor: pointer;
+}
+.link:hover {
+  text-decoration: underline;
+}
+
+.delete {
+  color: rgb(206, 12, 12);
+  cursor: pointer;
+}
+.delete:hover {
+  text-decoration: underline;
+}
 </style>

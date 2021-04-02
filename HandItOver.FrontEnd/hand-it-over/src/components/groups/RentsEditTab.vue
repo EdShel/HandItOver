@@ -3,15 +3,19 @@
     <table class="table">
       <tr>
         <th>#</th>
-        <th>From</th>
-        <th>Until</th>
-        <th>Renter</th>
+        <th><i class="fas fa-hourglass-start"></i> From</th>
+        <th><i class="fas fa-hourglass-end"></i> Until</th>
+        <th><i class="fas fa-user"></i> Renter</th>
         <th>&nbsp;</th>
       </tr>
       <tr v-for="(rent, i) in rents" :key="rent.rentId">
         <td>{{ i + 1 }}</td>
-        <td>{{ formatDate(rent.from) }}</td>
-        <td>{{ formatDate(rent.until) }}</td>
+        <td>
+           {{ formatDate(rent.from) }}
+        </td>
+        <td>
+           {{ formatDate(rent.until) }}
+        </td>
         <td>
           <router-link v-bind:to="`/account/${rent.renter.id}`">
             {{ rent.renter.fullName }}
@@ -19,7 +23,7 @@
         </td>
         <td>
           <router-link v-bind:to="`/rent/${rent.rentId}`">
-            More info
+            View rent
           </router-link>
         </td>
       </tr>
@@ -61,5 +65,8 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+td, th {
+  text-align: center;
+}
 </style>
