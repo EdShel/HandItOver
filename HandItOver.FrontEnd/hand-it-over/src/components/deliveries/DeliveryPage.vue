@@ -1,51 +1,56 @@
 <template>
-  <div>
-    <div v-if="delivery">
+  <div v-if="delivery">
+    <div>
       <delivery-give-away-modal
         ref="giveAwayModal"
         v-bind:deliveryId="deliveryId"
         v-on:given-away="onGivenAway"
       />
 
-      <span> Weight: {{ delivery.weight }} </span>
-      <span> Arrived: {{ formatDateString(delivery.arrived) }} </span>
-      <span>
-        TerminalTime:
+      <h3>Viewing delivery</h3>
+
+      <p v-if="addressee">
+        <b><i class="fas fa-user"></i> Addressee: </b>
+        <router-link v-bind:to="`/account/${addressee.id}`">
+          {{ addressee.fullName }} ({{ addressee.email }})
+        </router-link>
+      </p>
+      <p v-if="mailbox">
+        <b><i class="fas fa-map-marker-alt"></i> Mailbox address:</b>
+        {{ mailbox.address }}
+        <router-link v-bind:to="`/account/${mailbox.ownerId}`">
+          (mailbox owner)
+        </router-link>
+      </p>
+      <p>
+        <b><i class="fas fa-weight-hanging"></i> Weight:</b>
+        {{ toLocalMass(delivery.weight) }}
+      </p>
+      <p>
+        <b><i class="fas fa-truck-loading"></i> Arrived: </b>
+        {{ formatDateString(delivery.arrived) }}
+      </p>
+      <p>
+        <b><i class="fas fa-calendar-times"></i> Terminal time: </b>
         {{
           delivery.terminalTime
             ? formatDateString(delivery.terminalTime)
             : "Not limited"
         }}
-      </span>
-      <span>
-        Taken:
-        {{
-          delivery.terminalTime
-            ? formatDateString(delivery.terminalTime)
-            : "Not taken"
-        }}
-      </span>
-      <span>
-        Predicted to be taken:
-        {{ formatDateString(delivery.predictedTakingTime) }}
-      </span>
-    </div>
-    <div v-if="mailbox">
-      <h3>Mailbox</h3>
-      <p>
-        <span> Size: {{ mailbox.size }} </span>
-        <span> Address: {{ mailbox.address }} </span>
       </p>
-    </div>
-    <div v-if="addressee">
-      <h3>Addressee</h3>
       <p>
-        <span> Email: {{ addressee.email }} </span>
-        <span> Full name: {{ addressee.fullName }} </span>
+        <b><i class="fas fa-calendar"></i> Taken: </b>
+        {{ delivery.taken ? formatDateString(delivery.taken) : "Not taken" }}
+      </p>
+      <p>
+        <b><i class="fas fa-calendar-alt"></i> Predicted to be taken:</b>
+        {{ formatDateString(delivery.predictedTakingTime) }}
       </p>
     </div>
     <div>
-      <button v-on:click="giveAwayPressed">Give away</button>
+      <button v-on:click="giveAwayPressed" class="btn btn-warning">
+        Give away
+      </button>
     </div>
   </div>
 </template>
@@ -54,6 +59,7 @@
 import api from "~/util/api";
 import dateUtil from "~/util/date";
 import DeliveryGiveAwayModal from "~/components/deliveries/DeliveryGiveAwayModal";
+import { localWeight } from "~/util/units";
 
 export default {
   name: "DeliveryPage",
@@ -85,15 +91,32 @@ export default {
     formatDate(date) {
       return dateUtil.localString(date);
     },
-    giveAwayPressed(){
-        this.$refs.giveAwayModal.show();
+    giveAwayPressed() {
+      this.$refs.giveAwayModal.show();
     },
     onGivenAway(newAddressee) {
       this.addressee = newAddressee;
+    },
+    toLocalMass(mass) {
+      return this.$t("units.mass", [
+        localWeight(this.$t("units.massUnit"), mass).toFixed(2),
+      ]);
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
+h3 {
+  font-size: 3em;
+  margin-bottom: 30px;
+}
+
+p {
+  font-size: 1.5em;
+}
+
+button {
+  margin-top: 40px;
+}
 </style>

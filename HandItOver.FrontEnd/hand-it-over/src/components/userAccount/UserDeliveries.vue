@@ -13,8 +13,12 @@
         <td>{{ i + 1 }}</td>
         <td>{{ formatDate(d.arrived) }}</td>
         <td>{{ formatDate(d.terminal) }}</td>
-        <td>{{ $t('units.mass', [toLocalMass(d.weight).toFixed(2)]) }}</td> 
-        <td><router-link v-bind:to="'/delivery/' + d.id">View delivery</router-link></td>
+        <td>{{ toLocalMass(d.weight) }}</td>
+        <td>
+          <router-link v-bind:to="'/delivery/' + d.id"
+            >View delivery</router-link
+          >
+        </td>
       </tr>
     </table>
   </div>
@@ -56,14 +60,18 @@ export default {
             return dateUtil.localString(date);
         },
         toLocalMass(mass){
-          return localWeight(this.$t('units.massUnit'), mass);
+          return this.$t('units.mass',
+             [
+               localWeight(this.$t('units.massUnit'), mass).toFixed(2)
+             ]);
         }
     }
 }
 </script>
 
 <style scoped>
-td, th {
+td,
+th {
   text-align: center;
 }
 </style>
