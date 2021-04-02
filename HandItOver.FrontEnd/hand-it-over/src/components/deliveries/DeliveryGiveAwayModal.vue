@@ -1,9 +1,9 @@
 <template>
   <user-search-modal
     ref="modalWindow"
-    header="Give away delivery"
-    close-text="Cancel"
-    ok-text="Give away"
+    v-bind:header="$t('delivery.giveAwayDelivery')"
+    v-bind:close-text="$t('common.cancelAction')"
+    v-bind:ok-text="$t('delivery.giveAwayAction')"
     v-on:ok="giveAwayPressed"
     v-on:selected-user="onUserSelected"
   >
@@ -11,7 +11,7 @@
       {{ selectedUser.email }} - {{ selectedUser.fullName }}
     </div>
     <div v-else>
-      Type in new addressee's email or full name and select from the list below.
+      {{$t('delivery.giveAwayDescr')}}
     </div>
   </user-search-modal>
 </template>

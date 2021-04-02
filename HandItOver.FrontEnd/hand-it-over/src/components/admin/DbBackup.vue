@@ -2,7 +2,7 @@
   <div>
     <div class="row">
       <label for="backupFileText" class="col-sm-4"
-        >Backup file name (with extension)</label
+        >{{$t('admin.backupDbHeader')}}</label
       >
       <input
         id="backupFileText"
@@ -14,11 +14,11 @@
     <div>
       <button v-on:click="onMakeBackupPressed" class="btn btn-primary">
         <i class="fas fa-save"></i>
-        Make backup
+        {{$t('admin.makeBackup')}}
       </button>
       <button v-on:click="onDownloadBackupPressed" class="btn btn-success">
         <i class="fas fa-download"></i>
-        Download backup
+        {{$t('admin.downloadBackup')}}
       </button>
     </div>
     <div v-if="messageText">

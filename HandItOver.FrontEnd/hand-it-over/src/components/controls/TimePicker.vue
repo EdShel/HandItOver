@@ -2,7 +2,7 @@
   <clock-background v-bind:hours="hours" v-bind:minutes="minutes">
     <div class="time-picker">
       <div class="selector hours">
-        <label for="hourSelect">Hours</label>
+        <label for="hourSelect">{{$t('controls.hours')}}</label>
         <select id="hourSelect" v-model="hours">
           <option v-for="(x, i) in 24" :key="i" v-bind:value="i">
             {{ i.toString().padStart(2, "0") }}
@@ -10,7 +10,7 @@
         </select>
       </div>
       <div class="selector minutes">
-        <label for="minuteSelect">Minutes</label>
+        <label for="minuteSelect">{{$t('controls.minutes')}}</label>
         <select id="minuteSelect" v-model="minutes">
           <option v-for="(x, i) in 12" :key="i" v-bind:value="i * 5">
             {{ (i * 5).toString().padStart(2, "0") }}

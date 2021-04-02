@@ -4,7 +4,9 @@
     <register-modal ref="registerModal"></register-modal>
 
     <nav class="navbar navbar-expand-lg">
-      <router-link to="/" class="navbar-brand router-link">Hand It Over</router-link>
+      <router-link to="/" class="navbar-brand router-link"
+        >Hand It Over</router-link
+      >
       <button
         class="navbar-toggler"
         type="button"
@@ -17,43 +19,43 @@
         <ul class="navbar-nav mr-auto">
           <template v-if="!isAuthorized">
             <li>
-              <a class="nav-link" href="#" v-on:click.prevent="showLogin"
-                >Login</a
-              >
+              <a class="nav-link" href="#" v-on:click.prevent="showLogin">{{
+                $t("common.login")
+              }}</a>
             </li>
             <li>
-              <a class="nav-link" href="#" v-on:click.prevent="showRegister"
-                >Register</a
-              >
+              <a class="nav-link" href="#" v-on:click.prevent="showRegister">{{
+                $t("common.register")
+              }}</a>
             </li>
           </template>
           <template v-else>
             <template v-if="isAdmin">
               <li>
                 <router-link to="/admin" class="nav-link">
-                  Admin panel
+                  {{ $t("common.adminPanel") }}
                 </router-link>
               </li>
               <li>
                 <router-link to="/users" class="nav-link">
-                  System users
+                  {{ $t("common.systemUsers") }}
                 </router-link>
               </li>
             </template>
             <li>
               <router-link to="/myaccount" class="nav-link">
-                My account
+                {{ $t("common.myAccount") }}
               </router-link>
             </li>
             <li>
-              <router-link to="/mailbox" class="nav-link"
-                >My mailboxes
+              <router-link to="/mailbox" class="nav-link">
+                {{ $t("common.myMailboxes") }}
               </router-link>
             </li>
             <li>
-              <a class="nav-link" href="#" v-on:click.prevent="logout"
-                >Logout</a
-              >
+              <a class="nav-link" href="#" v-on:click.prevent="logout">
+                {{ $t("common.logout") }}
+              </a>
             </li>
           </template>
         </ul>
@@ -114,7 +116,8 @@ export default {
   padding: 0 10px 10px 10px;
 }
 
-a, span{
+a,
+span {
   color: black;
 }
 
@@ -143,7 +146,7 @@ a, span{
 
 .navbar-brand.router-link-exact-active {
   border-bottom: 5px solid #000;
-} 
+}
 
 .nav-link:not(.router-link-exact-active) {
   border-bottom: 5px solid transparent;

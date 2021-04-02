@@ -1,9 +1,9 @@
 <template>
   <user-search-modal
     ref="modalWindow"
-    header="Add user to whitelist"
-    close-text="Cancel"
-    ok-text="Add"
+    v-bind:header="$t('groups.addToWhitelistHeader')"
+    v-bind:close-text="$t('common.cancelAction')"
+    v-bind:ok-text="$t('common.addAction')"
     v-on:ok="whitelistPressed"
     v-on:selected-user="onUserSelected"
   >

@@ -1,32 +1,34 @@
 <template>
   <modal-window
     ref="modalWindow"
-    header="Login"
-    close-text="Close"
-    ok-text="Login"
+    v-bind:header="$t('common.login')"
+    v-bind:close-text="$t('common.closeAction')"
+    v-bind:ok-text="$t('common.loginButton')"
     v-on:ok="loginPressed"
   >
     <validation-errors v-bind:errors="errors" />
-      <div class="row mb-2">
-        <label for="emailText" class="col-sm-3">Email</label>
-        <input
-          type="email"
-          id="emailText"
-          v-model="email"
-          v-on:input="validateThrottled"
-          class="col-sm-9"
-        />
-      </div>
-      <div class="row">
-        <label for="passwordText" class="col-sm-3">Password</label>
-        <input
-          type="password"
-          id="passwordText"
-          v-model="password"
-          v-on:input="validateThrottled"
-          class="col-sm-9"
-        />
-      </div>
+    <div class="row mb-2">
+      <label for="emailText" class="col-sm-3">{{ $t("users.email") }}</label>
+      <input
+        type="email"
+        id="emailText"
+        v-model="email"
+        v-on:input="validateThrottled"
+        class="col-sm-9"
+      />
+    </div>
+    <div class="row">
+      <label for="passwordText" class="col-sm-3">{{
+        $t("users.password")
+      }}</label>
+      <input
+        type="password"
+        id="passwordText"
+        v-model="password"
+        v-on:input="validateThrottled"
+        class="col-sm-9"
+      />
+    </div>
   </modal-window>
 </template>
 
@@ -72,18 +74,18 @@ export default {
         this.hide();
         this.$router.go(0);
       } catch (e) {
-        this.errors.push("Invalid email or password.");
+        this.errors.push(this.$t("common.invalidEmailOrPassword"));
       }
     },
     validate() {
       let errors = [];
 
       if (!authConstants.emailRegex.test(this.email)) {
-        errors.push("Invalid email address.");
+        errors.push(this.$t("common.invalidEmail"));
       }
 
       if (!authConstants.passwordRegex.test(this.password)) {
-        errors.push("Password must contain 6-20 characters.");
+        errors.push(this.$t("common.invalidPassword"));
       }
 
       this.errors = errors;

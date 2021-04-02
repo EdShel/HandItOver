@@ -1,17 +1,17 @@
 <template>
   <div v-if="configTree" class="config-tree">
-    <h3>System configurations</h3>
+    <h3>{{$t('admin.sysConfigHeader')}}</h3>
     <config-property-item
       propertyName="appsettings.json"
       v-bind:propertyValue="configTree"
     />
     <button v-on:click="onSaveConfigurationsPressed" class="btn btn-primary">
       <i class="fas fa-save"></i>
-      Save configurations
+      {{$t('admin.saveConfig')}}
     </button>
     <button v-on:click="onDownloadConfigurationsPressed" class="btn btn-success">
       <i class="fas fa-download"></i>
-      Download configurations
+      {{$t('admin.downloadConfig')}}
     </button>
   </div>
 </template>

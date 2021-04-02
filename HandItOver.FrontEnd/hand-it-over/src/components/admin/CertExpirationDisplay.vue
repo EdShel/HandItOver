@@ -1,7 +1,7 @@
 <template>
   <div v-if="expirationDate">
       <b>
-      The SSL certificate will expire at
+       {{ $t('admin.sslExpire') }}
       </b>
       <i>
           {{ formatDate(this.expirationDate) }}

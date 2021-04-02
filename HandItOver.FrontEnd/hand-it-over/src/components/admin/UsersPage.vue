@@ -1,10 +1,10 @@
 <template>
   <div>
-    <h3>Users of the system</h3>
+    <h3>{{$t('admin.usersHeader')}}</h3>
     <div class="row">
       <label for="searchText" class="col-sm-4">
         <i class="fas fa-search"></i>
-        Search by name or email
+        {{$t('admin.searchUser')}}
       </label>
       <input
         for="searchText"
@@ -17,8 +17,8 @@
     <table class="table">
       <tr>
         <th>#</th>
-        <th><i class="fas fa-user"></i> Full name</th>
-        <th><i class="fas fa-at"></i> Email</th>
+        <th><i class="fas fa-user"></i> {{$t('users.fullName')}}</th>
+        <th><i class="fas fa-at"></i> {{$t('users.email')}}</th>
         <th>&nbsp;</th>
       </tr>
       <tr v-for="(user, i) in users" :key="user.id">
@@ -26,7 +26,7 @@
         <td>{{ user.fullName }}</td>
         <td>{{ user.email }}</td>
         <td>
-          <router-link v-bind:to="`/account/${user.id}`">View user</router-link>
+          <router-link v-bind:to="`/account/${user.id}`">{{$t('users.viewUser')}}</router-link>
         </td>
       </tr>
     </table>

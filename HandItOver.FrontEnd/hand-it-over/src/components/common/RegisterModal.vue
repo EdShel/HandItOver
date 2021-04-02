@@ -1,14 +1,14 @@
 <template>
   <modal-window
     ref="modalWindow"
-    header="Register"
-    close-text="Close"
-    ok-text="Register"
+    v-bind:header="$t('common.register')"
+    v-bind:close-text="$t('common.closeAction')"
+    v-bind:ok-text="$t('common.regiserAction')"
     v-on:ok="onRegisterPressed"
   >
     <validation-errors v-bind:errors="errors" />
     <div class="row mb-2">
-      <label for="emailText" class="col-sm-3">Email</label>
+      <label for="emailText" class="col-sm-3">{{$t('users.email')}}</label>
       <input
         type="email"
         id="emailText"
@@ -18,7 +18,7 @@
       />
     </div>
     <div class="row mb-2">
-      <label for="fullNameText" class="col-sm-3">Full name</label>
+      <label for="fullNameText" class="col-sm-3">{{$t('users.fullName')}}</label>
       <input
         type="text"
         id="fullNameText"
@@ -28,7 +28,7 @@
       />
     </div>
     <div class="row mb-2">
-      <label for="passwordText" class="col-sm-3">Password</label>
+      <label for="passwordText" class="col-sm-3">{{$t('users.password')}}</label>
       <input
         type="password"
         id="passwordText"
@@ -38,7 +38,7 @@
       />
     </div>
     <div class="row mb-2">
-      <label for="passwordRepeatText" class="col-sm-3">Repeat password</label>
+      <label for="passwordRepeatText" class="col-sm-3">{{$t('users.repeatPassword')}}</label>
       <input
         type="password"
         id="passwordRepeatText"
@@ -95,22 +95,22 @@ export default {
         this.hide();
         this.$router.go(0);
       } catch (e) {
-        this.errors.push("The user with the email is already registered.");
+        this.errors.push(this.$t('common.passwordNotSame'));
       }
     },
     validate() {
       let errors = [];
 
       if (!authConstants.emailRegex.test(this.email)) {
-        errors.push("Invalid email address.");
+        errors.push(this.$t('common.invalidEmail'));
       }
 
       if (!authConstants.passwordRegex.test(this.password)) {
-        errors.push("Password must contain 6-20 characters.");
+        errors.push(this.$t('common.invalidPassword'));
       }
 
       if (this.password !== this.passwordRepeat) {
-        errors.push("Passwords are not the same.");
+        errors.push(this.$t('common.userRegisterd'));
       }
 
       this.errors = errors;

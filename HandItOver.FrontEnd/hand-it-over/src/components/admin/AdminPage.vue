@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Admin panel</h1>
+    <h1>{{ $t('admin.header') }}</h1>
     <cert-expiration-display />
     <db-backup />
     <config-editor />
