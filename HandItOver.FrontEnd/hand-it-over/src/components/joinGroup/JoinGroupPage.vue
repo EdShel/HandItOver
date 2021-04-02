@@ -1,13 +1,13 @@
 <template>
   <div>
     <div v-if="status == 0">
-      <button v-on:click="onJoinPressed">Join</button>
+      <span v-on:click="onJoinPressed" class="join-button">Click to join</span>
     </div>
-    <div v-else-if="status == 1">Waiting...</div>
-    <div v-else-if="status == 2">Now you can rent this group.</div>
-    <div v-else-if="status == 3">
+    <p v-else-if="status == 1">Waiting...</p>
+    <p v-else-if="status == 2">Now you can rent this group.</p>
+    <p v-else-if="status == 3">
       Sorry, invalid token or you already belong to the whitelist.
-    </div>
+    </p>
   </div>
 </template>
 
@@ -58,5 +58,24 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.join-button {
+  display: block;
+  text-align: center;
+  margin-top: 40px;
+  font-size: 3em;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.join-button:hover {
+  text-decoration: underline;
+}
+
+p {
+  font-size: 2em;
+  text-align: center;
+  width: 80%;
+  margin: 0 auto;
+}
 </style>

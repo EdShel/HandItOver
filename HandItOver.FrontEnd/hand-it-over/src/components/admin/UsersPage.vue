@@ -1,20 +1,24 @@
 <template>
   <div>
     <h3>Users of the system</h3>
-    <div>
-      <label for="searchText">Search by name or email</label>
+    <div class="row">
+      <label for="searchText" class="col-sm-4">
+        <i class="fas fa-search"></i>
+        Search by name or email
+      </label>
       <input
         for="searchText"
         type="text"
         v-model="searchQuery"
         v-on:input="searchUsersThrottled"
+        class="col-sm-8"
       />
     </div>
     <table class="table">
       <tr>
         <th>#</th>
-        <th>Full name</th>
-        <th>Email</th>
+        <th><i class="fas fa-user"></i> Full name</th>
+        <th><i class="fas fa-at"></i> Email</th>
         <th>&nbsp;</th>
       </tr>
       <tr v-for="(user, i) in users" :key="user.id">
@@ -22,18 +26,20 @@
         <td>{{ user.fullName }}</td>
         <td>{{ user.email }}</td>
         <td>
-          <router-link v-bind:to="`/account/${user.id}`">View</router-link>
+          <router-link v-bind:to="`/account/${user.id}`">View user</router-link>
         </td>
       </tr>
     </table>
-    <div>
-      <button
-        v-for="(pageNum, pageIndex) in pagesCount"
-        :key="pageIndex"
-        v-on:click="onPageNumberChanged(pageIndex)"
+    <div class="pages">
+      <span
+        v-for="(pageNum, i) in pagesCount"
+        :key="i"
+        v-on:click="onPageNumberChanged(i)"
+        class="table-page"
+        v-bind:class="{'current-page': pageIndex === i}"
       >
         {{ pageNum }}
-      </button>
+      </span>
     </div>
   </div>
 </template>
@@ -47,7 +53,7 @@ export default {
     return {
       searchQuery: "",
       pageIndex: 0,
-      pageSize: 10,
+      pageSize: 5,
       pagesCount: 1,
       users: [],
     };
@@ -82,5 +88,34 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+table {
+  margin-top: 20px;
+}
+td,
+th {
+  text-align: center;
+}
+label {
+  text-align: right;
+}
+.pages {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: center;
+}
+.table-page {
+  color: #007bff;
+  cursor: pointer;
+  font-size: 1.2em;
+  margin: 0 10px;
+}
+.table-page:hover {
+  text-decoration: underline;
+}
+.current-page {
+  transform: translate(0, -4px);
+  font-weight: bold;
+}
 </style>
