@@ -1,12 +1,25 @@
 <template>
   <div>
-    <div>
-      <label for="backupFileText">Backup file name (with extension)</label>
-      <input id="backupFileText" type="text" v-model="backupFileName" />
+    <div class="row">
+      <label for="backupFileText" class="col-sm-4"
+        >Backup file name (with extension)</label
+      >
+      <input
+        id="backupFileText"
+        type="text"
+        v-model="backupFileName"
+        class="col-sm-8"
+      />
     </div>
     <div>
-      <button v-on:click="onMakeBackupPressed">Make backup</button>
-      <button v-on:click="onDownloadBackupPressed">Download backup</button>
+      <button v-on:click="onMakeBackupPressed" class="btn btn-primary">
+        <i class="fas fa-save"></i>
+        Make backup
+      </button>
+      <button v-on:click="onDownloadBackupPressed" class="btn btn-success">
+        <i class="fas fa-download"></i>
+        Download backup
+      </button>
     </div>
     <div v-if="messageText">
       {{ messageText }}
@@ -31,12 +44,16 @@ export default {
       await api.sendPost(`/admin/backup`, null, {
         backupFile: this.backupFileName,
       });
-      this.showMessage('Back up is succesfully made.');
+      this.showMessage("Back up is succesfully made.");
     },
     async onDownloadBackupPressed() {
-        await api.downloadBlobFile('/admin/backup', {
-            file: this.backupFileName
-        }, this.backupFileName);
+      await api.downloadBlobFile(
+        "/admin/backup",
+        {
+          file: this.backupFileName,
+        },
+        this.backupFileName
+      );
     },
     showMessage(text) {
       if (this.messageDisappearTimeout) {
@@ -54,5 +71,12 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+label {
+  text-align: right;
+}
+
+button {
+  margin: 0 10px;
+}
 </style>

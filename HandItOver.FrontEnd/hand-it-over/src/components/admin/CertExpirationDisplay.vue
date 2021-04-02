@@ -1,11 +1,11 @@
 <template>
   <div v-if="expirationDate">
-      <span>
-      The SSL certificate will expire at
-      </span>
       <b>
-          {{ formatDate(this.expirationDate) }}
+      The SSL certificate will expire at
       </b>
+      <i>
+          {{ formatDate(this.expirationDate) }}
+      </i>
   </div>
 </template>
 
@@ -32,5 +32,8 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+div {
+  margin: 30px 0;
+}
 </style>

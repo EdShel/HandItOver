@@ -9,29 +9,26 @@
       :key="propName"
       v-bind:propertyName="propName"
       v-bind:propertyValue="propValue"
+      v-on:value-changed="onValueChanged"
     />
   </div>
-  <div v-else-if="typeof propertyValue === 'number'">
+  <div v-else-if="typeof propertyValue === 'number'" class="group">
     <label v-bind:for="propertyName + myId">{{ propertyName }}</label>
     <input
       v-bind:id="propertyName + myId"
-      v-model="propertyValue"
+      v-model="changedValue"
       type="number"
     />
   </div>
-  <div v-else-if="typeof propertyValue === 'string'">
+  <div v-else-if="typeof propertyValue === 'string'" class="group">
     <label v-bind:for="propertyName + myId">{{ propertyName }}</label>
-    <input
-      v-bind:id="propertyName + myId"
-      v-model="propertyValue"
-      type="text"
-    />
+    <input v-bind:id="propertyName + myId" v-model="changedValue" type="text" />
   </div>
-  <div v-else-if="typeof propertyValue === 'boolean'">
+  <div v-else-if="typeof propertyValue === 'boolean'" class="group">
     <label v-bind:for="propertyName + myId">{{ propertyName }}</label>
     <input
       v-bind:id="propertyName + myId"
-      v-model="propertyValue"
+      v-model="changedValue"
       type="checkbox"
     />
   </div>
@@ -44,9 +41,38 @@ export default {
     propertyName: String,
     propertyValue: null,
   },
+  data() {
+    return {
+      newValue: null,
+    };
+  },
   computed: {
     myId() {
       return this._uid;
+    },
+    changedValue: {
+      get() {
+        return this.newValue;
+      },
+      set(val) {
+        this.newValue = val;
+        this.$emit("value-changed", { prop: this.propertyName, val: val });
+      },
+    },
+  },
+  mounted() {
+    this.changedValue = this.propertyValue;
+  },
+  methods: {
+    onValueChanged(obj) {
+      if (!this.changedValue){
+        return;
+      }
+      this.changedValue[obj.prop] = obj.val;
+      this.$emit("value-changed", {
+        prop: this.propertyName,
+        val: this.changedValue,
+      });
     },
   },
 };
@@ -55,5 +81,20 @@ export default {
 <style scoped>
 div {
   margin-left: 10px;
+}
+
+.group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.group > label {
+  margin-right: 10px;
+  margin-bottom: 0;
+}
+
+.group > input:not([type="checkbox"]) {
+  flex-grow: 1;
 }
 </style>
