@@ -1,5 +1,6 @@
 <template>
   <div>
+    <i class="fas fa-globe"></i>
     <select id="languageSelect" v-model="currentLanguage">
       <option
         v-for="lang in allowedLanguages"
@@ -36,5 +37,9 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+select {
+  border-color: #ddd;
+  margin-left: 5px;
+}
 </style>
