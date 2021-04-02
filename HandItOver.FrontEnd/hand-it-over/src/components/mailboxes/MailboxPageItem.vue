@@ -1,22 +1,38 @@
 <template>
-  <div>
-    <p>{{ mailbox.address }}</p>
+  <div class="groupItem">
+    <p>
+      Mailbox address: <i>{{ mailbox.address }}</i>
+    </p>
     <div v-if="!mailbox.groupId">
-      <button @click="createGroup">Add to new group</button>
-      <button @click="onAddToGroupPressed">Add to existing group</button>
+      <button @click="createGroup">
+        <i class="fas fa-folder"></i> Add to new group
+      </button>
+      <button @click="onAddToGroupPressed">
+        <i class="fas fa-folder-plus"></i> Add to existing group
+      </button>
     </div>
     <button v-if="mailbox.groupId" @click="removeFromGroup">
-      Remove from group
+      <i class="fas fa-folder-minus"></i> Remove from group
     </button>
-    <button @click="editMailbox">Edit</button>
-    <button v-on:click="onShowDeliveriesPressed">Show recent deliveries</button>
-    <div v-if="deliveriesAreVisible">
-      <div v-for="delivery in deliveries" :key="delivery.id">
-        <span> Arrived: {{ delivery.arrived }} </span>
-        <span v-if="delivery.taken === null">
-          Predicted taking: {{ delivery.predictedTakingTime }}
-        </span>
-        <span v-else> Taken: {{ delivery.taken }} </span>
+    <button @click="editMailbox"><i class="fas fa-edit"></i> Edit</button>
+    <button v-on:click="onShowDeliveriesPressed">
+      <i
+        class="fas"
+        v-bind:class="deliveriesAreVisible ? 'fa-box-open' : 'fa-box'"
+      ></i>
+      Recent deliveries
+    </button>
+    <div v-if="deliveriesAreVisible" class="delivery-container">
+      <div v-for="delivery in deliveries" :key="delivery.id" class="delivery">
+        <div><b><i class="fas fa-calendar"></i> Arrived: </b> {{ formatDate(delivery.arrived) }}</div>
+        <div v-if="delivery.taken === null">
+          <b><i class="fas fa-calendar-alt"></i> Predicted taking: </b>
+          {{ formatDate(delivery.predictedTakingTime) }}
+        </div>
+        <div v-else>
+          <b><i class="fas fa-calendar-times"></i> Taken: </b>
+          {{ formatDate(delivery.taken) }}
+        </div>
       </div>
     </div>
   </div>
@@ -24,6 +40,7 @@
 
 <script>
 import api from "~/util/api";
+import dateUtil from "~/util/date";
 
 export default {
   name: "MailboxPageItem",
@@ -58,14 +75,47 @@ export default {
       this.deliveriesAreVisible = true;
     },
     onAddToGroupPressed() {
-      this.$emit('add-to-group');
-    }
+      this.$emit("add-to-group");
+    },
+    formatDate(date) {
+      return dateUtil.localString(new Date(date));
+    },
   },
 };
 </script>
 
 <style scoped>
-div {
-  border: 1px solid black;
+.groupItem {
+  background: rgb(193 202 230);
+  margin: 10px 0;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.groupItem > * {
+  display: inline-block;
+}
+
+button {
+  border: none;
+  outline: none;
+  border-radius: 15px;
+  margin: 0 10px;
+  padding: 0 10px;
+}
+p {
+  margin: 0;
+}
+
+.delivery-container {
+  width: 100%;
+}
+
+.delivery {
+  background: #fff;
+  border-radius: 14px;
+  padding: 0 10px;
+  margin: 10px 0 0 10px;
+  width: 100%;
 }
 </style>

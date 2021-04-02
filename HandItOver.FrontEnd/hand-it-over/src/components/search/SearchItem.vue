@@ -25,14 +25,13 @@ export default {
       let matchedProps = [];
       for (let property in this.secondaryText) {
         const value = this.secondaryText[property];
-        if (Array.isArray(value)){
-            for(let arrayElement of value){
-                if (arrayElement.match(regex)){
-                    matchedProps.push(arrayElement.replace(regex, '<b>$&</b>'))
-                }
+        if (Array.isArray(value)) {
+          for (let arrayElement of value) {
+            if (arrayElement.match(regex)) {
+              matchedProps.push(arrayElement.replace(regex, "<b>$&</b>"));
             }
-        }
-        else if (value.match(regex)) {
+          }
+        } else if (value.match(regex)) {
           matchedProps.push(value.replace(regex, "<b>$&</b>"));
         }
       }
@@ -40,28 +39,32 @@ export default {
     },
   },
   methods: {
-    selected(){
-      this.$emit('selected-item');
-    }
-  }
+    selected() {
+      this.$emit("selected-item");
+    },
+  },
 };
 </script>
 
 <style scoped>
 div {
-    width: 100%;
-    cursor: pointer;
-    border: 1px solid black;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    padding: 5px;
-}
-
-div:first-child {
-  background: #fff;
+  width: 100%;
+  cursor: pointer;
+  border: 1px solid black;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  padding: 5px;
 }
 
 div:not(:first-child) {
-    border-top: none;
-    background: rgb(240, 240, 240);
+  border-top: none;
+  background: rgb(224, 224, 224);
+}
+
+div:first-child {
+  background: rgb(240, 240, 240);
+}
+
+div:hover {
+  background: #fff;
 }
 </style>
