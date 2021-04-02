@@ -3,8 +3,8 @@
     <login-modal ref="loginModal"></login-modal>
     <register-modal ref="registerModal"></register-modal>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <router-link to="/" class="navbar-brand">Hand It Over</router-link>
+    <nav class="navbar navbar-expand-lg">
+      <router-link to="/" class="navbar-brand router-link">Hand It Over</router-link>
       <button
         class="navbar-toggler"
         type="button"
@@ -66,10 +66,10 @@
 </template>
 
 <script>
-import LoginModal from "~/components/LoginModal";
-import RegisterModal from "~/components/RegisterModal";
+import LoginModal from "~/components/common/LoginModal";
+import RegisterModal from "~/components/common/RegisterModal";
 import LangSelector from "~/components/common/LangSelector";
-import api from "../util/api.js";
+import api from "../../util/api.js";
 
 export default {
   name: "AppHeader",
@@ -77,7 +77,7 @@ export default {
   components: {
     LoginModal,
     RegisterModal,
-    LangSelector
+    LangSelector,
   },
   computed: {
     isAuthorized() {
@@ -103,5 +103,56 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+#navSection {
+  background: #fff;
+  box-shadow: #0000001c 0 10px 10px;
+  color: black;
+}
+.navbar {
+  padding: 0 10px 10px 10px;
+}
+
+a, span{
+  color: black;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 0, 0, 1.0%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='4' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  box-sizing: content-box;
+  border: 4px solid black;
+}
+
+.nav-link {
+  font-size: 1.2em;
+  margin-top: 8px;
+  padding: 0;
+}
+
+.navbar-expand-lg a {
+  text-align: center;
+}
+
+.navbar-brand {
+  font-size: 2em;
+  font-weight: bold;
+  padding: 0;
+  border-bottom: 5px solid transparent;
+}
+
+.navbar-brand.router-link-exact-active {
+  border-bottom: 5px solid #000;
+} 
+
+.nav-link:not(.router-link-exact-active) {
+  border-bottom: 5px solid transparent;
+}
+
+.nav-link:hover {
+  border-bottom: 5px solid #000;
+}
+
+.router-link-exact-active {
+  border-bottom: 5px solid #000;
+}
 </style>

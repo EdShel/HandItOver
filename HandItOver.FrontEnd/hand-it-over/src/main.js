@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import VueRouter from 'vue-router'
 import MainPage from "~/components/main/MainPage"
+import NotFoundPage from "~/components/errors/NotFoundPage"
 import AdminPage from '~/components/admin/AdminPage'
 import UsersPage from '~/components/admin/UsersPage'
 import MailboxPage from '~/components/mailboxes/MailboxPage'
@@ -49,6 +50,7 @@ const routes = [
     path: '/join/:groupId/:token', component: JoinGroupPage, props: r => (
       { groupId: r.params.groupId, token: r.params.token })
   },
+  { path: '*', component: NotFoundPage },
 ]
 const router = new VueRouter({ routes, mode: 'history' });
 router.beforeEach((to, from, next) => {

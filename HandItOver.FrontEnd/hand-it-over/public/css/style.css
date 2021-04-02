@@ -1,15 +1,13 @@
-
-
 .inline-input {
     display: flex;
     align-items: center;
 }
 
-    .inline-input label {
-        margin-right: 5px;
-        margin-bottom: 0;
-    }
+.inline-input label {
+    margin-right: 5px;
+    margin-bottom: 0;
+}
 
-    .inline-input select {
-        flex: 2;
-    }
+.inline-input select {
+    flex: 2;
+}
