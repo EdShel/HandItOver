@@ -38,10 +38,7 @@
         $t("rent.rentTime")
       }}</label>
       <div class="col-sm-9 date-picker">
-        <date-picker
-          ref="datePicker"
-          v-bind:daysForwardCount="Number(14)"
-        />
+        <date-picker ref="datePicker" v-bind:daysForwardCount="Number(14)" />
         <div class="row" v-if="$refs.datePicker">
           <div class="col col-lg-4 col-md-6 col-sm-6 col-xs-6">
             <time-picker ref="timePicker"></time-picker>
@@ -55,7 +52,12 @@
       </div>
     </div>
     <div>
-      <button v-on:click="renting" class="btn btn-primary rent-button">{{ $t("rent.rent") }}</button>
+      <button v-on:click="renting" class="btn btn-primary rent-button">
+        {{ $t("rent.rent") }}
+      </button>
+    </div>
+    <div>
+      <validation-errors v-bind:errors="errors" />
     </div>
   </div>
 </template>
@@ -66,6 +68,7 @@ import date from "~/util/date";
 import DatePicker from "~/components/controls/DatePicker";
 import TimePicker from "~/components/controls/TimePicker";
 import VacantIntervalsTable from "~/components/rent/VacantIntervalsTable";
+import ValidationErrors from '~/components/controls/ValidationErrors'
 
 export default {
   name: "MakeRentPage",
@@ -76,6 +79,7 @@ export default {
     DatePicker,
     TimePicker,
     VacantIntervalsTable,
+    ValidationErrors
   },
   data() {
     return {
@@ -83,6 +87,7 @@ export default {
       rentPackageSize: 1,
       rentDurationMinutes: 120,
       vacantIntervals: [],
+      errors: []
     };
   },
   computed: {
@@ -159,6 +164,7 @@ export default {
   },
   methods: {
     renting() {
+      this.errors = [];
       api
         .sendPost(`/mailboxGroup/${this.groupId}/rent`, null, {
           packageSize: 1 * this.rentPackageSize,
@@ -169,7 +175,14 @@ export default {
           let data = r.data;
           this.$router.push(`/rent/${data.rentId}`);
         })
-        .catch((e) => {});
+        .catch((e) => {
+          if (!e.response || e.response.status === 403){
+            this.errors.push('No mailboxes for this time found');
+          }
+          else {
+            this.errors.push('No rights to rent the mailbox');
+            }
+        });
     },
   },
 };

@@ -17,6 +17,7 @@ export default {
         delivery: 'Delivery',
         join: 'Join rent whitelist',
         404: 'Not Found',
+        403: 'No access',
     },
     main: {
         descr: "Program system for automation of processes associated with handing deliveries over to the addressee.",
@@ -89,7 +90,8 @@ export default {
         notTaken: 'Not taken'
     },
     errors: {
-        notFound: '404 Not Found'
+        notFound: '404 Not Found',
+        noAccess: '403 Forbidden'
     },
     groups: {
         addToWhitelistHeader: 'Add user to whitelist',
@@ -157,5 +159,20 @@ export default {
     account: {
         currentDeliveries: 'Current deliveries',
         viewDeliveryAction: 'View delivery'
-    }
+    },
+    months: [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "June",
+        "July",
+        "Aug",
+        "Sept",
+        "Oct",
+        "Nov",
+        "Dec",
+    ],
+    daysOfWeek: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 };

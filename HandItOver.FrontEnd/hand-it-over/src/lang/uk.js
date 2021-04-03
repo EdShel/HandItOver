@@ -17,6 +17,7 @@ export default {
         delivery: 'Доставка',
         join: 'Приєднатння до білого списку',
         404: 'Не знайдено',
+        403: 'Немає доступу',
     },
     main: {
         descr: "Програмна система для оптимізації процесів, пов'язаних з передачею посилок отримувачам.",
@@ -54,7 +55,7 @@ export default {
         myAccount: 'Мій акаунт',
         myMailboxes: 'Мої скрині',
         logout: 'Вийти',
-        regiserAction: 'Зареєструватися',
+        regiserAction: 'Створити акаунт',
         loginButton: 'Увійти',
         closeAction: 'Закрити',
         cancelAction: 'Відмінити',
@@ -89,7 +90,8 @@ export default {
         notTaken: 'Не одержена'
     },
     errors: {
-        notFound: '404 Не знайдено'
+        notFound: '404 Не знайдено',
+        noAccess: '403 Немає доступу'
     },
     groups: {
         addToWhitelistHeader: 'Додавання в білий список',
@@ -156,6 +158,21 @@ export default {
     },
     account: {
         currentDeliveries: 'Поточні посилки',
-        viewDeliveryAction: 'Переглянути посилки'
-    }
+        viewDeliveryAction: 'Переглянути посилку'
+    },
+    months: [
+        "Січ",
+        "Лют",
+        "Бер",
+        "Квіт",
+        "Трав",
+        "Черв",
+        "Лип",
+        "Серп",
+        "Вер",
+        "Жовт",
+        "Лист",
+        "Груд",
+    ],
+    daysOfWeek: ["Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"]
 };

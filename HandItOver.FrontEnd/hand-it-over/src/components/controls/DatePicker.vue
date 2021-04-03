@@ -43,10 +43,10 @@ export default {
       }
     },
     getDayOfWeekShort(date) {
-      return daysOfWeek[date.getDay()];
+      return this.$t('daysOfWeek.' + date.getDay());
     },
     getMonthShort(date) {
-      return months[date.getMonth()];
+      return this.$t('months.' + date.getMonth());
     },
     changeSelectedDate(selectedIndex) {
       this.selectedDateIndex = selectedIndex;
@@ -54,21 +54,6 @@ export default {
   },
 };
 
-const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const months = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "June",
-  "July",
-  "Aug",
-  "Sept",
-  "Oct",
-  "Nov",
-  "Dec",
-];
 </script>
 
 <style scoped>
