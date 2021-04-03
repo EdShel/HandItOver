@@ -18,8 +18,8 @@
         v-model="whitelistOnly"
       />
     </div>
-    <div>
-      <label for="maxRentHours">{{$t('groups.maxRentHours')}}</label>
+    <div class="row">
+      <label for="maxRentHours" class="col-sm-12">{{$t('groups.maxRentHours')}}: {{ this.maxRentHours }} </label>
       <input
         id="maxRentHours"
         type="range"
@@ -27,6 +27,7 @@
         max="72"
         step="1"
         v-model="maxRentHours"
+        class="col-sm-12"
       />
     </div>
   </modal-window>

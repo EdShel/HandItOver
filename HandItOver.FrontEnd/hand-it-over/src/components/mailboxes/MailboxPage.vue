@@ -97,7 +97,6 @@ export default {
       this.updateMailboxesList();
     },
     removeMailboxFromGroup(mailboxId, groupId) {
-      // TODO: check if have rents etc
       api
         .sendDelete(`/mailboxGroup/${groupId}/mailboxes/${mailboxId}`)
         .then((r) => {

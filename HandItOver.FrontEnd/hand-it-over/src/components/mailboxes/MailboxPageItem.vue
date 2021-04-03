@@ -20,7 +20,7 @@
         class="fas"
         v-bind:class="deliveriesAreVisible ? 'fa-box-open' : 'fa-box'"
       ></i>
-      Recent deliveries
+      {{$t('mailboxes.recentDeliveries')}}
     </button>
     <div v-if="deliveriesAreVisible" class="delivery-container">
       <div v-for="delivery in deliveries" :key="delivery.id" class="delivery">
