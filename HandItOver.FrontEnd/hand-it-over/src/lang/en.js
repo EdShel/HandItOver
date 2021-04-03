@@ -129,7 +129,7 @@ export default {
         large: 'Large',
         rentDuration: 'Rent duration',
         minutes: 'minutes',
-        rentStart: 'Rent start',
+        rentTime: 'Rent time',
         rent: 'Rent',
         viewingRent: 'Viewing rent',
         startTime: 'Start time',

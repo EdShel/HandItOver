@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import date from '~/util/date'
+import date from "~/util/date";
 
 export default {
   name: "DatePicker",

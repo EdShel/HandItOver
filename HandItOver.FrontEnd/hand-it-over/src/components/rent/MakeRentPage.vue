@@ -1,19 +1,26 @@
 <template>
   <div>
-    <h3>{{$t('rent.rentOptions')}}</h3>
+    <h3>{{ $t("rent.rentOptions") }}</h3>
     <div v-if="group">
       <div>
-        <div>
-          <label for="packageSizeSelect">{{$t('rent.packageSize')}}</label>
-          <select id="packageSizeSelect" v-model="rentPackageSize">
-            <option value="0">{{$t('rent.small')}}</option>
-            <option value="1">{{$t('rent.medium')}}</option>
-            <option value="2">{{$t('rent.large')}}</option>
+        <div class="row">
+          <label for="packageSizeSelect" class="col-sm-3">{{
+            $t("rent.packageSize")
+          }}</label>
+          <select
+            id="packageSizeSelect"
+            v-model="rentPackageSize"
+            class="col-sm-9"
+          >
+            <option value="0">{{ $t("rent.small") }}</option>
+            <option value="1">{{ $t("rent.medium") }}</option>
+            <option value="2">{{ $t("rent.large") }}</option>
           </select>
         </div>
-        <div>
-          <label for="rentDurationRange"
-            >{{$t('rent.rentDuration')}}: {{ rentDurationMinutes }} {{$t('rent.minutes')}}</label
+        <div class="row">
+          <label for="rentDurationRange" class="col-sm-3"
+            >{{ $t("rent.rentDuration") }}: {{ rentDurationMinutes }}
+            {{ $t("rent.minutes") }}</label
           >
           <input
             type="range"
@@ -21,29 +28,34 @@
             v-bind:max="group.maxRentMinutes"
             step="5"
             v-model="rentDurationMinutes"
+            class="col-sm-9"
           />
         </div>
       </div>
     </div>
-    <div>
-      <label for="rentFromDate">{{$t('rent.rentStart')}}</label>
-      <date-picker
-        ref="datePicker"
-        v-bind:daysForwardCount="Number(14)"
-      ></date-picker>
-    </div>
-    <div class="row" v-if="$refs.datePicker">
-      <div class="col col-lg-4 col-md-6 col-sm-6 col-xs-6">
-        <time-picker  ref="timePicker"></time-picker>
-      </div>
-      <div class="col col-lg-8 col-md-6 col-sm-6 col-xs-6">
-        <vacant-intervals-table
-          v-bind:intervals="vacantIntervalsForSelectedDay"
+    <div class="row">
+      <label for="rentFromDate" class="col-sm-3">{{
+        $t("rent.rentTime")
+      }}</label>
+      <div class="col-sm-9 date-picker">
+        <date-picker
+          ref="datePicker"
+          v-bind:daysForwardCount="Number(14)"
         />
+        <div class="row" v-if="$refs.datePicker">
+          <div class="col col-lg-4 col-md-6 col-sm-6 col-xs-6">
+            <time-picker ref="timePicker"></time-picker>
+          </div>
+          <div class="col col-lg-8 col-md-6 col-sm-6 col-xs-6">
+            <vacant-intervals-table
+              v-bind:intervals="vacantIntervalsForSelectedDay"
+            />
+          </div>
+        </div>
       </div>
-      <div>
-        <button v-on:click="renting">{{$t('rent.rent')}}</button>
-      </div>
+    </div>
+    <div>
+      <button v-on:click="renting" class="btn btn-primary rent-button">{{ $t("rent.rent") }}</button>
     </div>
   </div>
 </template>
@@ -102,12 +114,13 @@ export default {
       let selectedDay = new Date(this.rentDate);
       let nextDay = new Date(selectedDay);
       nextDay.setDate(nextDay.getDate() + 1);
+      nextDay.setSeconds(nextDay.getSeconds() - 1);
 
       let vacantIntervalsForDay = [];
       for (let interval of this.vacantIntervals) {
         let intervalOverlapsSelectedDay =
-          selectedDay.getTime() <= interval.end.getTime() 
-          && interval.begin.getTime() <= nextDay.getTime();
+          selectedDay.getTime() <= interval.end.getTime() &&
+          interval.begin.getTime() <= nextDay.getTime();
         if (!intervalOverlapsSelectedDay) {
           continue;
         }
@@ -132,7 +145,7 @@ export default {
       .catch((e) => {});
     api
       .sendGet(`/mailboxGroup/${this.groupId}/rentTime`, {
-        packageSize: 1, // TODO: wtf
+        packageSize: this.rentPackageSize,
       })
       .then((r) => {
         this.vacantIntervals = r.data.map((interval) => ({
@@ -162,5 +175,18 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+h3 {
+  font-size: 2em;
+}
+
+label {
+  text-align: right;
+}
+.date-picker {
+  padding: 0;
+}
+.rent-button {
+  float: right;
+}
 </style>
