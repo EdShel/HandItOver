@@ -16,7 +16,6 @@ import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_login.*
 import ua.nure.sheliemietiev.handitover.App
 import ua.nure.sheliemietiev.handitover.BuildConfig
-import ua.nure.sheliemietiev.handitover.MainActivity
 import ua.nure.sheliemietiev.handitover.R
 import ua.nure.sheliemietiev.handitover.api.AuthorizationInfo
 import ua.nure.sheliemietiev.handitover.models.AuthorizationResult
