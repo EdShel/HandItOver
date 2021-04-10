@@ -139,7 +139,9 @@ export default {
         cancelRentAction: 'Скасувати оренду',
         vacantIntervals: 'Вільні проміжки часу за день',
         begin: 'Початок',
-        end: 'Кінець'
+        end: 'Кінець',
+        wrongTime: 'Немає вільних скринь на цей час',
+        noRights: 'Немає прав орендувати скриню'
     },
     mailboxes: {
         mailbox: 'Скриня',

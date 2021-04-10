@@ -176,11 +176,11 @@ export default {
           this.$router.push(`/rent/${data.rentId}`);
         })
         .catch((e) => {
-          if (!e.response || e.response.status === 403){
-            this.errors.push('No mailboxes for this time found');
+          if (!e.response || e.response.status === 400){
+            this.errors.push(this.$t('rent.wrongTime'));
           }
           else {
-            this.errors.push('No rights to rent the mailbox');
+            this.errors.push(this.$t('rent.noRights'));
             }
         });
     },

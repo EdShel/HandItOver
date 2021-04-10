@@ -139,7 +139,9 @@ export default {
         cancelRentAction: 'Cancel rent',
         vacantIntervals: 'Vacant intervals of the day',
         begin: 'Begin',
-        end: 'End'
+        end: 'End',
+        wrongTime: 'No mailboxes for this time found',
+        noRights: 'No rights to rent the mailbox'
     },
     mailboxes: {
         mailbox: 'Mailbox',

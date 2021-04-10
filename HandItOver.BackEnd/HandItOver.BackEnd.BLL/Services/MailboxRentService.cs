@@ -36,7 +36,7 @@ namespace HandItOver.BackEnd.BLL.Services
         public async Task<RentResult> RentMailboxAsync(RentRequest request)
         {
             MailboxGroup mailboxGroup = await this.mailboxGroupRepository
-                .FindWithWhitelistById(request.GroupId)
+                .FindWithWhitelistByIdAsync(request.GroupId)
                 ?? throw new NotFoundException("Mailbox group");
             if (!IsUserAllowedToRentGroup(request.RenterId, mailboxGroup))
             {

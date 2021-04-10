@@ -37,7 +37,7 @@ namespace HandItOver.BackEnd.BLL.Services
 
         public async Task<WhitelistInfo> GetMailboxWhitelistAsync(string groupId)
         {
-            MailboxGroup mailboxGroup = await this.mailboxGroupRepository.FindWithWhitelistById(groupId)
+            MailboxGroup mailboxGroup = await this.mailboxGroupRepository.FindWithWhitelistByIdAsync(groupId)
                 ?? throw new NotFoundException("Mailbox group");
 
             return new WhitelistInfo(
@@ -56,7 +56,7 @@ namespace HandItOver.BackEnd.BLL.Services
         {
             AppUser user = await this.userRepository.FindByEmailOrNullAsync(userEmail)
                 ?? throw new NotFoundException("User");
-            MailboxGroup mailboxGroup = await this.mailboxGroupRepository.FindWithWhitelistById(groupId)
+            MailboxGroup mailboxGroup = await this.mailboxGroupRepository.FindWithWhitelistByIdAsync(groupId)
                 ?? throw new NotFoundException("Mailbox group");
 
             if (mailboxGroup.OwnerId == user.Id)
@@ -76,7 +76,7 @@ namespace HandItOver.BackEnd.BLL.Services
         {
             AppUser user = await this.userRepository.FindByEmailOrNullAsync(userEmail)
                 ?? throw new NotFoundException("User");
-            MailboxGroup mailboxGroup = await this.mailboxGroupRepository.FindWithWhitelistById(groupId)
+            MailboxGroup mailboxGroup = await this.mailboxGroupRepository.FindWithWhitelistByIdAsync(groupId)
                 ?? throw new NotFoundException("Mailbox group");
 
             if (!mailboxGroup.Whitelisted.Contains(user))

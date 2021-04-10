@@ -48,9 +48,9 @@ namespace HandItOver.BackEnd.DAL.Repositories
                 .FirstOrDefaultAsync(m => m!.GroupId == id);
         }
 
-        public Task<MailboxGroup?> FindWithWhitelistById(string id)
+        public async Task<MailboxGroup?> FindWithWhitelistByIdAsync(string id)
         {
-            return this.dbContext.Set<MailboxGroup?>()
+            return await this.dbContext.Set<MailboxGroup?>()
                 .Include(m => m!.Whitelisted)
                 .FirstOrDefaultAsync(m => m!.GroupId == id);
         }
