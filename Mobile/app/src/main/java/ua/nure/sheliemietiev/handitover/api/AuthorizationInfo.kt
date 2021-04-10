@@ -7,7 +7,7 @@ import javax.inject.Singleton
 class AuthorizationInfo(
     private val storage: SecureStorage
 ) {
-    var userName: String = ""
+    var fullName: String = ""
         private set
 
     var email: String = ""
@@ -25,17 +25,17 @@ class AuthorizationInfo(
         }
 
     fun loadFromStorage() {
-        userName = storage.getStringOrNull("userName") ?: ""
+        fullName = storage.getStringOrNull("fullName") ?: ""
         email = storage.getStringOrNull("email") ?: ""
         token = storage.getStringOrNull("token") ?: ""
         refreshToken = storage.getStringOrNull("refreshToken") ?: ""
     }
 
-    fun setUser(userName : String, email : String, token : String, refreshToken : String){
-        this.userName = userName
+    fun setUser(fullName : String, email : String, token : String, refreshToken : String){
+        this.fullName = fullName
         this.email = email
 
-        storage.saveString("userName", userName)
+        storage.saveString("fullName", fullName)
         storage.saveString("email", email)
 
         changeAuth(token, refreshToken)

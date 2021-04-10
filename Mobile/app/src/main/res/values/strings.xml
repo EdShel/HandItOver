@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">HandItOver</string>
+    <string name="error_server_not_accessible">The server is not accessible</string>
+    <string name="error_invalid_email_or_password">Invalid email and/or password</string>
+    <string name="error_invalid_email">Invalid email</string>
+    <string name="error_invalid_password">Invalid password</string>
 </resources>
