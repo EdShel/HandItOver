@@ -50,21 +50,21 @@ class DeliveriesListAdapter(
         setTextFor(
             row,
             R.id.arrived_time_label,
-            "Arrived: {0}",
+            "Arrived: %s",
             currentDelivery.arrived.toLocaleDateTimeString(context)
         )
 
         setTextFor(
             row,
             R.id.terminal_time_label,
-            "Terminal time: {0}",
+            "Terminal time: %s",
             currentDelivery.terminalTime.toLocaleDateTimeString(context)
         )
 
         setTextFor(
             row,
             R.id.weight_label,
-            "Weight: {0}lb",
+            "Weight: %.2flb",
             localizedWeight(context, currentDelivery.weight)
         )
 
@@ -81,10 +81,10 @@ class DeliveriesListAdapter(
         val textFormat: String
         val hoursDifference: Int
         if (now.after(currentDelivery.terminalTime)) {
-            textFormat = "Late for {0} hours"
+            textFormat = "Late for %d hours"
             hoursDifference = now.differenceHours(currentDelivery.terminalTime)
         } else {
-            textFormat = "{0} hours left"
+            textFormat = "%d hours left"
             hoursDifference = currentDelivery.terminalTime.differenceHours(now)
         }
         setTextFor(

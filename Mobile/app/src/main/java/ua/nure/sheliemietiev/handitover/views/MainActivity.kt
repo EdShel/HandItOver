@@ -14,6 +14,7 @@ import ua.nure.sheliemietiev.handitover.api.AuthorizationInfo
 import ua.nure.sheliemietiev.handitover.views.menuItems.LogoutStrategy
 import ua.nure.sheliemietiev.handitover.views.menuItems.MainMenuItem
 import ua.nure.sheliemietiev.handitover.views.menuItems.MenuItemsAdapter
+import ua.nure.sheliemietiev.handitover.views.menuItems.NextActivityStrategy
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
@@ -29,7 +30,12 @@ class MainActivity : AppCompatActivity() {
 
         menuItemsList = findViewById(R.id.menu_items_list)
         val menuItems = listOf(
-             MainMenuItem("Logout", R.drawable.ic_scan_qr_code, LogoutStrategy(authInfo))
+            MainMenuItem(
+                "Current deliveries",
+                R.drawable.ic_scan_qr_code,
+                NextActivityStrategy(DeliveriesActivity::class)
+            ),
+            MainMenuItem("Logout", R.drawable.ic_scan_qr_code, LogoutStrategy(authInfo))
         )
         val listAdapter = MenuItemsAdapter(this, menuItems)
         menuItemsList.adapter = listAdapter

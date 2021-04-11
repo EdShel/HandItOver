@@ -21,8 +21,8 @@ class DeliveriesModel @Inject constructor(private val api: Api) {
         if (response.statusCode != StatusCode.OK.code) {
             return OperationResult.error()
         }
-        val json = response.asJsonMap()
-        return OperationResult.success(json.asJsonArray.map {
+        val json = response.asJsonArray()
+        return OperationResult.success(json.map {
             val delivery = it.asJsonObject
             ActiveDelivery(
                 id = delivery["id"].asString,
