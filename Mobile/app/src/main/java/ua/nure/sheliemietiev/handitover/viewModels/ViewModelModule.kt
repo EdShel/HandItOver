@@ -17,4 +17,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(LoginViewModel::class)
     internal abstract fun provideLoginViewModel(viewModel: LoginViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(DeliveriesViewModel::class)
+    internal abstract fun provideDeliveriesViewModel(viewModel: DeliveriesViewModel): ViewModel
 }

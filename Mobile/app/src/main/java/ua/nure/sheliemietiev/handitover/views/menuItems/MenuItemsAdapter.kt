@@ -53,7 +53,7 @@ class MenuItemsAdapter(
         return menuItemsList.count()
     }
 
-    override fun getItem(position: Int): Any {
+    override fun getItem(position: Int): MainMenuItem {
         return menuItemsList[position]
     }
 

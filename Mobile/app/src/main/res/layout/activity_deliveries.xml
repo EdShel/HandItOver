@@ -4,21 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.MainActivity"
+    tools:context=".views.DeliveriesActivity"
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/main_menu_title"
+        android:id="@+id/current_deliveries_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="15dp"
-        android:text="Hand It Over"
+        android:text="Your deliveries"
         android:textAlignment="center"
         android:textSize="25sp"
         android:gravity="center_horizontal" />
 
     <ListView
-        android:id="@+id/menu_items_list"
+        android:id="@+id/deliveries_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"

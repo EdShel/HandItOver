@@ -102,7 +102,7 @@ class Api @Inject constructor(
 
     suspend fun get(
         relativeUrl: String,
-        queryParams: Map<String, String>?
+        queryParams: Map<String, String>? = null
     ): ApiResponse {
         var request = requestBuilder.buildGetRequest(relativeUrl, queryParams)
 

@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         val listAdapter = MenuItemsAdapter(this, menuItems)
         menuItemsList.adapter = listAdapter
         menuItemsList.setOnItemClickListener { parent, view, position, id ->
-            val clickedMenuItem = listAdapter.getItem(position) as MainMenuItem
+            val clickedMenuItem = listAdapter.getItem(position)
             clickedMenuItem.clickHandler.onClicked(this@MainActivity)
         }
 

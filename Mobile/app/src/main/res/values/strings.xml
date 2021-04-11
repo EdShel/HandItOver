@@ -4,4 +4,8 @@
     <string name="error_invalid_email_or_password">Invalid email and/or password</string>
     <string name="error_invalid_email">Invalid email</string>
     <string name="error_invalid_password">Invalid password</string>
+    <!-- Date & time -->
+    <string name="locale_time">HH:mm:ss a</string>
+    <string name="locale_date_time">MM/dd/yy HH:mm a</string>
+    <string name="mass_unit">pounds</string>
 </resources>
