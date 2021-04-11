@@ -14,6 +14,8 @@ class ApiResponse() {
     var body : String = ""
         private set
 
+    val isSuccessful get() = (statusCode / 100) == 2
+
     constructor(response : Response) : this() {
         this.statusCode = response.code()
         this.body = response.body()?.string() ?: ""

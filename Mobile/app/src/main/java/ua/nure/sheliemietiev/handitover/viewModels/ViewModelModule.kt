@@ -22,4 +22,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(DeliveriesViewModel::class)
     internal abstract fun provideDeliveriesViewModel(viewModel: DeliveriesViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(DeliveryViewModel::class)
+    internal abstract fun provideDeliveryViewModel(viewModel: DeliveryViewModel): ViewModel
 }
