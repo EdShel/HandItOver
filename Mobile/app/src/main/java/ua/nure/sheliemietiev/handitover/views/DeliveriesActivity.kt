@@ -1,5 +1,6 @@
 package ua.nure.sheliemietiev.handitover.views
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ListView
@@ -35,7 +36,8 @@ class DeliveriesActivity : AppCompatActivity() {
     private fun initializeDeliveriesList() {
         deliveriesListView.adapter = DeliveriesListAdapter(this, emptyList())
         deliveriesListView.setOnItemClickListener{parent, view, position, id ->
-            Toast.makeText(this, "Showing delivery", Toast.LENGTH_LONG).show()
+            val intent = Intent(this, DeliveryActivity::class.java)
+            startActivity(intent)
         }
     }
 

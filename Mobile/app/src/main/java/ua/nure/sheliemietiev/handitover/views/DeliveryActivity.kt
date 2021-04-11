@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import ua.nure.sheliemietiev.handitover.App
 import ua.nure.sheliemietiev.handitover.R
+import ua.nure.sheliemietiev.handitover.customViews.CircleButton
 import ua.nure.sheliemietiev.handitover.viewModels.DeliveryViewModel
 import javax.inject.Inject
 
@@ -14,6 +15,8 @@ class DeliveryActivity : AppCompatActivity() {
 
     private lateinit var deliveryViewModel: DeliveryViewModel
 
+    private lateinit var openButton: CircleButton
+
     override fun onCreate(savedInstanceState: Bundle?) {
         (applicationContext as App).components.inject(this)
         super.onCreate(savedInstanceState)
@@ -21,6 +24,10 @@ class DeliveryActivity : AppCompatActivity() {
         deliveryViewModel = ViewModelProvider(this, viewModelFactory)
             .get(DeliveryViewModel::class.java)
 
-        
+        openButton = findViewById(R.id.open_button)
+        openButton.setLongClickListener{btn ->
+            btn.canClick = false
+            btn.text = "Kekekekeke"
+        }
     }
 }

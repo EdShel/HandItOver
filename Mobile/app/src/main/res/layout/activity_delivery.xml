@@ -6,4 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".views.DeliveryActivity">
 
+    <ua.nure.sheliemietiev.handitover.customViews.CircleButton
+        android:id="@+id/open_button"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Kek lol"
+        android:background="@color/colorPrimary"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
