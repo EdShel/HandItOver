@@ -27,7 +27,8 @@ class DeliveryActivity : AppCompatActivity() {
         openButton = findViewById(R.id.open_button)
         openButton.setLongClickListener{btn ->
             btn.canClick = false
-            btn.text = "Kekekekeke"
+            // TODO: replace with string resource
+            btn.text = "Hold to open the mailbox"
         }
     }
 }

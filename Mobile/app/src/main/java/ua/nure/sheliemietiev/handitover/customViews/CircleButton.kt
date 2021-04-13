@@ -9,6 +9,8 @@ import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import androidx.annotation.StyleableRes
+import ua.nure.sheliemietiev.handitover.R
 
 class CircleButton @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -21,14 +23,7 @@ class CircleButton @JvmOverloads constructor(
 
     private var longClickListener: ((CircleButton) -> Unit)? = null
 
-    init {
-        val attributesSet = intArrayOf(android.R.attr.text)
-        val typedArray = context.obtainStyledAttributes(attrs, attributesSet)
-        text = typedArray.getText(0)
-        typedArray.recycle()
-    }
-
-    private val backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val outerCirclePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
         color = Color.rgb(53, 242, 75)
     }
@@ -43,6 +38,17 @@ class CircleButton @JvmOverloads constructor(
         color = Color.rgb(0, 0, 0)
         textAlign = Paint.Align.CENTER
         textSize = 48f
+    }
+
+    init {
+        context.obtainStyledAttributes(attrs, R.styleable.CircleButton).apply {
+            text = getText(R.styleable.CircleButton_text)
+            textPaint.textSize = getDimension(R.styleable.CircleButton_text_size, 48f)
+            textPaint.color = getColor(R.styleable.CircleButton_text_color, Color.BLACK)
+            outerCirclePaint.color = getColor(R.styleable.CircleButton_outer_color, Color.WHITE)
+            innerCirclePaint.color = getColor(R.styleable.CircleButton_inner_color, Color.GRAY)
+            recycle()
+        }
     }
 
     private val gestureListener = object : GestureDetector.SimpleOnGestureListener() {
@@ -91,13 +97,16 @@ class CircleButton @JvmOverloads constructor(
             return
         }
         canvas.apply {
+            val centerX = width / 2f
+            val centerY = height / 2f
+            val r = radius
             if (innerCircleSize < 1f) {
-                drawCircle(width / 2f, height / 2f, width / 2f, backgroundPaint)
+                drawCircle(centerX, centerY, r, outerCirclePaint)
             }
             if (innerCircleSize > 0f) {
-                drawCircle(width / 2f, height / 2f, width / 2f * innerCircleSize, innerCirclePaint)
+                drawCircle(centerX, centerY, r * innerCircleSize, innerCirclePaint)
             }
-            drawText(text, 0, text.length, width / 2f, height / 2f, textPaint)
+            drawText(text, 0, text.length, centerX, centerY, textPaint)
         }
     }
 }
