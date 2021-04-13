@@ -30,6 +30,9 @@ class DeliveryViewModel @Inject constructor(
     private val _delivery: MutableLiveData<ActiveDeliveryFullInfo>
     val delivery: LiveData<ActiveDeliveryFullInfo> get() = _delivery
 
+    private val _openResult = MutableLiveData<Boolean>()
+    val openResult: LiveData<Boolean> get() = _openResult
+
     var deliveryId: String? = null
 
     init {
@@ -59,6 +62,16 @@ class DeliveryViewModel @Inject constructor(
                         mailboxSize = mailbox.size
                     )
                 }
+            }
+        }
+    }
+
+    fun openMailboxButtonPressed(){
+        val deliveryToOpen = deliveryId ?: return
+        viewModelScope.launch {
+        val openResult = deliveryModel.openMailboxWithDelivery(deliveryToOpen)
+            if (openResult.isSuccess){
+                _openResult.value = true
             }
         }
     }

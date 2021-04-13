@@ -8,4 +8,5 @@
     <string name="locale_time">HH:mm:ss a</string>
     <string name="locale_date_time">MM/dd/yy HH:mm a</string>
     <string name="mass_unit">pounds</string>
+    <string name="mass_format">%.2lb</string>
 </resources>

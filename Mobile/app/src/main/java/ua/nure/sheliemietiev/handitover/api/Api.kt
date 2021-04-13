@@ -74,8 +74,8 @@ class Api @Inject constructor(
 
     suspend fun post(
         relativeUrl: String,
-        queryParams: Map<String, String>?,
-        body: Any?
+        queryParams: Map<String, String>? = null,
+        body: Any? = null
     ): ApiResponse {
         var request = requestBuilder.buildPostRequest(relativeUrl, queryParams, body)
 

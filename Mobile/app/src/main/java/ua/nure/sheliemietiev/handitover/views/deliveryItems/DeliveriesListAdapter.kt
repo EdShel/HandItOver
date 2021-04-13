@@ -9,10 +9,7 @@ import android.widget.TextView
 import androidx.annotation.IdRes
 import ua.nure.sheliemietiev.handitover.R
 import ua.nure.sheliemietiev.handitover.models.ActiveDelivery
-import ua.nure.sheliemietiev.handitover.util.currentTimeUtc
-import ua.nure.sheliemietiev.handitover.util.differenceHours
-import ua.nure.sheliemietiev.handitover.util.localizedWeight
-import ua.nure.sheliemietiev.handitover.util.toLocaleDateTimeString
+import ua.nure.sheliemietiev.handitover.util.*
 import java.util.*
 
 class DeliveriesListAdapter(
@@ -64,8 +61,8 @@ class DeliveriesListAdapter(
         setTextFor(
             row,
             R.id.weight_label,
-            "Weight: %.2flb",
-            localizedWeight(context, currentDelivery.weight)
+            "Weight: %s",
+            localizedWeightString(context, currentDelivery.weight)
         )
 
         setTextForTimeLeftLabel(currentDelivery, row)
