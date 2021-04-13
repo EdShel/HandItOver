@@ -1,19 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="10dp"
     tools:context=".views.DeliveryActivity">
+
+    <TextView
+        android:id="@+id/mailbox_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mailbox address"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/mailbox_address_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mailbox_address"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:text="The address will be written here and will be long enough"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/delivery_weight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mailbox_address_value"
+        android:text="Weight"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/delivery_weight_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/delivery_weight"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:text="2.00kg"
+        android:textSize="18sp" />
 
     <ua.nure.sheliemietiev.handitover.customViews.CircleButton
         android:id="@+id/open_button"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        custom:text="Hold to open the mailbox"
-        custom:text_size="28sp"
-        custom:inner_color="#305703"
-        custom:outer_color="#5CA606" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/delivery_weight_value"
+        android:layout_above="@id/delivery_arrived"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        app:inner_color="#305703"
+        app:outer_color="#5CA606"
+        app:text="Hold to open the mailbox"
+        app:text_size="28sp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/delivery_arrived"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/delivery_arrived_value"
+        android:text="Arrived"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/delivery_arrived_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/delivery_terminal_time"
+        android:text="04/16/2021 10:30PM"
+        android:textSize="18sp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"/>
+
+    <TextView
+        android:id="@+id/delivery_terminal_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/delivery_terminal_time_value"
+        android:text="Terminal time"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/delivery_terminal_time_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="04/16/2021 10:30PM"
+        android:textSize="18sp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"/>
+
+
+</RelativeLayout>
