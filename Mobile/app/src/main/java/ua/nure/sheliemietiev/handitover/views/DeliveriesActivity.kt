@@ -36,7 +36,9 @@ class DeliveriesActivity : AppCompatActivity() {
     private fun initializeDeliveriesList() {
         deliveriesListView.adapter = DeliveriesListAdapter(this, emptyList())
         deliveriesListView.setOnItemClickListener{parent, view, position, id ->
+            val delivery = (deliveriesListView.adapter as DeliveriesListAdapter).getItem(position)
             val intent = Intent(this, DeliveryActivity::class.java)
+            intent.putExtra("deliveryId", delivery.id)
             startActivity(intent)
         }
     }

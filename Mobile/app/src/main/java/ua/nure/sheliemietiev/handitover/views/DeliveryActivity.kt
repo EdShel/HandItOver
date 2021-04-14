@@ -34,6 +34,7 @@ class DeliveryActivity : AppCompatActivity() {
         val arrivedText = findViewById<TextView>(R.id.delivery_arrived_value)
         val terminalTimeText = findViewById<TextView>(R.id.delivery_terminal_time_value)
 
+        deliveryViewModel.deliveryId = intent.extras!!.getString("deliveryId")
         deliveryViewModel.delivery.observe(this@DeliveryActivity, Observer { delivery ->
             val activity = this@DeliveryActivity
             addressText.text = delivery.mailboxAddress

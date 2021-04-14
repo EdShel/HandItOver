@@ -8,5 +8,13 @@
     <string name="locale_time">HH:mm:ss a</string>
     <string name="locale_date_time">MM/dd/yy HH:mm a</string>
     <string name="mass_unit">pounds</string>
-    <string name="mass_format">%.2lb</string>
+    <string name="mass_format">%.2flb</string>
+    <!-- Notifications -->
+    <string name="notify_delivery_arrived_title">Delivery has arrived</string>
+    <string name="notify_delivery_stolen_title">Delivery has been stolen</string>
+    <string name="notify_delivery_expired_title">Delivery has expired</string>
+    <string name="notify_delivery_arrived_body">Your delivery has arrived to the mailbox and can be taken.</string>
+    <string name="notify_delivery_stolen_body">Your delivery has disappeared without opening the mailbox.</string>
+    <string name="notify_delivery_expired_body">You didn\'t take the delivery in time. Now the mailbox is open.</string>
+    <string name="unknown">Unknown</string>
 </resources>

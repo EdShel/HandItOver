@@ -1,7 +1,11 @@
 package ua.nure.sheliemietiev.handitover.views
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -180,6 +184,19 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun initializeFirebaseNotifications() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                "HandItOverNotifications",
+                "Hand It Over Notifications",
+                NotificationManager.IMPORTANCE_DEFAULT
+            ).apply {
+                description = ""
+            }
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
                 return@OnCompleteListener
