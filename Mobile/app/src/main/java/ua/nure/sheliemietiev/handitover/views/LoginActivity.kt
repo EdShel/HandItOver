@@ -2,7 +2,6 @@ package ua.nure.sheliemietiev.handitover.views
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -11,8 +10,11 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.activity_login.*
 import ua.nure.sheliemietiev.handitover.App
 import ua.nure.sheliemietiev.handitover.BuildConfig
@@ -20,6 +22,7 @@ import ua.nure.sheliemietiev.handitover.R
 import ua.nure.sheliemietiev.handitover.api.AuthorizationInfo
 import ua.nure.sheliemietiev.handitover.models.AuthorizationResult
 import ua.nure.sheliemietiev.handitover.util.afterTextChanged
+import ua.nure.sheliemietiev.handitover.viewModels.FirebaseViewModel
 import ua.nure.sheliemietiev.handitover.viewModels.LoginViewModel
 import javax.inject.Inject
 
@@ -32,6 +35,8 @@ class LoginActivity : AppCompatActivity() {
     lateinit var authorizationInfo: AuthorizationInfo
 
     private lateinit var loginViewModel: LoginViewModel
+
+    private lateinit var firebaseViewModel: FirebaseViewModel
 
     private lateinit var username: EditText
 
@@ -49,10 +54,14 @@ class LoginActivity : AppCompatActivity() {
 
         loginViewModel = ViewModelProvider(this, viewModelFactory)
             .get(LoginViewModel::class.java)
+        firebaseViewModel = ViewModelProvider(this, viewModelFactory)
+            .get(FirebaseViewModel::class.java)
 
-        username = findViewById<EditText>(R.id.username)
-        password = findViewById<EditText>(R.id.password)
-        loginButton = findViewById<Button>(R.id.loginButton)
+        initializeFirebaseNotifications()
+
+        username = findViewById(R.id.username)
+        password = findViewById(R.id.password)
+        loginButton = findViewById(R.id.loginButton)
         loading = findViewById(R.id.loading)
 
         // TODO: remove it, it's just for test
@@ -168,5 +177,17 @@ class LoginActivity : AppCompatActivity() {
             val browseIntent = Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.WEB_URL))
             startActivity(browseIntent)
         }
+    }
+
+    private fun initializeFirebaseNotifications() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                return@OnCompleteListener
+            }
+            val token = task.result
+            if (token != null) {
+                firebaseViewModel.onFirebaseTokenReceived(token)
+            }
+        })
     }
 }

@@ -27,4 +27,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(DeliveryViewModel::class)
     internal abstract fun provideDeliveryViewModel(viewModel: DeliveryViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(FirebaseViewModel::class)
+    internal abstract fun provideFirebaseViewModel(viewModel: FirebaseViewModel): ViewModel
 }
