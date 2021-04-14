@@ -1,7 +1,4 @@
 ﻿using HandItOver.BackEnd.BLL.Models.Notification;
-using HandItOver.BackEnd.DAL.Entities.Auth;
-using HandItOver.BackEnd.DAL.Repositories;
-using HandItOver.BackEnd.Infrastructure.Exceptions;
 using HandItOver.BackEnd.Infrastructure.Models.Auth;
 using MailKit.Net.Smtp;
 using MimeKit;
@@ -18,7 +15,7 @@ namespace HandItOver.BackEnd.BLL.Services.Notification
             this.options = options;
         }
 
-        public async Task SendAsync(NotificationMessage message)
+        public async Task SendAsync(EmailMessage message)
         {
             if (!this.options.Enabled)
             {

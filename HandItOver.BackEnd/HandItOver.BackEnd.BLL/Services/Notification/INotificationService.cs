@@ -5,6 +5,6 @@ namespace HandItOver.BackEnd.BLL.Services.Notification
 {
     public interface INotificationService
     {
-        public Task SendAsync(NotificationMessage message);
+        public Task SendAsync(EmailMessage message);
     }
 }

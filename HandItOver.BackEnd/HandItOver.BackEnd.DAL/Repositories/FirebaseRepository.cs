@@ -3,10 +3,8 @@ using FirebaseAdmin.Messaging;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.DAL.Repositories
@@ -23,15 +21,13 @@ namespace HandItOver.BackEnd.DAL.Repositories
             });
         }
 
-        public Task SendMessageAsync(string clientToken, string title, string body)
+        public Task SendMessageAsync(string clientToken, string messageKey, IDictionary<string, string>? data = null)
         {
+            IDictionary<string, string> messageData = data ?? new Dictionary<string, string>();
+            messageData.Add("messageKey", messageKey);
             var message = new Message
             {
-                Notification = new Notification
-                {
-                    Title = title,
-                    Body = body
-                },
+                Data = new ReadOnlyDictionary<string, string>(messageData),
                 Token = clientToken
             };
             return FirebaseMessaging.DefaultInstance.SendAsync(message);

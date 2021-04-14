@@ -27,7 +27,7 @@ namespace HandItOver.BackEnd.BLL.Services
 
         private readonly NotificationsMessagesService notificationsMessagesService;
 
-        private readonly INotificationService firebaseNotificationService;
+        private readonly FirebaseNotificationService firebaseNotificationService;
 
         private readonly ILogger<DeliveryService> logger;
 

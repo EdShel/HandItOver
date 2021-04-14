@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HandItOver.BackEnd.BLL.Services.Notification
 {
-    public class FirebaseNotificationService : INotificationService
+    public class FirebaseNotificationService
     {
         private readonly FirebaseRepository firebaseRepository;
 
@@ -22,7 +22,7 @@ namespace HandItOver.BackEnd.BLL.Services.Notification
         {
             FirebaseToken token = await this.firebaseTokenRepository.FindTokenForUserOrNull(message.ReceiverAddress)
                 ?? throw new NotFoundException("User firebase token");
-            await this.firebaseRepository.SendMessageAsync(token.Token, message.Title, message.Body);
+            await this.firebaseRepository.SendMessageAsync(token.Token, message.MessageKey, message.Data);
         }
     }
 }

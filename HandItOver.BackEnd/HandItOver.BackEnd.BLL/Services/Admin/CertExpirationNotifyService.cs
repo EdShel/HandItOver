@@ -35,7 +35,7 @@ namespace HandItOver.BackEnd.BLL.Services.Admin
                 if (expired)
                 {
                     await this.emailService.SendAsync(
-                        new NotificationMessage(
+                        new EmailMessage(
                             this.options.EmailForNotifications,
                             "Hand It Over SSL expiration",
                             $"The certificate will expire at {expires.Value}"
