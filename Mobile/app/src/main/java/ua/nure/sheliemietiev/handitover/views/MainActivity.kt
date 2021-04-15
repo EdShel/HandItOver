@@ -30,6 +30,11 @@ class MainActivity : AppCompatActivity() {
                 R.drawable.ic_scan_qr_code,
                 NextActivityStrategy(DeliveriesActivity::class)
             ),
+            MainMenuItem(
+                "Configure mailbox",
+                R.drawable.ic_scan_qr_code,
+                NextActivityStrategy(ConnectMailboxActivity::class)
+            ),
             MainMenuItem("Logout", R.drawable.ic_scan_qr_code, LogoutStrategy(authInfo))
         )
         val listAdapter = MenuItemsAdapter(this, menuItems)

@@ -1,27 +1,24 @@
 package ua.nure.sheliemietiev.handitover.views
 
 import android.Manifest
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import android.content.pm.PackageManager
+import android.content.*
 import android.net.wifi.WifiManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.ListView
 import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import ua.nure.sheliemietiev.handitover.App
 import ua.nure.sheliemietiev.handitover.R
+import ua.nure.sheliemietiev.handitover.util.LocationServicesEnabler
+import ua.nure.sheliemietiev.handitover.util.SeverePermissionsEnabler
 import ua.nure.sheliemietiev.handitover.viewModels.ConnectMailboxViewModel
 import ua.nure.sheliemietiev.handitover.views.accessPointItems.AccessPointAdapter
 import javax.inject.Inject
+
 
 private const val ACCESS_FINE_LOCATION_ALLOWED_CODE = 1
 
@@ -34,6 +31,10 @@ class ConnectMailboxActivity : AppCompatActivity() {
     private lateinit var accessPointsListView: ListView
 
     private lateinit var loadingBar: ProgressBar
+
+    private lateinit var locationServicesEnabler: LocationServicesEnabler
+
+    private lateinit var severePermissionsEnabler: SeverePermissionsEnabler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (applicationContext as App).components.inject(this)
@@ -53,28 +54,21 @@ class ConnectMailboxActivity : AppCompatActivity() {
         connectMailboxViewModel.accessPoints.observe(this, Observer {
             accessPointAdapter.notifyDataSetChanged()
         })
+
+        hideLoading()
+
     }
 
     private fun askForPermissions() {
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    this,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                )
-            ) {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    ACCESS_FINE_LOCATION_ALLOWED_CODE
-                )
-            } else {
-                permissionsDenied()
-            }
-        }
+        severePermissionsEnabler = SeverePermissionsEnabler(
+            this,
+            listOf(Manifest.permission.ACCESS_FINE_LOCATION)
+        )
+        locationServicesEnabler = LocationServicesEnabler(this, severePermissionsEnabler)
+        locationServicesEnabler.checkPermission(
+            { allPermissionsGranted() },
+            { permissionsDenied() }
+        )
     }
 
     override fun onRequestPermissionsResult(
@@ -83,18 +77,15 @@ class ConnectMailboxActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            ACCESS_FINE_LOCATION_ALLOWED_CODE -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    locationAccessGranted()
-                } else {
-                    permissionsDenied()
-                }
-            }
-        }
+        severePermissionsEnabler.acceptPermissionResult(requestCode, grantResults)
     }
 
-    private fun locationAccessGranted() {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        locationServicesEnabler.onActivityResult(requestCode, resultCode)
+    }
+
+    private fun allPermissionsGranted() {
         startDiscoveringWifiNetworks()
     }
 
@@ -108,6 +99,7 @@ class ConnectMailboxActivity : AppCompatActivity() {
         finish()
     }
 
+    @Suppress("DEPRECATION")
     private fun startDiscoveringWifiNetworks() {
         showLoading()
 
@@ -118,12 +110,11 @@ class ConnectMailboxActivity : AppCompatActivity() {
                     if (intent?.action == WifiManager.SCAN_RESULTS_AVAILABLE_ACTION) {
                         val scanResults = wifiManager.scanResults
                         connectMailboxViewModel.addAccessPoints(scanResults)
+                        hideLoading()
                     }
                 }
             },
-            IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION).apply {
-                addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
-            }
+            IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
         )
         wifiManager.startScan();
     }

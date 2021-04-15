@@ -32,11 +32,11 @@ class AccessPointAdapter(
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val row = convertView ?: inflater.inflate(
-            R.layout.deliveries_list_item, parent, false
+            R.layout.access_point_item, parent, false
         )
         val currentScanResult = accessPoints[position]
         val wifiNetworkName = row.findViewById<TextView>(R.id.wifi_name)
-        wifiNetworkName.text = "${currentScanResult.SSID} MAC (${currentScanResult.BSSID})"
+        wifiNetworkName.text = currentScanResult.SSID
 
         return row
     }

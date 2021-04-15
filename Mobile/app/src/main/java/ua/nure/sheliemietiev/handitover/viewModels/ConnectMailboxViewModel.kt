@@ -15,7 +15,7 @@ class ConnectMailboxViewModel @Inject constructor(
     val accessPoints: LiveData<List<ScanResult>> get() = _accessPoints
 
     fun addAccessPoints(newAccessPoints: Iterable<ScanResult>) {
-        val notAddedAccessPoints = newAccessPoints.filter { point ->
+        val notAddedAccessPoints = newAccessPoints.filterNot { point ->
             accessPointsList.any { saved -> saved.SSID == point.SSID }
         }
         accessPointsList.addAll(notAddedAccessPoints)

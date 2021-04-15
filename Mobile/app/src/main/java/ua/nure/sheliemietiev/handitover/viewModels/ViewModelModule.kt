@@ -32,4 +32,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(FirebaseViewModel::class)
     internal abstract fun provideFirebaseViewModel(viewModel: FirebaseViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ConnectMailboxViewModel::class)
+    internal abstract fun provideConnectMailboxViewModel(viewModel: ConnectMailboxViewModel): ViewModel
 }
