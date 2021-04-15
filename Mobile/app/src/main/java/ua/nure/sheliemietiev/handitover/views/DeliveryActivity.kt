@@ -52,7 +52,7 @@ class DeliveryActivity : AppCompatActivity() {
         }
 
         deliveryViewModel.openResult.observe(this, Observer {
-            val closeAfterMilliseconds = 3000L
+            val closeAfterMilliseconds = 5000L
             Timer("MovingBack", true).schedule(object: TimerTask() {
                 override fun run() {
                     finish()
