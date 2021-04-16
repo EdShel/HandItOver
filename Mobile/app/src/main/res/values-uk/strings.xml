@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Hand It Over</string>
+    <string name="error_server_not_accessible">The server is not accessible</string>
+    <string name="error_invalid_email_or_password">Invalid email and/or password</string>
+    <string name="error_invalid_email">Invalid email</string>
+    <string name="error_invalid_password">Invalid password</string>
+    <!-- Menu -->
+    <string name="current_deliveries">Поточні посилки</string>
+</resources>

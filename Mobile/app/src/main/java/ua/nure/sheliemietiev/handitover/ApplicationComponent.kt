@@ -28,4 +28,6 @@ interface ApplicationComponent {
     fun inject(loginActivity: LoginActivity)
 
     fun inject(connectMailboxActivity: ConnectMailboxActivity)
+
+    fun inject(languageActivity: LanguageActivity)
 }

@@ -16,7 +16,10 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".views.QRScanner"></activity>
+        <activity
+            android:name=".views.LanguageActivity"
+            android:configChanges="locale|orientation" />
+        <activity android:name=".views.QRScanner" />
         <activity android:name=".views.ConnectMailboxActivity" />
         <activity android:name=".views.DeliveryActivity" />
         <activity android:name=".views.DeliveriesActivity" />

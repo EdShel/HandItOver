@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         menuItemsList = findViewById(R.id.menu_items_list)
         val menuItems = listOf(
             MainMenuItem(
-                "Current deliveries",
+                getString(R.string.current_deliveries),
                 R.drawable.ic_scan_qr_code,
                 NextActivityStrategy(DeliveriesActivity::class)
             ),
@@ -39,6 +39,11 @@ class MainActivity : AppCompatActivity() {
                 "Scan join link",
                 R.drawable.ic_scan_qr_code,
                 NextActivityStrategy(QRScanner::class)
+            ),
+            MainMenuItem(
+                "Language",
+                R.drawable.ic_scan_qr_code,
+                NextActivityStrategy(LanguageActivity::class)
             ),
             MainMenuItem("Logout", R.drawable.ic_scan_qr_code, LogoutStrategy(authInfo))
         )

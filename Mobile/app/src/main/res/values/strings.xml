@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HandItOver</string>
+    <string name="app_name">Hand It Over</string>
     <string name="error_server_not_accessible">The server is not accessible</string>
     <string name="error_invalid_email_or_password">Invalid email and/or password</string>
     <string name="error_invalid_email">Invalid email</string>
@@ -17,4 +17,6 @@
     <string name="notify_delivery_stolen_body">Your delivery has disappeared without opening the mailbox.</string>
     <string name="notify_delivery_expired_body">You didn\'t take the delivery in time. Now the mailbox is open.</string>
     <string name="unknown">Unknown</string>
+    <!-- Menu -->
+    <string name="current_deliveries">Current deliveries</string>
 </resources>

@@ -25,9 +25,11 @@ import ua.nure.sheliemietiev.handitover.BuildConfig
 import ua.nure.sheliemietiev.handitover.R
 import ua.nure.sheliemietiev.handitover.api.AuthorizationInfo
 import ua.nure.sheliemietiev.handitover.models.AuthorizationResult
+import ua.nure.sheliemietiev.handitover.util.SecureStorage
 import ua.nure.sheliemietiev.handitover.util.afterTextChanged
 import ua.nure.sheliemietiev.handitover.viewModels.FirebaseViewModel
 import ua.nure.sheliemietiev.handitover.viewModels.LoginViewModel
+import java.util.*
 import javax.inject.Inject
 
 class LoginActivity : AppCompatActivity() {
@@ -37,6 +39,9 @@ class LoginActivity : AppCompatActivity() {
 
     @Inject
     lateinit var authorizationInfo: AuthorizationInfo
+
+    @Inject
+    lateinit var storageService: SecureStorage
 
     private lateinit var loginViewModel: LoginViewModel
 
@@ -82,6 +87,8 @@ class LoginActivity : AppCompatActivity() {
         observeLoginSubmit()
 
         observeRegisterPressed()
+
+        setPreviousLanguage()
     }
 
     private fun observeLoginSubmit() {
@@ -206,5 +213,28 @@ class LoginActivity : AppCompatActivity() {
                 firebaseViewModel.onFirebaseTokenReceived(token)
             }
         })
+    }
+
+    private fun setPreviousLanguage(){
+        val localeCode = storageService.getStringOrNull("locale")
+            ?: resources.getStringArray(R.array.supported_locales).first()
+        setAppLocale(localeCode)
+    }
+
+    @Suppress("DEPRECATION")
+    private fun setAppLocale(localeCode: String) {
+        val locale = Locale(localeCode)
+        Locale.setDefault(locale)
+
+        val resources = resources
+        val config = resources.configuration
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            config.setLocale(locale)
+        } else {
+            config.locale = locale
+        }
+
+        val displayMetrics = resources.displayMetrics
+        resources.updateConfiguration(config, displayMetrics)
     }
 }
