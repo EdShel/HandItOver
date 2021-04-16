@@ -77,9 +77,13 @@ namespace HandItOver.BackEnd.BLL.Services
                 throw new OperationException("No mailboxes of suitable size.");
             }
 
-            var vacantIntervals = (await Task.WhenAll(
-                mailboxesOfSuitableSize.Select(mb => GetVacantTimeIntervalsForMailboxAsync(mb))
-            )).Zip(mailboxesOfSuitableSize);
+
+			var tasks = mailboxesOfSuitableSize.Select(mb => GetVacantTimeIntervalsForMailboxAsync(mb)).ToArray();
+			foreach(var t in tasks) {
+				await t;
+			}
+			// here
+            var vacantIntervals = (await Task.WhenAll(tasks)).Zip(mailboxesOfSuitableSize);
 
             TimeInterval rentInterval = new TimeInterval(request.RentFrom, request.RentUntil);
             var vacantRightNow = vacantIntervals.Where(

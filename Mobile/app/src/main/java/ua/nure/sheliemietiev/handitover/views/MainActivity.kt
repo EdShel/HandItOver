@@ -1,15 +1,15 @@
 package ua.nure.sheliemietiev.handitover.views
 
+import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ListView
 import ua.nure.sheliemietiev.handitover.App
+import ua.nure.sheliemietiev.handitover.BuildConfig
 import ua.nure.sheliemietiev.handitover.R
 import ua.nure.sheliemietiev.handitover.api.AuthorizationInfo
-import ua.nure.sheliemietiev.handitover.views.menuItems.LogoutStrategy
-import ua.nure.sheliemietiev.handitover.views.menuItems.MainMenuItem
-import ua.nure.sheliemietiev.handitover.views.menuItems.MenuItemsAdapter
-import ua.nure.sheliemietiev.handitover.views.menuItems.NextActivityStrategy
+import ua.nure.sheliemietiev.handitover.views.menuItems.*
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
@@ -44,6 +44,11 @@ class MainActivity : AppCompatActivity() {
                 "Language",
                 R.drawable.ic_scan_qr_code,
                 NextActivityStrategy(LanguageActivity::class)
+            ),
+            MainMenuItem(
+                "Visit web-site",
+                R.drawable.ic_scan_qr_code,
+                OpenUriStrategy(Uri.parse(BuildConfig.WEB_URL))
             ),
             MainMenuItem("Logout", R.drawable.ic_scan_qr_code, LogoutStrategy(authInfo))
         )

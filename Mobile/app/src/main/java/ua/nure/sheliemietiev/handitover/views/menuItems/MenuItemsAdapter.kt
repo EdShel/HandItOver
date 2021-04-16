@@ -3,6 +3,7 @@ package ua.nure.sheliemietiev.handitover.views.menuItems
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,6 +32,13 @@ class LogoutStrategy(private val authInfo: AuthorizationInfo)
         authInfo.deauthorize()
         context.finish()
         super.onClicked(context)
+    }
+}
+
+class OpenUriStrategy(private val uri: Uri) : MenuItemClickStrategy{
+    override fun onClicked(context: Activity) {
+        val browseIntent = Intent(Intent.ACTION_VIEW, uri)
+        context.startActivity(browseIntent)
     }
 }
 
