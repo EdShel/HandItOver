@@ -32,9 +32,7 @@ class DeliveryModel @Inject constructor(
             return OperationResult.error()
         }
 
-        val json = response.asJsonMap()
-        val isOpen = json["isOpen"].asBoolean
-        return OperationResult.success(isOpen)
+        return OperationResult.success(true)
     }
 }
 

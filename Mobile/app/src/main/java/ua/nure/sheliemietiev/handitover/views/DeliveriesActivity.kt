@@ -3,7 +3,9 @@ package ua.nure.sheliemietiev.handitover.views
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.ListView
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -48,6 +50,7 @@ class DeliveriesActivity : AppCompatActivity() {
             (deliveriesListView.adapter as DeliveriesListAdapter).setDeliveriesList(
                 deliveries.toList()
             )
+            findViewById<ProgressBar>(R.id.loading).visibility = View.INVISIBLE
         })
     }
 }

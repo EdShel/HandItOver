@@ -17,6 +17,13 @@
         android:textSize="25sp"
         android:gravity="center_horizontal" />
 
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true" />
+
     <ListView
         android:id="@+id/deliveries_list"
         android:layout_width="match_parent"
