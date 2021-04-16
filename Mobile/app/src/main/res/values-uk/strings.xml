@@ -1,10 +1,59 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Hand It Over</string>
-    <string name="error_server_not_accessible">The server is not accessible</string>
-    <string name="error_invalid_email_or_password">Invalid email and/or password</string>
-    <string name="error_invalid_email">Invalid email</string>
-    <string name="error_invalid_password">Invalid password</string>
+    <!-- Errors -->
+    <string name="error_server_not_accessible">Сервер недоступний</string>
+    <string name="error_invalid_email_or_password">Неправильна пошта та/або пароль</string>
+    <string name="error_invalid_email">Неправильна пошта</string>
+    <string name="error_invalid_password">Неправильний пароль</string>
+    <!-- Units -->
+    <string name="locale_time">HH:mm:ss</string>
+    <string name="locale_date_time">dd.MM.yy HH:mm</string>
+    <string name="mass_unit">kilo</string>
+    <string name="mass_format">%.2fкг</string>
+    <!-- Notifications -->
+    <string name="notify_delivery_arrived_title">Посилка прибула</string>
+    <string name="notify_delivery_stolen_title">Посилка викрадена</string>
+    <string name="notify_delivery_expired_title">Стік час збереження посилки</string>
+    <string name="notify_delivery_arrived_body">Ваша посилка була доставлена до поштової скрині та може бути отримана.</string>
+    <string name="notify_delivery_stolen_body">Ваша посилка зникла без попереднього відчинення скрині.</string>
+    <string name="notify_delivery_expired_body">Ви не забрали посилку вчасно: тепер скриня відчинена.</string>
+    <string name="unknown">Невідомо</string>
     <!-- Menu -->
-    <string name="current_deliveries">Поточні посилки</string>
+    <string name="current_deliveries">Мої посилки</string>
+    <string name="configure_mailbox">Налаштувати скриню</string>
+    <string name="scan_join_link">Сканувати посилання</string>
+    <string name="change_lang">Змінити мову</string>
+    <string name="go_to_web">Перейти на веб-сайт</string>
+    <string name="logout">Вийти</string>
+    <!-- Login -->
+    <string name="login">Вхід</string>
+    <string name="email">Пошта</string>
+    <string name="password">Пароль</string>
+    <string name="sign_in">Увійти</string>
+    <string name="create_account">Немає акаунту? Створіть на веб-сайті!</string>
+    <string name="register_on_the_web">Зареєструватися у веб-додатку</string>
+    <string name="greetings">Ласкаво просимо,</string>
+    <!-- Mailbox config -->
+    <string name="select_mailbox">Оберіть точку доступу Wi-Fi розумної скрині</string>
+    <!-- Deliveries -->
+    <string name="your_deliveries">Мої посилки</string>
+    <string name="mailbox_address">Адреса скрині</string>
+    <string name="weight">Вага</string>
+    <string name="arrived">Прибула</string>
+    <string name="terminal_time">Термін зберігання</string>
+    <string name="arrived_at">Прибула: %s</string>
+    <string name="terminal_time_at">Термін зберігання: %s</string>
+    <string name="weight_is">Вага: %s</string>
+    <string name="late_for_hour">Прострочено на %d годин</string>
+    <string name="left_hours">%d годин залишилося</string>
+    <string name="opened">Відчинено</string>
+    <string name="hold_to_open">Відчинити скриню</string>
+    <!-- Language -->
+    <string name="choose_lang">Оберіть мову із списку нижче</string>
+    <string name="enable_location">Щоб знайти скриню, необхідно увімкнути сервіси геолокації.</string>
+    <!-- Permissions -->
+    <string name="ok">Добре</string>
+    <string name="cancel">Відмінити</string>
+    <string name="allow_location">Необхідно дозволити визначення місцезнаходження</string>
+    <string name="allow_camera">Необхідно дозволити використання камери</string>
 </resources>

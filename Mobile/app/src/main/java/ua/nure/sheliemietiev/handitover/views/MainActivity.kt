@@ -27,12 +27,12 @@ class MainActivity : AppCompatActivity() {
         val menuItems = listOf(
             MainMenuItem(
                 getString(R.string.current_deliveries),
-                R.drawable.ic_scan_qr_code,
+                R.drawable.ic_delivery,
                 NextActivityStrategy(DeliveriesActivity::class)
             ),
             MainMenuItem(
                 getString(R.string.configure_mailbox),
-                R.drawable.ic_scan_qr_code,
+                R.drawable.ic_configure,
                 NextActivityStrategy(ConnectMailboxActivity::class)
             ),
             MainMenuItem(
@@ -42,15 +42,15 @@ class MainActivity : AppCompatActivity() {
             ),
             MainMenuItem(
                 getString(R.string.change_lang),
-                R.drawable.ic_scan_qr_code,
+                R.drawable.ic_language,
                 NextActivityStrategy(LanguageActivity::class)
             ),
             MainMenuItem(
                 getString(R.string.go_to_web),
-                R.drawable.ic_scan_qr_code,
+                R.drawable.ic_web,
                 OpenUriStrategy(Uri.parse(BuildConfig.WEB_URL))
             ),
-            MainMenuItem(getString(R.string.logout), R.drawable.ic_scan_qr_code, LogoutStrategy(authInfo))
+            MainMenuItem(getString(R.string.logout), R.drawable.ic_exit, LogoutStrategy(authInfo))
         )
         val listAdapter = MenuItemsAdapter(this, menuItems)
         menuItemsList.adapter = listAdapter

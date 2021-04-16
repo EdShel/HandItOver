@@ -1,12 +1,13 @@
 <resources>
     <string name="app_name">Hand It Over</string>
+    <!-- Errors -->
     <string name="error_server_not_accessible">The server is not accessible</string>
     <string name="error_invalid_email_or_password">Invalid email and/or password</string>
     <string name="error_invalid_email">Invalid email</string>
     <string name="error_invalid_password">Invalid password</string>
-    <!-- Date & time -->
-    <string name="locale_time">HH:mm:ss a</string>
-    <string name="locale_date_time">MM/dd/yy HH:mm a</string>
+    <!-- Units -->
+    <string name="locale_time">hh:mm:ss a</string>
+    <string name="locale_date_time">MM/dd/yy hh:mm a</string>
     <string name="mass_unit">pounds</string>
     <string name="mass_format">%.2flb</string>
     <!-- Notifications -->
@@ -24,29 +25,35 @@
     <string name="change_lang">Change language</string>
     <string name="go_to_web">Visit web-site</string>
     <string name="logout">Logout</string>
-    <string name="greetings">Greetings,</string>
-    <string name="select_mailbox">Select a mailbox\'s Wi-Fi access point</string>
-    <string name="your_deliveries">Your deliveries</string>
-    <string name="mailbox_address">Mailbox address</string>
-    <string name="weight">Weight</string>
-    <string name="arrived">Arrived</string>
-    <string name="terminal_time">Terminal time</string>
-    <string name="choose_lang">Choose a language from the list below</string>
+    <!-- Login -->
     <string name="login">Login</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="sign_in">Sign in</string>
     <string name="create_account">Don\'t have an account? Create one on the web-site!</string>
     <string name="register_on_the_web">Register on the web</string>
-    <string name="enable_location">To find mailbox you need to enable location services</string>
-    <string name="ok">Ok</string>
-    <string name="cancel">Cancel</string>
-    <string name="allow_location">Allow location permission</string>
+    <string name="greetings">Greetings,</string>
+    <!-- Mailbox config -->
+    <string name="select_mailbox">Select a mailbox\'s Wi-Fi access point</string>
+    <!-- Deliveries -->
+    <string name="your_deliveries">Your deliveries</string>
+    <string name="mailbox_address">Mailbox address</string>
+    <string name="weight">Weight</string>
+    <string name="arrived">Arrived</string>
+    <string name="terminal_time">Terminal time</string>
     <string name="arrived_at">Arrived: %s</string>
     <string name="terminal_time_at">Terminal time: %s</string>
     <string name="weight_is">Weight: %s</string>
     <string name="late_for_hour">Late for %d hours</string>
     <string name="left_hours">%d hours left</string>
     <string name="opened">Opened</string>
+    <string name="hold_to_open">Hold to open the mailbox</string>
+    <!-- Language -->
+    <string name="choose_lang">Choose a language from the list below</string>
+    <string name="enable_location">To find mailbox you need to enable location services</string>
+    <!-- Permissions -->
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+    <string name="allow_location">Allow location permission</string>
     <string name="allow_camera">Allow camera permission</string>
 </resources>

@@ -52,7 +52,7 @@
         android:layout_marginRight="10dp"
         app:inner_color="#305703"
         app:outer_color="#5CA606"
-        app:text="Hold to open the mailbox"
+        app:text="@string/hold_to_open"
         app:text_size="28sp" />
 
     <TextView
