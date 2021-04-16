@@ -115,7 +115,7 @@ class SeverePermissionsEnabler(
         if (allPermissionsCanBeAsked) {
             ActivityCompat.requestPermissions(
                 activity,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                permissions.toList().toTypedArray(),
                 PERMISSION_LISTENER_CODE
             )
         } else {

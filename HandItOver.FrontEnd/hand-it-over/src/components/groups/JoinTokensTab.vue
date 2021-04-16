@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-r-code-modal ref="qrcodeModal" v-bind:link="selectedTokenValue" />
+    <q-r-code-modal ref="qrcodeModal" v-bind:link="createLinkFromToken(selectedTokenValue)" />
 
     <button v-on:click="onGenerateLinkPressed" class="btn btn-outline-success">
       <i class="fas fa-plus"></i>

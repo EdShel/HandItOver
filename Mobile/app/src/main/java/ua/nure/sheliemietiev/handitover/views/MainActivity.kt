@@ -35,6 +35,11 @@ class MainActivity : AppCompatActivity() {
                 R.drawable.ic_scan_qr_code,
                 NextActivityStrategy(ConnectMailboxActivity::class)
             ),
+            MainMenuItem(
+                "Scan join link",
+                R.drawable.ic_scan_qr_code,
+                NextActivityStrategy(QRScanner::class)
+            ),
             MainMenuItem("Logout", R.drawable.ic_scan_qr_code, LogoutStrategy(authInfo))
         )
         val listAdapter = MenuItemsAdapter(this, menuItems)
