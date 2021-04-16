@@ -42,7 +42,7 @@ class DeliveryActivity : AppCompatActivity() {
             weightText.text = localizedWeightString(activity, delivery.weight)
             arrivedText.text = delivery.arrived.toLocaleDateTimeString(activity)
             terminalTimeText.text = delivery.terminalTime.toLocaleDateTimeString(activity)
-            
+
             if (delivery.terminalTime.after(Date(currentTimeUtc()))){
                 openButton.visibility = View.VISIBLE
             }
@@ -51,8 +51,7 @@ class DeliveryActivity : AppCompatActivity() {
         openButton.visibility = View.INVISIBLE
         openButton.setLongClickListener { btn ->
             btn.canClick = false
-            // TODO: replace with string resource
-            btn.text = "Opened"
+            btn.text = getString(R.string.opened)
             deliveryViewModel.openMailboxButtonPressed()
         }
 

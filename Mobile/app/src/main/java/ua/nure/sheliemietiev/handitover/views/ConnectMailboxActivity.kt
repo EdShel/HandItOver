@@ -19,9 +19,6 @@ import ua.nure.sheliemietiev.handitover.viewModels.ConnectMailboxViewModel
 import ua.nure.sheliemietiev.handitover.views.accessPointItems.AccessPointAdapter
 import javax.inject.Inject
 
-
-private const val ACCESS_FINE_LOCATION_ALLOWED_CODE = 1
-
 class ConnectMailboxActivity : AppCompatActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -56,7 +53,6 @@ class ConnectMailboxActivity : AppCompatActivity() {
         })
 
         hideLoading()
-
     }
 
     private fun askForPermissions() {
@@ -90,10 +86,9 @@ class ConnectMailboxActivity : AppCompatActivity() {
     }
 
     private fun permissionsDenied() {
-        // TODO: replace with localized text
         Toast.makeText(
             this,
-            "Allow location permission",
+            getString(R.string.allow_location),
             Toast.LENGTH_LONG
         ).show()
         finish()

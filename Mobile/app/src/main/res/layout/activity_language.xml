@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="15dp"
-        android:text="Choose a language from the list below"
+        android:text="@string/choose_lang"
         android:textSize="25sp" />
 
     <ListView

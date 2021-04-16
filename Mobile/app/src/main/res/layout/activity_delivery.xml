@@ -11,7 +11,7 @@
         android:id="@+id/mailbox_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Mailbox address"
+        android:text="@string/mailbox_address"
         android:textSize="24sp" />
 
     <TextView
@@ -29,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/mailbox_address_value"
-        android:text="Weight"
+        android:text="@string/weight"
         android:textSize="24sp" />
 
     <TextView
@@ -60,7 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/delivery_arrived_value"
-        android:text="Arrived"
+        android:text="@string/arrived"
         android:textSize="24sp" />
 
     <TextView
@@ -78,7 +78,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/delivery_terminal_time_value"
-        android:text="Terminal time"
+        android:text="@string/terminal_time"
         android:textSize="24sp" />
 
     <TextView

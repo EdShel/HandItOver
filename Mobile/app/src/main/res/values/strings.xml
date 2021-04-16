@@ -19,4 +19,34 @@
     <string name="unknown">Unknown</string>
     <!-- Menu -->
     <string name="current_deliveries">Current deliveries</string>
+    <string name="configure_mailbox">Configure mailbox</string>
+    <string name="scan_join_link">Scan join link</string>
+    <string name="change_lang">Change language</string>
+    <string name="go_to_web">Visit web-site</string>
+    <string name="logout">Logout</string>
+    <string name="greetings">Greetings,</string>
+    <string name="select_mailbox">Select a mailbox\'s Wi-Fi access point</string>
+    <string name="your_deliveries">Your deliveries</string>
+    <string name="mailbox_address">Mailbox address</string>
+    <string name="weight">Weight</string>
+    <string name="arrived">Arrived</string>
+    <string name="terminal_time">Terminal time</string>
+    <string name="choose_lang">Choose a language from the list below</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="sign_in">Sign in</string>
+    <string name="create_account">Don\'t have an account? Create one on the web-site!</string>
+    <string name="register_on_the_web">Register on the web</string>
+    <string name="enable_location">To find mailbox you need to enable location services</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+    <string name="allow_location">Allow location permission</string>
+    <string name="arrived_at">Arrived: %s</string>
+    <string name="terminal_time_at">Terminal time: %s</string>
+    <string name="weight_is">Weight: %s</string>
+    <string name="late_for_hour">Late for %d hours</string>
+    <string name="left_hours">%d hours left</string>
+    <string name="opened">Opened</string>
+    <string name="allow_camera">Allow camera permission</string>
 </resources>

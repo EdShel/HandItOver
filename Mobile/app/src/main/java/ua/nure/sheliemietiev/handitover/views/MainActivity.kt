@@ -31,30 +31,30 @@ class MainActivity : AppCompatActivity() {
                 NextActivityStrategy(DeliveriesActivity::class)
             ),
             MainMenuItem(
-                "Configure mailbox",
+                getString(R.string.configure_mailbox),
                 R.drawable.ic_scan_qr_code,
                 NextActivityStrategy(ConnectMailboxActivity::class)
             ),
             MainMenuItem(
-                "Scan join link",
+                getString(R.string.scan_join_link),
                 R.drawable.ic_scan_qr_code,
                 NextActivityStrategy(QRScanner::class)
             ),
             MainMenuItem(
-                "Language",
+                getString(R.string.change_lang),
                 R.drawable.ic_scan_qr_code,
                 NextActivityStrategy(LanguageActivity::class)
             ),
             MainMenuItem(
-                "Visit web-site",
+                getString(R.string.go_to_web),
                 R.drawable.ic_scan_qr_code,
                 OpenUriStrategy(Uri.parse(BuildConfig.WEB_URL))
             ),
-            MainMenuItem("Logout", R.drawable.ic_scan_qr_code, LogoutStrategy(authInfo))
+            MainMenuItem(getString(R.string.logout), R.drawable.ic_scan_qr_code, LogoutStrategy(authInfo))
         )
         val listAdapter = MenuItemsAdapter(this, menuItems)
         menuItemsList.adapter = listAdapter
-        menuItemsList.setOnItemClickListener { parent, view, position, id ->
+        menuItemsList.setOnItemClickListener { _, _, position, _ ->
             val clickedMenuItem = listAdapter.getItem(position)
             clickedMenuItem.clickHandler.onClicked(this@MainActivity)
         }

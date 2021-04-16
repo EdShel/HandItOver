@@ -10,6 +10,7 @@ import android.provider.Settings
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import ua.nure.sheliemietiev.handitover.R
 
 interface PermissionChecker {
     fun checkPermission(onAllow: () -> Unit, onDeny: () -> Unit)
@@ -71,17 +72,16 @@ class LocationServicesEnabler(
     }
 
     private fun askToEnableLocationServices() {
-        // TODO: localize messages
         val builder = AlertDialog.Builder(activity).apply {
-            setMessage("To find mailbox you need to enable location services")
+            setMessage(context.getString(R.string.enable_location))
             setCancelable(false)
-            setPositiveButton("Ok") { _, _ ->
+            setPositiveButton(context.getString(R.string.ok)) { _, _ ->
                 activity.startActivityForResult(
                     Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS),
                     LOCATION_SERVICE_ENABLE_CODE
                 )
             }
-            setNegativeButton("Cancel") { _, _ -> denied() }
+            setNegativeButton(context.getString(R.string.cancel)) { _, _ -> denied() }
         }
         builder.create().show()
     }

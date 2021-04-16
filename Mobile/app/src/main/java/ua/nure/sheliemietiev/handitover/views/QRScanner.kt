@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 import com.google.zxing.Result
+import ua.nure.sheliemietiev.handitover.R
 import ua.nure.sheliemietiev.handitover.util.SeverePermissionsEnabler
 
 class QRScanner : AppCompatActivity(), ZXingScannerView.ResultHandler {
@@ -27,8 +28,7 @@ class QRScanner : AppCompatActivity(), ZXingScannerView.ResultHandler {
         severePermissionsEnabler.checkPermission({
             allPermissionsGranted = true
         }, {
-            //TODO: localize
-            Toast.makeText(this, "Allow camera permission", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.allow_camera), Toast.LENGTH_LONG).show()
             finish()
         })
     }

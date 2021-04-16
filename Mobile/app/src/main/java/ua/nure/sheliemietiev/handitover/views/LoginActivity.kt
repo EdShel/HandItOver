@@ -170,7 +170,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun showWelcomeMessage(model: AuthorizationResult) {
-        val welcome = "Greetings,"
+        val welcome = getString(R.string.greetings)
         val displayName = model.userName
         Toast.makeText(
             applicationContext,

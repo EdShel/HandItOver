@@ -43,25 +43,24 @@ class DeliveriesListAdapter(
             R.layout.deliveries_list_item, parent, false
         )
         val currentDelivery = deliveriesList[position]
-        // TODO: replace with localised strings
         setTextFor(
             row,
             R.id.arrived_time_label,
-            "Arrived: %s",
+            context.getString(R.string.arrived_at),
             currentDelivery.arrived.toLocaleDateTimeString(context)
         )
 
         setTextFor(
             row,
             R.id.terminal_time_label,
-            "Terminal time: %s",
+            context.getString(R.string.terminal_time_at),
             currentDelivery.terminalTime.toLocaleDateTimeString(context)
         )
 
         setTextFor(
             row,
             R.id.weight_label,
-            "Weight: %s",
+            context.getString(R.string.weight_is),
             localizedWeightString(context, currentDelivery.weight)
         )
 
@@ -78,10 +77,10 @@ class DeliveriesListAdapter(
         val textFormat: String
         val hoursDifference: Int
         if (now.after(currentDelivery.terminalTime)) {
-            textFormat = "Late for %d hours"
+            textFormat = context.getString(R.string.late_for_hour)
             hoursDifference = now.differenceHours(currentDelivery.terminalTime)
         } else {
-            textFormat = "%d hours left"
+            textFormat = context.getString(R.string.left_hours)
             hoursDifference = currentDelivery.terminalTime.differenceHours(now)
         }
         setTextFor(
