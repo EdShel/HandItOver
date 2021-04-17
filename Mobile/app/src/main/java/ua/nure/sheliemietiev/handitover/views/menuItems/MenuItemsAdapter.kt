@@ -15,19 +15,22 @@ import ua.nure.sheliemietiev.handitover.api.AuthorizationInfo
 import ua.nure.sheliemietiev.handitover.views.LoginActivity
 import kotlin.reflect.KClass
 
-interface MenuItemClickStrategy{
+interface MenuItemClickStrategy {
     fun onClicked(context: Activity)
 }
 
-open class NextActivityStrategy(private val activityClass: KClass<*>) : MenuItemClickStrategy {
+open class NextActivityStrategy(
+    private val activityClass: KClass<*>
+) : MenuItemClickStrategy {
     override fun onClicked(context: Activity) {
         val nextIntent = Intent(context, activityClass.java)
         context.startActivity(nextIntent)
     }
 }
 
-class LogoutStrategy(private val authInfo: AuthorizationInfo)
-    : NextActivityStrategy(LoginActivity::class) {
+class LogoutStrategy(
+    private val authInfo: AuthorizationInfo
+) : NextActivityStrategy(LoginActivity::class) {
     override fun onClicked(context: Activity) {
         authInfo.deauthorize()
         context.finish()
@@ -35,7 +38,9 @@ class LogoutStrategy(private val authInfo: AuthorizationInfo)
     }
 }
 
-class OpenUriStrategy(private val uri: Uri) : MenuItemClickStrategy{
+class OpenUriStrategy(
+    private val uri: Uri
+) : MenuItemClickStrategy {
     override fun onClicked(context: Activity) {
         val browseIntent = Intent(Intent.ACTION_VIEW, uri)
         context.startActivity(browseIntent)
@@ -69,11 +74,15 @@ class MenuItemsAdapter(
         return position.toLong()
     }
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+    override fun getView(
+        position: Int,
+        convertView: View?,
+        parent: ViewGroup?
+    ): View {
         val row = convertView ?: inflater.inflate(
             R.layout.main_menu_item, parent, false
         )
-        val currentMenuItem =  menuItemsList[position];
+        val currentMenuItem = menuItemsList[position];
 
         row.findViewById<TextView>(
             R.id.menu_item_text

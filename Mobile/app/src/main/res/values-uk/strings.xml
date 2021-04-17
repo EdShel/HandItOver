@@ -56,4 +56,5 @@
     <string name="cancel">Відмінити</string>
     <string name="allow_location">Необхідно дозволити визначення місцезнаходження</string>
     <string name="allow_camera">Необхідно дозволити використання камери</string>
+    <string name="cant_connect">З\'єднання не може бути встановлене.</string>
 </resources>

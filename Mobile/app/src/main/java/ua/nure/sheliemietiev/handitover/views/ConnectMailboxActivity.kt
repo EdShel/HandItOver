@@ -48,6 +48,10 @@ class ConnectMailboxActivity : AppCompatActivity() {
         val accessPointAdapter =
             AccessPointAdapter(this, connectMailboxViewModel.accessPoints.value!!)
         accessPointsListView.adapter = accessPointAdapter
+        accessPointsListView.setOnItemClickListener { _, _, position, _ ->
+            // TODO: connect to wifi and send auth tokens
+            Toast.makeText(this, getString(R.string.cant_connect), Toast.LENGTH_LONG).show()
+        }
         connectMailboxViewModel.accessPoints.observe(this, Observer {
             accessPointAdapter.notifyDataSetChanged()
         })

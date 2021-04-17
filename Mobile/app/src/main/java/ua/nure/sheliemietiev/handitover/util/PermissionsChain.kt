@@ -16,7 +16,9 @@ interface PermissionChecker {
     fun checkPermission(onAllow: () -> Unit, onDeny: () -> Unit)
 }
 
-abstract class PermissionsChain(var next: PermissionChecker? = null) : PermissionChecker {
+abstract class PermissionsChain(
+    var next: PermissionChecker? = null
+) : PermissionChecker {
     private var onAllow: (() -> Unit)? = null
     private var onDeny: (() -> Unit)? = null
 
@@ -67,8 +69,12 @@ class LocationServicesEnabler(
     }
 
     private fun isLocationServicesEnabled(): Boolean {
-        val locationManager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        val locationManager = activity.getSystemService(
+            Context.LOCATION_SERVICE
+        ) as LocationManager
+        return locationManager.isProviderEnabled(
+            LocationManager.GPS_PROVIDER
+        )
     }
 
     private fun askToEnableLocationServices() {
@@ -143,7 +149,9 @@ class SeverePermissionsEnabler(
         grantResults: IntArray
     ) {
         if (requestCode == PERMISSION_LISTENER_CODE) {
-            if (grantResults.all { r -> r == PackageManager.PERMISSION_GRANTED }) {
+            if (grantResults.all { r ->
+                    r == PackageManager.PERMISSION_GRANTED
+                }) {
                 allowed()
             } else {
                 denied()
