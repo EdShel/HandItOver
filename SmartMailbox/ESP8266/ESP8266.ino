@@ -14,6 +14,9 @@
 #define ERROR_RESULT "ERROR\n"
 
 #define MAILBOX_STATUS_URL "http://192.168.1.16:5003/delivery/mailboxStatus"
+#define MAILBOX_INFO_URL "http://192.168.1.16:5003/mailbox"
+#define DELIVERY_ARRIVED_URL "http://192.168.1.16:5003/delivery/arrived"
+#define DELIVERY_STOLEN_URL "http://192.168.1.16:5003/delivery/stolen"
 
 char *_accessToken;
 
@@ -27,10 +30,9 @@ void setup()
   const char *configureStationName = "SmartMailbox";
   const char *configureStationPass = "password";
 
-  bool connected = wifiManager.autoConnect(configureStationName, configureStationPass);
   // Uncomment to force reconfiguration
   // bool connected = wifiManager.startConfigPortal(configureStationName, configureStationPass);
-  if (!connected)
+  if (!wifiManager.autoConnect(configureStationName, configureStationPass))
   {
   }
   // const char *tokenValue = accessTokenParameter.getValue();
@@ -59,9 +61,12 @@ void loop()
     }
     else if (commandName.equals(DELIVERY_ARRIVED_COMMAND))
     {
+      float deliveryMass = Serial.readStringUntil('\n').toFloat();
+      sendDeliveryArrived(deliveryMass);
     }
     else if (commandName.equals(DELIVERY_STOLEN_COMMAND))
     {
+      sendDeliveryStolen();
     }
     else
     {
@@ -72,11 +77,8 @@ void loop()
   delay(10000);
 }
 
-void outputMailboxAddress()
+void outputWhetherIsOpenAndRenter()
 {
-}
-
-void outputWhetherIsOpenAndRenter() {
   HTTPClient httpClient;
   if (httpClient.begin(MAILBOX_STATUS_URL))
   {
@@ -96,12 +98,90 @@ void outputWhetherIsOpenAndRenter() {
         Serial.print(OK_RESULT);
         Serial.print(isOpen ? "OPEN" : "CLOSED");
         Serial.print(' ');
-        Serial.print(renter);
+        Serial.print(renter ? renter : "NONE");
         Serial.print('\n');
 
         httpClient.end();
         return;
       }
+    }
+    httpClient.end();
+  }
+  Serial.print(ERROR_RESULT);
+}
+
+void outputMailboxAddress()
+{
+  HTTPClient httpClient;
+  if (httpClient.begin(MAILBOX_INFO_URL))
+  {
+    httpClient.addHeader("Authorization", String("Bearer ") + _accessToken);
+    int statusCode = httpClient.GET();
+    if (statusCode == HTTP_CODE_OK)
+    {
+      String payload = httpClient.getString();
+      StaticJsonDocument<384> doc;
+      DeserializationError error = deserializeJson(doc, payload);
+      if (!error)
+      {
+        const char *address = doc["address"];
+
+        Serial.print(OK_RESULT);
+        Serial.print(address);
+        Serial.print('\n');
+
+        httpClient.end();
+        return;
+      }
+    }
+    httpClient.end();
+  }
+  Serial.print(ERROR_RESULT);
+}
+
+void sendDeliveryArrived(float deliveryMass)
+{
+  HTTPClient httpClient;
+  if (httpClient.begin(DELIVERY_ARRIVED_URL))
+  {
+    httpClient.addHeader("Authorization", String("Bearer ") + _accessToken);
+    httpClient.addHeader("Content-Type", "application/json");
+
+    StaticJsonDocument<16> doc;
+    doc["weight"] = deliveryMass;
+    String output;
+    serializeJson(doc, output);
+    Serial.print(output);
+    Serial.print('\n');
+
+    int statusCode = httpClient.POST(output);
+    if (statusCode == HTTP_CODE_OK)
+    {
+      Serial.print(OK_RESULT);
+      Serial.print('\n');
+      httpClient.end();
+      return;
+    }
+    httpClient.end();
+  }
+  Serial.print(ERROR_RESULT);
+}
+
+void sendDeliveryStolen()
+{
+  HTTPClient httpClient;
+  if (httpClient.begin(DELIVERY_STOLEN_URL))
+  {
+    httpClient.addHeader("Authorization", String("Bearer ") + _accessToken);
+    httpClient.addHeader("Content-Type", "application/json");
+
+    int statusCode = httpClient.POST("{}");
+    if (statusCode == HTTP_CODE_OK)
+    {
+      Serial.print(OK_RESULT);
+      Serial.print('\n');
+      httpClient.end();
+      return;
     }
     httpClient.end();
   }
