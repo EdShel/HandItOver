@@ -73,7 +73,7 @@ namespace HandItOver.BackEnd.API
 			app.UseSwagger();
 			app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "HandItOver.BackEnd.API v1"));
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
 
             app.UseCors(builder => builder
                 .AllowAnyOrigin()
