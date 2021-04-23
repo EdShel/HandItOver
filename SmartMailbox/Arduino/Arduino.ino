@@ -1,47 +1,36 @@
 #include <SoftwareSerial.h>
 #include "HX711.h"
+#include <LiquidCrystal_I2C.h>
 
-SoftwareSerial mySerial(2, 3);
-
-// HX711 circuit wiring
-const int LOADCELL_DOUT_PIN = A1;
-const int LOADCELL_SCK_PIN = A0;
+#define LCD_W 20
+#define LCD_H 4
+#define LOADCELL_DOUT_PIN A1;
+#define LOADCELL_SCK_PIN A0;
 
 float Calibration_Factor_Of_Load_cell = -41.7;
 float U;
 float O;
 
 HX711 scale;
+LiquidCrystal_I2C lcd(0x27, LCD_W, LCD_H);
+SoftwareSerial esp8266(2, 3);
 
 void setup()
 {
   Serial.begin(9600);
-  mySerial.begin(9600);
+  esp8266.begin(9600);
+  lcd.init(); // initialize the lcd
+  lcd.backlight();
+  lcd.clear();
+  printLcdOnLines("Loading...", 0, 0);
+
+  printAddress();
   // scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
   // scale.tare();
 }
 
 void loop()
 {
-  mySerial.print("ADDRESS\n");
-  Serial.print("ADDRESS\n");
-  while (mySerial.available() == 0)
-  {
-    Serial.println("Nothing...");
-    delay(1000);
-  }
-  String readResult = mySerial.readStringUntil(' ');
-  Serial.print(String("Read ") + readResult + "\n");
-  if (readResult.equals("OK"))
-  {
-    String address = mySerial.readStringUntil('\n');
-    Serial.println(address);
-  }
-  else
-  {
-    serialFlush();
-  }
-  delay(10000);
 
   // scale.set_scale(Calibration_Factor_Of_Load_cell);
 
@@ -60,10 +49,73 @@ void loop()
   // delay(1000);
 }
 
-void serialFlush()
+void printAddress()
 {
-  while (mySerial.available() > 0)
+  while (true)
   {
-    char t = mySerial.read();
+    esp8266Flush();
+    esp8266.print("ADDRESS\n");
+    while (esp8266.available() == 0)
+    {
+      delay(1000);
+    }
+    String readResult = esp8266.readStringUntil(' ');
+    Serial.print(String("Read ") + readResult + "\n");
+    if (readResult.equals("OK"))
+    {
+      String address = esp8266.readStringUntil('\n');
+      Serial.println(address);
+      printLcdOnLines(address, 0, 1);
+      return;
+    }
+    else
+    {
+      esp8266Flush();
+      delay(5000);
+    }
+  }
+}
+
+void esp8266Flush()
+{
+  while (esp8266.available() > 0)
+  {
+    char t = esp8266.read();
+  }
+}
+
+void printLcdOnLines(String text, int lineFrom, int lineToInclusive)
+{
+  for (int i = lineFrom; i <= lineToInclusive; i++)
+  {
+    clearLcdLine(i);
+  }
+  int textLength = text.length();
+  if (textLength < LCD_W)
+  {
+    int leftPadding = (LCD_W - textLength) / 2;
+    lcd.setCursor(leftPadding, lineFrom);
+    lcd.print(text);
+    return;
+  }
+
+  for (int i = lineFrom, printFrom = 0; i <= lineToInclusive && printFrom < textLength; i++, printFrom += LCD_W)
+  {
+    int leftToPrint = textLength - printFrom;
+    int printOnThisRow = min(LCD_W, leftToPrint);
+    lcd.setCursor(0, i);
+    for (int j = 0; j < printOnThisRow; j++)
+    {
+      lcd.print(text[printFrom + j]);
+    }
+  }
+}
+
+void clearLcdLine(const int rowNum)
+{
+  lcd.setCursor(0, rowNum);
+  for (int i = 0; i < LCD_W; i++)
+  {
+    lcd.print(' ');
   }
 }
