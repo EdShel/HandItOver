@@ -77,28 +77,25 @@ namespace HandItOver.BackEnd.BLL.Services
                 throw new OperationException("No mailboxes of suitable size.");
             }
 
+            var rentInterval = new TimeInterval(request.RentFrom, request.RentUntil);
+            var vacantMailboxes = new List<Mailbox>();
+            foreach (var mailbox in mailboxesOfSuitableSize)
+            {
+                var allVacantIntervals = await GetVacantTimeIntervalsForMailboxAsync(mailbox);
+                var intervalsThatContainRentPeriod = allVacantIntervals
+                    .Where(vacantTime => vacantTime.DoesFullyContain(rentInterval));
+                if (intervalsThatContainRentPeriod.Any())
+                {
+                    vacantMailboxes.Add(mailbox);
+                }
+            }
 
-			var tasks = mailboxesOfSuitableSize.Select(mb => GetVacantTimeIntervalsForMailboxAsync(mb)).ToArray();
-			foreach(var t in tasks) {
-				await t;
-			}
-			// here
-            var vacantIntervals = (await Task.WhenAll(tasks)).Zip(mailboxesOfSuitableSize);
-
-            TimeInterval rentInterval = new TimeInterval(request.RentFrom, request.RentUntil);
-            var vacantRightNow = vacantIntervals.Where(
-                mb => mb.First.Any(
-                    interval => interval.DoesFullyContain(rentInterval)
-                )
-            ).Select(mb => mb.Second)
-             .ToList();
-
-            if (!vacantRightNow.Any())
+            if (!vacantMailboxes.Any())
             {
                 throw new OperationException("No available mailboxes for the period.");
             }
 
-            return vacantRightNow;
+            return vacantMailboxes;
         }
 
         private static bool IsUserAllowedToRentGroup(string userId, MailboxGroup mailboxGroup)
