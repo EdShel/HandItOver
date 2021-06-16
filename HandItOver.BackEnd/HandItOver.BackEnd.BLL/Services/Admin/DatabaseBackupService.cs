@@ -33,6 +33,18 @@ namespace HandItOver.BackEnd.BLL.Services.Admin
             await this.database.MakeBackupAsync(pathToBackup);
         }
 
+        public async Task RestoreDatabaseAsync(string backupFile)
+        {
+            string pathToBackup = Path.Combine(this.settings.BackupPath, backupFile);
+            string? backupDirectory = Path.GetDirectoryName(pathToBackup);
+            if (backupDirectory == null)
+            {
+                throw new WrongValueException("Backup directory");
+            }
+
+            await this.database.RestoreBackupAsync(pathToBackup);
+        }
+
         public Stream GetBackupAsStream(string backupFile)
         {
             string pathToBackup = Path.Combine(this.settings.BackupPath, backupFile);

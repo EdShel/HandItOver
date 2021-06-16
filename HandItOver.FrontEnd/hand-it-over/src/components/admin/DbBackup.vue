@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="row">
-      <label for="backupFileText" class="col-sm-4"
-        >{{$t('admin.backupDbHeader')}}</label
-      >
+      <label for="backupFileText" class="col-sm-4">{{
+        $t("admin.backupDbHeader")
+      }}</label>
       <input
         id="backupFileText"
         type="text"
@@ -11,14 +11,19 @@
         class="col-sm-8"
       />
     </div>
+    <br>
     <div>
       <button v-on:click="onMakeBackupPressed" class="btn btn-primary">
         <i class="fas fa-save"></i>
-        {{$t('admin.makeBackup')}}
+        {{ $t("admin.makeBackup") }}
+      </button>
+      <button v-on:click="onRestoreBackupPressed" class="btn btn-primary">
+        <i class="fas fa-file-export"></i>
+        {{ $t("admin.restoreBackup") }}
       </button>
       <button v-on:click="onDownloadBackupPressed" class="btn btn-success">
         <i class="fas fa-download"></i>
-        {{$t('admin.downloadBackup')}}
+        {{ $t("admin.downloadBackup") }}
       </button>
     </div>
     <div v-if="messageText">
@@ -45,6 +50,12 @@ export default {
         backupFile: this.backupFileName,
       });
       this.showMessage("Back up is succesfully made.");
+    },
+    async onRestoreBackupPressed() {
+      await api.sendPost(`/admin/restore`, null, {
+        backupFile: this.backupFileName,
+      });
+      this.showMessage("Database is restored.");
     },
     async onDownloadBackupPressed() {
       await api.downloadBlobFile(

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const apiUrl = 'http://192.168.1.16:5003'
+const apiUrl = 'https://192.168.1.16:5003'
 
 const authScheme = 'Bearer'
 

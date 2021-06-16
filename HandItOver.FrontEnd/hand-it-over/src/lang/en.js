@@ -37,6 +37,7 @@ export default {
         backupDbHeader: 'Backup file name (with extension)',
         makeBackup: 'Make backup',
         downloadBackup: 'Download backup',
+        restoreBackup: 'Restore backup',
         usersHeader: 'Users of the system',
         searchUser: 'Search by name or email',
     },

@@ -45,6 +45,14 @@ namespace HandItOver.BackEnd.API.Controllers
             return Ok();
         }
 
+        [HttpPost("restore")]
+        public async Task<IActionResult> RestoreDatabaseFromBackup([FromBody] BackupDatabaseModel model)
+        {
+            await this.databaseBackupService.RestoreDatabaseAsync(model.BackupFile);
+
+            return Ok();
+        }
+
         [HttpGet("backup")]
         public IActionResult SendBackup([FromQuery, Required] string file)
         {
