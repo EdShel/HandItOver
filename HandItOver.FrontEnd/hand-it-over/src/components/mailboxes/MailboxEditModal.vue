@@ -8,7 +8,7 @@
   >
     <div>
       <label for="addressText">{{$t('delivery.mailboxAddress')}}</label>
-      <input id="addressText" type="text" v-model="edit.address" />
+      <input id="addressText" type="text" v-model="edit.address" autocomplete="off" />
     </div>
   </modal-window>
 </template>
@@ -19,9 +19,6 @@ import ModalWindow from "~/components/controls/ModalWindow";
 
 export default {
   name: "MailboxEditModal",
-  props: {
-    mailbox: {},
-  },
   components: { ModalWindow },
   data: function () {
     return {
@@ -34,21 +31,20 @@ export default {
   methods: {
     editPressed() {
       api
-        .sendPatch(`/mailbox/${this.mailbox.id}`, null, {
+        .sendPatch(`/mailbox/${this.edit.id}`, null, {
           address: this.edit.address,
         })
         .then((r) => {
           this.edit.address = r.data.address;
-          this.mailbox.address = r.data.address;
 
           this.$emit("edited-mailbox", r.data);
           this.hide();
         })
         .catch((e) => {});
     },
-    show() {
+    show(mailbox) {
+      this.edit = {...mailbox};
       this.$refs.modalWindow.show();
-      this.edit.address = this.mailbox.address;
     },
     hide() {
       this.$refs.modalWindow.hide();
@@ -56,6 +52,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+
 label {
     font-size: 1.2em;
 }
@@ -64,4 +63,5 @@ label, input {
     display: block;
     width: 100%;
 }
-<style>
+
+</style>

@@ -8,7 +8,6 @@
 
     <mailbox-edit-modal
       ref="editModal"
-      v-bind:mailbox="editedMailbox"
       v-on:edited-mailbox="onMailboxEdited"
     />
 
@@ -105,10 +104,13 @@ export default {
         .catch((e) => {});
     },
     onMailboxEditing(mailbox) {
+      console.log(mailbox.address);
       this.editedMailbox = mailbox;
-      this.$refs.editModal.show();
+      this.$refs.editModal.show(mailbox);
     },
-    onMailboxEdited(mailbox) {},
+    onMailboxEdited(mailbox) {
+      this.editedMailbox.address = mailbox.address;
+    },
     onAddToGroupRequested(box) {
       this.editedMailbox = box;
       this.$refs.addToGroupModal.show();
