@@ -104,7 +104,6 @@ export default {
         .catch((e) => {});
     },
     onMailboxEditing(mailbox) {
-      console.log(mailbox.address);
       this.editedMailbox = mailbox;
       this.$refs.editModal.show(mailbox);
     },

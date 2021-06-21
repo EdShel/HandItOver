@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import ua.nure.sheliemietiev.handitover.App
 import ua.nure.sheliemietiev.handitover.R
 import ua.nure.sheliemietiev.handitover.util.LocationServicesEnabler
+import ua.nure.sheliemietiev.handitover.util.MailboxInitializer
 import ua.nure.sheliemietiev.handitover.util.SeverePermissionsEnabler
 import ua.nure.sheliemietiev.handitover.viewModels.ConnectMailboxViewModel
 import ua.nure.sheliemietiev.handitover.views.accessPointItems.AccessPointAdapter
@@ -33,6 +34,8 @@ class ConnectMailboxActivity : AppCompatActivity() {
 
     private lateinit var severePermissionsEnabler: SeverePermissionsEnabler
 
+    private var wifiManager: WifiManager? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         (applicationContext as App).components.inject(this)
         super.onCreate(savedInstanceState)
@@ -50,6 +53,14 @@ class ConnectMailboxActivity : AppCompatActivity() {
         accessPointsListView.adapter = accessPointAdapter
         accessPointsListView.setOnItemClickListener { _, _, position, _ ->
             // TODO: connect to wifi and send auth tokens
+            val wifi = wifiManager
+            if (wifi != null) {
+                val network = accessPointAdapter.getItem(position)
+                val ssid = network.SSID
+                val capabilities = network.capabilities
+                MailboxInitializer(wifi).connect(capabilities, ssid)
+                Toast.makeText(this, "Good", Toast.LENGTH_LONG).show()
+            }
             Toast.makeText(this, getString(R.string.cant_connect), Toast.LENGTH_LONG).show()
         }
         connectMailboxViewModel.accessPoints.observe(this, Observer {
@@ -102,12 +113,13 @@ class ConnectMailboxActivity : AppCompatActivity() {
     private fun startDiscoveringWifiNetworks() {
         showLoading()
 
-        val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        val wifi = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        wifiManager = wifi
         registerReceiver(
             object : BroadcastReceiver() {
                 override fun onReceive(context: Context?, intent: Intent?) {
                     if (intent?.action == WifiManager.SCAN_RESULTS_AVAILABLE_ACTION) {
-                        val scanResults = wifiManager.scanResults
+                        val scanResults = wifi.scanResults
                         connectMailboxViewModel.addAccessPoints(scanResults)
                         hideLoading()
                     }
@@ -115,7 +127,7 @@ class ConnectMailboxActivity : AppCompatActivity() {
             },
             IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
         )
-        wifiManager.startScan();
+        wifi.startScan();
     }
 
     private fun showLoading() {
