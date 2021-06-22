@@ -28,11 +28,11 @@ export default {
         if (Array.isArray(value)) {
           for (let arrayElement of value) {
             if (arrayElement.match(regex)) {
-              matchedProps.push(arrayElement.replace(regex, "<b>$&</b>"));
+              matchedProps.push(arrayElement.replace(regex, "<b>$&</b>") + " ");
             }
           }
         } else if (value.match(regex)) {
-          matchedProps.push(value.replace(regex, "<b>$&</b>"));
+          matchedProps.push(value.replace(regex, "<b>$&</b>") + " ");
         }
       }
       return matchedProps;

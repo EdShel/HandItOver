@@ -21,14 +21,14 @@ class DeliveryModel @Inject constructor(
                 weight = json["weight"].asFloat,
                 mailboxId = json["mailboxId"].asString,
                 arrived = iso8601ToDate(json["arrived"].asString),
-                terminalTime = iso8601ToDate(json["terminalTime"].asString)
+                terminalTime = if (!json["terminalTime"].isJsonNull) iso8601ToDate(json["terminalTime"].asString) else null
             )
         )
     }
 
-    suspend fun openMailboxWithDelivery(deliveryId: String) : OperationResult<Boolean> {
+    suspend fun openMailboxWithDelivery(deliveryId: String): OperationResult<Boolean> {
         val response = api.post("delivery/$deliveryId/open")
-        if (!response.isSuccessful){
+        if (!response.isSuccessful) {
             return OperationResult.error()
         }
 

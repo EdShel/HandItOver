@@ -48,6 +48,8 @@
     <string name="left_hours">%d годин залишилося</string>
     <string name="opened">Відчинено</string>
     <string name="hold_to_open">Відчинити скриню</string>
+    <string name="not_limited">Не обмежений</string>
+    <string name="time_not_limited">Час не обмежений</string>
     <!-- Language -->
     <string name="choose_lang">Оберіть мову із списку нижче</string>
     <string name="enable_location">Щоб знайти скриню, необхідно увімкнути сервіси геолокації.</string>

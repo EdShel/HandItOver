@@ -37,4 +37,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(ConnectMailboxViewModel::class)
     internal abstract fun provideConnectMailboxViewModel(viewModel: ConnectMailboxViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ConfigureMailboxViewModel::class)
+    internal abstract fun provideConfigureMailboxViewModel(viewModel: ConfigureMailboxViewModel): ViewModel
 }

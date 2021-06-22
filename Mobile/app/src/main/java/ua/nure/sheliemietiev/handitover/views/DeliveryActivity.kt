@@ -41,9 +41,10 @@ class DeliveryActivity : AppCompatActivity() {
             addressText.text = delivery.mailboxAddress
             weightText.text = localizedWeightString(activity, delivery.weight)
             arrivedText.text = delivery.arrived.toLocaleDateTimeString(activity)
-            terminalTimeText.text = delivery.terminalTime.toLocaleDateTimeString(activity)
+            terminalTimeText.text =
+                delivery.terminalTime?.toLocaleDateTimeString(activity) ?: getString(R.string.not_limited)
 
-            if (delivery.terminalTime.after(Date(currentTimeUtc()))){
+            if (delivery.terminalTime == null || delivery.terminalTime.after(Date(currentTimeUtc()))) {
                 openButton.visibility = View.VISIBLE
             }
         })
@@ -57,7 +58,7 @@ class DeliveryActivity : AppCompatActivity() {
 
         deliveryViewModel.openResult.observe(this, Observer {
             val closeAfterMilliseconds = 5000L
-            Timer("MovingBack", true).schedule(object: TimerTask() {
+            Timer("MovingBack", true).schedule(object : TimerTask() {
                 override fun run() {
                     finish()
                 }

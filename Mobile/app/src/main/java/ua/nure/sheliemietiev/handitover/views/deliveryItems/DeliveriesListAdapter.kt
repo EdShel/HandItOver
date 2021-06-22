@@ -21,7 +21,7 @@ class DeliveriesListAdapter(
         Context.LAYOUT_INFLATER_SERVICE
     ) as LayoutInflater
 
-    fun setDeliveriesList(list: List<ActiveDelivery>){
+    fun setDeliveriesList(list: List<ActiveDelivery>) {
         deliveriesList = list;
         notifyDataSetChanged()
     }
@@ -54,7 +54,8 @@ class DeliveriesListAdapter(
             row,
             R.id.terminal_time_label,
             context.getString(R.string.terminal_time_at),
-            currentDelivery.terminalTime.toLocaleDateTimeString(context)
+            currentDelivery.terminalTime?.toLocaleDateTimeString(context)
+                ?: context.getString(R.string.not_limited)
         )
 
         setTextFor(
@@ -76,12 +77,19 @@ class DeliveriesListAdapter(
         val now = Date(currentTimeUtc());
         val textFormat: String
         val hoursDifference: Int
-        if (now.after(currentDelivery.terminalTime)) {
-            textFormat = context.getString(R.string.late_for_hour)
-            hoursDifference = now.differenceHours(currentDelivery.terminalTime)
-        } else {
-            textFormat = context.getString(R.string.left_hours)
-            hoursDifference = currentDelivery.terminalTime.differenceHours(now)
+        when {
+            currentDelivery.terminalTime == null -> {
+                textFormat = context.getString(R.string.time_not_limited)
+                hoursDifference = 0
+            }
+            now.after(currentDelivery.terminalTime) -> {
+                textFormat = context.getString(R.string.late_for_hour)
+                hoursDifference = now.differenceHours(currentDelivery.terminalTime)
+            }
+            else -> {
+                textFormat = context.getString(R.string.left_hours)
+                hoursDifference = currentDelivery.terminalTime.differenceHours(now)
+            }
         }
         setTextFor(
             row,

@@ -29,5 +29,7 @@ interface ApplicationComponent {
 
     fun inject(connectMailboxActivity: ConnectMailboxActivity)
 
+    fun inject(configureMailboxActivity: ConfigureMailboxActivity)
+
     fun inject(languageActivity: LanguageActivity)
 }

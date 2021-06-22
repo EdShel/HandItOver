@@ -5,13 +5,12 @@ package ua.nure.sheliemietiev.handitover.util
 import android.annotation.SuppressLint
 import android.net.wifi.WifiConfiguration
 import android.net.wifi.WifiManager
-import java.lang.Exception
 
-const val mailboxPassword = "";
+const val mailboxPassword = "password";
 
-class MailboxInitializer(private val wifiManager: WifiManager) {
+class WifiConnector(private val wifiManager: WifiManager) {
     @SuppressLint("MissingPermission")
-    fun connect(networkCapabilities: String, networkSSID: String) {
+    fun connect(networkSSID: String, networkCapabilities: String) {
         val wifiConfig = WifiConfiguration()
         wifiConfig.SSID = "\"${networkSSID}\""
 
@@ -32,10 +31,13 @@ class MailboxInitializer(private val wifiManager: WifiManager) {
             }
         }
 
-        val networkId = wifiManager.addNetwork(wifiConfig)
+        wifiManager.addNetwork(wifiConfig)
+
+        val network = wifiManager.configuredNetworks.find { network -> network.SSID == wifiConfig.SSID }
+
 
         wifiManager.disconnect()
-        wifiManager.enableNetwork(networkId, true)
+        wifiManager.enableNetwork(network!!.networkId, true)
         wifiManager.reconnect()
     }
 

@@ -57,4 +57,6 @@
     <string name="allow_location">Allow location permission</string>
     <string name="allow_camera">Allow camera permission</string>
     <string name="cant_connect">Connection cannot be established.</string>
+    <string name="not_limited">Not limited</string>
+    <string name="time_not_limited">Time not limited</string>
 </resources>

@@ -17,9 +17,7 @@ class MailboxModel @Inject constructor(
         return OperationResult.success(
             Mailbox(
                 id = json["id"].asString,
-                ownerId = json["ownerId"].asString,
                 size = json["size"].asInt,
-                groupId = json["groupId"].asString,
                 address = json["address"].asString
             )
         )

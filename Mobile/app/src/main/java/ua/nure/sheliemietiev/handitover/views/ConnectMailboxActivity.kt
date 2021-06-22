@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import ua.nure.sheliemietiev.handitover.App
 import ua.nure.sheliemietiev.handitover.R
 import ua.nure.sheliemietiev.handitover.util.LocationServicesEnabler
-import ua.nure.sheliemietiev.handitover.util.MailboxInitializer
+import ua.nure.sheliemietiev.handitover.util.WifiConnector
 import ua.nure.sheliemietiev.handitover.util.SeverePermissionsEnabler
 import ua.nure.sheliemietiev.handitover.viewModels.ConnectMailboxViewModel
 import ua.nure.sheliemietiev.handitover.views.accessPointItems.AccessPointAdapter
@@ -52,16 +52,12 @@ class ConnectMailboxActivity : AppCompatActivity() {
             AccessPointAdapter(this, connectMailboxViewModel.accessPoints.value!!)
         accessPointsListView.adapter = accessPointAdapter
         accessPointsListView.setOnItemClickListener { _, _, position, _ ->
-            // TODO: connect to wifi and send auth tokens
-            val wifi = wifiManager
-            if (wifi != null) {
-                val network = accessPointAdapter.getItem(position)
-                val ssid = network.SSID
-                val capabilities = network.capabilities
-                MailboxInitializer(wifi).connect(capabilities, ssid)
-                Toast.makeText(this, "Good", Toast.LENGTH_LONG).show()
-            }
-            Toast.makeText(this, getString(R.string.cant_connect), Toast.LENGTH_LONG).show()
+            val accessPoint = accessPointAdapter.getItem(position)
+            val intent = Intent(this, ConfigureMailboxActivity::class.java)
+            intent.putExtra("mac", accessPoint.BSSID)
+            intent.putExtra("ssid", accessPoint.SSID)
+            intent.putExtra("networkCapabilities", accessPoint.capabilities)
+            startActivity(intent)
         }
         connectMailboxViewModel.accessPoints.observe(this, Observer {
             accessPointAdapter.notifyDataSetChanged()

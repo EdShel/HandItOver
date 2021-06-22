@@ -27,7 +27,7 @@
         {{ toLocalMass(delivery.weight) }}
       </p>
       <p>
-        <b><i class="fas fa-truck-loading"></i> $t('delivery.arrived'): </b>
+        <b><i class="fas fa-truck-loading"></i> {{$t('delivery.arrived')}}: </b>
         {{ formatDateString(delivery.arrived) }}
       </p>
       <p>

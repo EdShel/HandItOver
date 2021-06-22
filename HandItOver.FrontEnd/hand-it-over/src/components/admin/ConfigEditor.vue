@@ -51,7 +51,8 @@ export default {
     async onDownloadConfigurationsPressed() {
       let link = document.createElement("a");
       link.setAttribute("download", "appsettings.json");
-      link.href = "data:text/plain;charset=utf-8," + encodeURIComponent(JSON.stringify(this.configTree));
+      link.href = "data:text/plain;charset=utf-8," 
+        + encodeURIComponent(JSON.stringify(this.configTree, null, 2));
       document.body.appendChild(link);
       link.click();
       link.remove();

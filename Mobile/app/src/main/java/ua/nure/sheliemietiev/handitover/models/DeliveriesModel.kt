@@ -12,7 +12,7 @@ class ActiveDelivery(
     val weight: Float,
     val mailboxId: String,
     val arrived: Date,
-    val terminalTime: Date
+    val terminalTime: Date?
 )
 
 class DeliveriesModel @Inject constructor(private val api: Api) {
@@ -29,7 +29,10 @@ class DeliveriesModel @Inject constructor(private val api: Api) {
                 weight = delivery["weight"].asFloat,
                 mailboxId = delivery["mailboxId"].asString,
                 arrived = iso8601ToDate(delivery["arrived"].asString),
-                terminalTime = iso8601ToDate(delivery["terminalTime"].asString)
+                terminalTime =
+                    if (!delivery["terminalTime"].isJsonNull)
+                        iso8601ToDate(delivery["terminalTime"].asString)
+                    else null
             )
         })
     }

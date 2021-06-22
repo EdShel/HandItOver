@@ -5,8 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ua.nure.sheliemietiev.handitover.models.ActiveDelivery
-import ua.nure.sheliemietiev.handitover.models.DeliveriesModel
 import ua.nure.sheliemietiev.handitover.models.DeliveryModel
 import ua.nure.sheliemietiev.handitover.models.MailboxModel
 import java.lang.IllegalStateException
@@ -18,7 +16,7 @@ class ActiveDeliveryFullInfo(
     val weight: Float,
     val mailboxId: String,
     val arrived: Date,
-    val terminalTime: Date,
+    val terminalTime: Date?,
     val mailboxAddress: String,
     val mailboxSize: Int
 )
@@ -47,7 +45,7 @@ class DeliveryViewModel @Inject constructor(
                     }
                     val delivery = deliveryResult.getOrThrow()
                     val mailboxResult = mailboxModel.getMailbox(delivery.mailboxId)
-                    if (!mailboxResult.isSuccess){
+                    if (!mailboxResult.isSuccess) {
                         return@launch
                     }
                     val mailbox = mailboxResult.getOrThrow()
@@ -66,11 +64,11 @@ class DeliveryViewModel @Inject constructor(
         }
     }
 
-    fun openMailboxButtonPressed(){
+    fun openMailboxButtonPressed() {
         val deliveryToOpen = deliveryId ?: return
         viewModelScope.launch {
-        val openResult = deliveryModel.openMailboxWithDelivery(deliveryToOpen)
-            if (openResult.isSuccess){
+            val openResult = deliveryModel.openMailboxWithDelivery(deliveryToOpen)
+            if (openResult.isSuccess) {
                 _openResult.value = true
             }
         }
